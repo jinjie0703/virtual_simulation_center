@@ -24,19 +24,19 @@ import UpdatesSection from '@/components/home_page/UpdatesSection.vue'
 // 1. 轮播图的数据
 const carouselData = ref([
   {
-    title: '腾讯公布二零二五年第一季业绩',
+    title: '标题1',
     imageUrl:
       'https://images.unsplash.com/photo-1542370285-b8eb8317691c?q=80&w=1974&auto=format&fit=crop',
   },
   {
-    title: '科技向善，创造无限可能',
+    title: '标题2',
     imageUrl:
       'https://images.unsplash.com/photo-1519010470956-6d877008eaa4?q=80&w=2070&auto=format&fit=crop',
   },
   {
-    title: '连接你我，共创美好未来',
+    title: '标题3',
     imageUrl:
-      'https://images.unsplash.com/photo-1611606063065-ee7946f0b343?q=80&w=1974&auto=format&fit=crop',
+      'https://tse4.mm.bing.net/th/id/OIP.-tDxOx7ZR2xR63hBP47YuAHaEw?r=0&rs=1&pid=ImgDetMain&o=7&rm=3',
   },
 ])
 

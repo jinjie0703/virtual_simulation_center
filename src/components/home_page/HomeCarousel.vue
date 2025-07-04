@@ -14,8 +14,8 @@
       </div>
     </div>
 
-    <button @click="prevSlide" class="carousel-control prev">></button>
-    <button @click="nextSlide" class="carousel-control next">></button>
+    <button @click="prevSlide" class="carousel-control prev">&lt;</button>
+    <button @click="nextSlide" class="carousel-control next">&gt;</button>
 
     <ul class="carousel-indicators">
       <li
@@ -80,13 +80,16 @@ onUnmounted(() => {
 /* 这里只放该组件相关的样式，保持组件独立性 */
 .hero-carousel {
   position: relative;
-  height: 60vh;
+  height: 100vh;
   min-height: 400px;
   width: 100%;
   overflow: hidden;
-  background-color: #1a1a1a;
+  /* 如果图片加载慢，显示黑色背景 */
+  background-color: black;
+  /* 文字颜色 */
   color: white;
 }
+/* 直接父容器 */
 .carousel-inner {
   position: relative;
   width: 100%;
@@ -110,6 +113,7 @@ onUnmounted(() => {
   opacity: 1;
   z-index: 1;
 }
+/* 暗色遮罩层，增加可读性 */
 .carousel-item::after {
   content: '';
   position: absolute;
@@ -135,13 +139,22 @@ onUnmounted(() => {
   top: 50%;
   transform: translateY(-50%);
   z-index: 3;
+  /* 1. 设定固定的宽高，让它成为一个正方形 */
+  width: 45px;
+  height: 45px;
+  padding: 0;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: rgba(0, 0, 0, 0.3);
   color: white;
   border: none;
-  padding: 10px 15px;
   font-size: 24px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition:
+    background-color 0.3s,
+    transform 0.3s ease;
 }
 .carousel-control:hover {
   background: rgba(0, 0, 0, 0.6);

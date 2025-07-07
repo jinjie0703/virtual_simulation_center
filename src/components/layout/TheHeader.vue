@@ -23,7 +23,7 @@
         <router-link to="/">首页</router-link>
         <router-link to="/information_center">信息中心</router-link>
         <router-link to="/showcase">成果展示</router-link>
-        <router-link to="/our_team">团队介绍</router-link>
+        <router-link to="/our_team">师资队伍</router-link>
         <router-link to="/forum">交流中心</router-link>
         <router-link to="/about_us">关于我们</router-link>
         <router-link to="/login_and_register">登录/注册</router-link>

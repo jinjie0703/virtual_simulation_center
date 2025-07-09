@@ -1,9 +1,67 @@
 :root {
-  --primary-color: #6366f1;
-  --secondary-color: #ec4899;
-  --text-dark: #000000;
+  --primary-color: #667eea;
+  --secondary-color: #764ba2;
+  --text-dark: #1a202c;
   --text-light: #6b7280;
   --border-color: #d1d5db;
   --accent-blue: #3b82f6;
   --input-bg: #f3f4f6;
+}
+/* 1. 使用 border-box 模型，但保留伪元素的原样 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* 2. 移除大部分元素的默认 margin */
+/* 注意：我们没有用 *，而是指定了具体元素 */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd,
+ul,
+ol {
+  margin: 0;
+}
+
+/* 3. 移除列表的默认 padding 和样式（如果需要）*/
+/* 这可以让你完全控制列表样式 */
+ul,
+ol {
+  padding: 0;
+  list-style: none; /* 移除项目符号 */
+}
+
+/* 4. 让 body 撑满视口，为应用布局打好基础 */
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+/* 5. 只有在确认没有内容会意外溢出时，才谨慎使用 overflow-x: hidden */
+/* body {
+  overflow-x: hidden;  <-- 先注释掉这一行，看看下拉菜单是否恢复正常
+} */
+
+/* 6. 让根应用容器至少和视口一样高 */
+#app {
+  min-height: 100vh;
+}
+
+/* 7. 让图片响应式 */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
 }

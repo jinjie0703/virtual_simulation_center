@@ -1,11 +1,9 @@
 <template>
-  <header>
-    <h1>我的信息中心</h1>
-    <p>在这里，您可以找到最新的公司动态和行业资讯。</p>
-  </header>
-  <main>
-    <InformationCenter />
-  </main>
+  <div class="page-wrapper">
+    <div class="page-content">
+      <InformationCenter />
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -13,31 +11,28 @@ import InformationCenter from '@/components/information_center/InformationCenter
 </script>
 
 <style scoped>
-/* 全局样式 */
-body {
+.page-wrapper {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding-top: 80px; /* 为导航栏留出空间 */
+}
+
+.page-content {
+  max-width: 100%;
   margin: 0;
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  background-color: #f4f7f9;
-  color: #333;
+  padding: 0;
 }
 
-#app {
-  padding: 20px;
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .page-wrapper {
+    padding-top: 70px;
+  }
 }
 
-header {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-header h1 {
-  font-size: 2.5rem;
-  color: #2c3e50;
-}
-
-header p {
-  font-size: 1.1rem;
-  color: #555;
+@media (max-width: 480px) {
+  .page-wrapper {
+    padding-top: 60px;
+  }
 }
 </style>

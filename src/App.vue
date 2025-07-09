@@ -31,7 +31,7 @@ import SiteFooter from './components/layout/SiteFooter.vue'
   或者保持 scoped，但在每个需要它的页面组件中单独定义。
   这里我假设您希望它是一个全局可用的工具类，因此移除了 scoped。
 -->
-<style>
+<style scoped>
 /* 引入字体 */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 

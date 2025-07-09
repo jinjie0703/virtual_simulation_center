@@ -2,11 +2,13 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from '@/views/home_page/HomePage.vue'
 import LoginAndRegister from '@/views/login_and_register/LoginAndRegister.vue'
 import InformationCenter from '@/views/information_center/InformationCenter.vue'
+import AboutUs from '@/views/about_us/AboutUs.vue'
+import OurTeam from '@/views/our_team/OurTeam.vue'
 
 // 创建并直接导出 router 实例
 const router = createRouter({
   // 使用 Vite 的标准方式获取基础 URL
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(),
 
   // 路由规则定义
   routes: [
@@ -27,6 +29,18 @@ const router = createRouter({
       path: '/information_center',
       name: 'information-center',
       component: InformationCenter,
+      // 此页面会默认显示页脚
+    },
+    {
+      path: '/about_us',
+      name: 'about-us',
+      component: AboutUs,
+      // 此页面会默认显示页脚
+    },
+    {
+      path: '/our_team',
+      name: 'our-team',
+      component: OurTeam,
       // 此页面会默认显示页脚
     },
   ],

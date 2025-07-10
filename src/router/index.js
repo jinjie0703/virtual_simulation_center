@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from '@/views/home_page/HomePage.vue'
-import LoginAndRegister from '@/views/login_and_register/LoginAndRegister.vue'
 import InformationCenter from '@/views/information_center/InformationCenter.vue'
-import AboutUs from '@/views/about_us/AboutUs.vue'
+import AchievementShowcase from '@/views/achievement_showcase/AchievementShowcase.vue'
 import OurTeam from '@/views/our_team/OurTeam.vue'
+import AboutUs from '@/views/about_us/AboutUs.vue'
 
 // 创建并直接导出 router 实例
 const router = createRouter({
@@ -14,16 +14,13 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomePage,
-      // 此页面会默认显示页脚
+      redirect: '/home_page', // 默认重定向到首页
     },
     {
-      path: '/login_and_register',
-      name: 'login-and-register', // 建议将 name 改为小写 kebab-case 风格
-      component: LoginAndRegister,
-      // 在此明确指出此页面不显示页脚
-      meta: { showFooter: false },
+      path: '/home_page',
+      name: 'home-page',
+      component: HomePage,
+      // 此页面会默认显示页脚
     },
     {
       path: '/information_center',
@@ -32,15 +29,21 @@ const router = createRouter({
       // 此页面会默认显示页脚
     },
     {
-      path: '/about_us',
-      name: 'about-us',
-      component: AboutUs,
+      path: '/achievement_showcase',
+      name: 'achievement-showcase',
+      component: AchievementShowcase,
       // 此页面会默认显示页脚
     },
     {
       path: '/our_team',
       name: 'our-team',
       component: OurTeam,
+      // 此页面会默认显示页脚
+    },
+    {
+      path: '/about_us',
+      name: 'about-us',
+      component: AboutUs,
       // 此页面会默认显示页脚
     },
   ],

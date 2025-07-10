@@ -1,14 +1,14 @@
 # virtual_simulation_center
 
-This template should help get you started developing with Vue 3 in Vite.
+本项目是本人跟老师做的项目
 
-## Recommended IDE Setup
+## Recommended IDE
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+[VSCode](https://code.visualstudio.com/)
 
 ## Customize configuration
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+[Vite Configuration](https://vite.dev/config/).
 
 ## Project Setup
 

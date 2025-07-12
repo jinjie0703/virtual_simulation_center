@@ -10,9 +10,9 @@
 <script setup>
 // 注意：lang="js" 可以省略，setup 默认就是 JS
 import { RouterView } from 'vue-router'
-import TheHeader from './components/layout/TheHeader.vue'
+import TheHeader from './components/global/TheHeader.vue'
 // ✨ 导入我们之前创建的页脚组件
-import SiteFooter from './components/layout/SiteFooter.vue'
+import SiteFooter from './components/global/SiteFooter.vue'
 </script>
 
 <style scoped>

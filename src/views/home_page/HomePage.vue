@@ -4,6 +4,7 @@
     <div class="main-content">
       <FeatureSection :features="featureData" />
       <UpdatesSection :newsItems="newsData" :competitionItems="competitionData" />
+      <PartnersCarousel :companies="companiesData" :schools="schoolsData" :scrollSpeed="1.2" />
     </div>
   </div>
 </template>
@@ -15,6 +16,7 @@ import { ref } from 'vue'
 import Carousel from '@/components/home_page/HomeCarousel.vue'
 import FeatureSection from '@/components/home_page/FeatureSection.vue'
 import UpdatesSection from '@/components/home_page/UpdatesSection.vue'
+import PartnersCarousel from '@/components/home_page/PartnersCarousel.vue'
 
 // 1. 轮播图的数据
 const carouselData = ref([
@@ -45,7 +47,7 @@ const featureData = ref([
     id: 1,
     title: '虚拟现实教学平台',
     description:
-      '基于先进的VR技术构建的沉浸式教学环境，为学生提供真实感强、交互性好的学习体验。该平台集成了多种学科内容，支持个性化学习路径定制。',
+      '基于先进的VR技术构建的沉浸式教学环境，为学生提供真实感强、交互性好的学习体验。该平台集成了多种学科内容，支持个性化学习路径定制。基于先进的VR技术构建的沉浸式教学环境，为学生提供真实感强、交互性好的学习体验。该平台集成了多种学科内容，支持个性化学习路径定制。',
     image:
       'https://images.unsplash.com/photo-1592478411213-6153e4ebc696?q=80&w=1200&auto=format&fit=crop',
     tags: ['VR技术', '教学创新', '沉浸式体验'],
@@ -55,7 +57,8 @@ const featureData = ref([
     authorTitle: '虚拟现实研究中心主任',
     authorAvatar:
       'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=150&auto=format&fit=crop',
-    contact: 'zhang@university.edu.cn',
+    contact1: '邮箱zhang@university.edu.cn',
+    contact2: '电话123-456-7890',
     projectUrl: 'https://github.com/university/vr-teaching-platform',
 
     // 视频和图片库
@@ -232,6 +235,172 @@ const competitionData = ref([
     level: '省级',
   },
 ])
+const schoolsData = ref([
+  {
+    id: 1,
+    name: '哈尔滨工业大学',
+    logo: 'https://placehold.co/80x80/003366/FFFFFF?text=HIT',
+    url: '#',
+  },
+  {
+    id: 2,
+    name: '华南理工大学',
+    logo: 'https://placehold.co/80x80/007A5E/FFFFFF?text=SCUT',
+    url: '#',
+  },
+  { id: 3, name: '南京大学', logo: 'https://placehold.co/80x80/5A007B/FFFFFF?text=NJU', url: '#' },
+  {
+    id: 4,
+    name: '四川农业大学',
+    logo: 'https://placehold.co/80x80/008080/FFFFFF?text=SICAU',
+    url: '#',
+  },
+  { id: 5, name: '中南大学', logo: 'https://placehold.co/80x80/005BAC/FFFFFF?text=CSU', url: '#' },
+  {
+    id: 6,
+    name: '中央民族大学',
+    logo: 'https://placehold.co/80x80/D8232A/FFFFFF?text=MUC',
+    url: '#',
+  },
+  {
+    id: 7,
+    name: '北京理工大学',
+    logo: 'https://placehold.co/80x80/008000/FFFFFF?text=BIT',
+    url: '#',
+  },
+  {
+    id: 8,
+    name: '大连海事大学',
+    logo: 'https://placehold.co/80x80/004B8D/FFFFFF?text=DMU',
+    url: '#',
+  },
+  { id: 9, name: '嘉应学院', logo: 'https://placehold.co/80x80/4682B4/FFFFFF?text=JYU', url: '#' },
+  { id: 10, name: '吉林大学', logo: 'https://placehold.co/80x80/002D62/FFFFFF?text=JLU', url: '#' },
+  {
+    id: 11,
+    name: '辽宁石油化工大学',
+    logo: 'https://placehold.co/80x80/00537E/FFFFFF?text=LNPU',
+    url: '#',
+  },
+  {
+    id: 12,
+    name: '北华大学',
+    logo: 'https://placehold.co/80x80/006400/FFFFFF?text=BEIHUA',
+    url: '#',
+  },
+])
+
+// 模拟的合作企业数据 (如果您不需要，可以传入一个空数组 [])
+const companiesData = ref([
+  {
+    id: 1,
+    name: '科技公司 A',
+    logo: 'https://placehold.co/80x80/1A1A1A/FFFFFF?text=Tech+A',
+    url: '#',
+  },
+  {
+    id: 2,
+    name: '创新企业 B',
+    logo: 'https://placehold.co/80x80/FF6347/FFFFFF?text=Innovate+B',
+    url: '#',
+  },
+  {
+    id: 3,
+    name: '互联网巨头 C',
+    logo: 'https://placehold.co/80x80/1E90FF/FFFFFF?text=Web+C',
+    url: '#',
+  },
+  {
+    id: 4,
+    name: '金融集团 D',
+    logo: 'https://placehold.co/80x80/FFD700/000000?text=Finance+D',
+    url: '#',
+  },
+  {
+    id: 5,
+    name: '制造业 E',
+    logo: 'https://placehold.co/80x80/B0B0B0/FFFFFF?text=Manu+E',
+    url: '#',
+  },
+  {
+    id: 6,
+    name: '初创公司 F',
+    logo: 'https://placehold.co/80x80/32CD32/FFFFFF?text=Startup+F',
+    url: '#',
+  },
+  {
+    id: 1,
+    name: '科技公司 A',
+    logo: 'https://placehold.co/80x80/1A1A1A/FFFFFF?text=Tech+A',
+    url: '#',
+  },
+  {
+    id: 2,
+    name: '创新企业 B',
+    logo: 'https://placehold.co/80x80/FF6347/FFFFFF?text=Innovate+B',
+    url: '#',
+  },
+  {
+    id: 3,
+    name: '互联网巨头 C',
+    logo: 'https://placehold.co/80x80/1E90FF/FFFFFF?text=Web+C',
+    url: '#',
+  },
+  {
+    id: 4,
+    name: '金融集团 D',
+    logo: 'https://placehold.co/80x80/FFD700/000000?text=Finance+D',
+    url: '#',
+  },
+  {
+    id: 5,
+    name: '制造业 E',
+    logo: 'https://placehold.co/80x80/B0B0B0/FFFFFF?text=Manu+E',
+    url: '#',
+  },
+  {
+    id: 6,
+    name: '初创公司 F',
+    logo: 'https://placehold.co/80x80/32CD32/FFFFFF?text=Startup+F',
+    url: '#',
+  },
+  {
+    id: 1,
+    name: '科技公司 A',
+    logo: 'https://placehold.co/80x80/1A1A1A/FFFFFF?text=Tech+A',
+    url: '#',
+  },
+  {
+    id: 2,
+    name: '创新企业 B',
+    logo: 'https://placehold.co/80x80/FF6347/FFFFFF?text=Innovate+B',
+    url: '#',
+  },
+  {
+    id: 3,
+    name: '互联网巨头 C',
+    logo: 'https://placehold.co/80x80/1E90FF/FFFFFF?text=Web+C',
+    url: '#',
+  },
+  {
+    id: 4,
+    name: '金融集团 D',
+    logo: 'https://placehold.co/80x80/FFD700/000000?text=Finance+D',
+    url: '#',
+  },
+  {
+    id: 5,
+    name: '制造业 E',
+    logo: 'https://placehold.co/80x80/B0B0B0/FFFFFF?text=Manu+E',
+    url: '#',
+  },
+  {
+    id: 6,
+    name: '初创公司 F',
+    logo: 'https://placehold.co/80x80/32CD32/FFFFFF?text=Startup+F',
+    url: '#',
+  },
+])
 </script>
 
 <style scoped>
@@ -241,20 +410,7 @@ const competitionData = ref([
   overflow-x: hidden;
   width: 100%;
   position: relative;
-  scroll-behavior: smooth;
-}
-/* --- 关键新增/修改样式 --- */
-.main-content {
-  /*
-    为被 position:fixed 的轮播组件腾出空间。
-    它的高度是 100vh，所以我们把主内容向下推 100vh。
-  */
-  margin-top: 100vh;
-  position: relative; /* 确保 main-content 内部的 z-index 生效 */
-  z-index: 2; /* 确保内容区域在需要时可以覆盖轮播图（如下滑时的动画效果） */
-  background-color: white; /* 或者你的页面背景色，防止透明部分透出轮播图 */
-  padding: 0; /* 你的代码里已经有了，确保保留 */
-  display: block;
+  scroll-behavior: auto;
 }
 
 .main-content {

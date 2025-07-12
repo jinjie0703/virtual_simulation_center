@@ -2,8 +2,8 @@
   <section class="features-section">
     <div class="container">
       <div class="section-header">
-        <h2 class="section-title">项目展示</h2>
-        <p class="section-subtitle">探索我们的创新项目成果</p>
+        <h2 class="section-title">Highligts</h2>
+        <p class="section-subtitle">Explore the results of our innovative projects</p>
       </div>
 
       <div class="features-grid">
@@ -53,12 +53,14 @@
                     <div class="contact-section">
                       <div class="contact-item">
                         <span class="contact-label">联系方式:</span>
-                        <span class="contact-value">{{ feature.contact }}</span>
+                        <span class="contact-value"
+                          >{{ feature.contact1 }}<br />{{ feature.contact2 }}</span
+                        >
                       </div>
                       <div class="contact-item">
                         <span class="contact-label">项目地址:</span>
                         <a :href="feature.projectUrl || '#'" class="project-link" target="_blank">
-                          查看项目详情
+                          {{ feature.projectUrl }}
                         </a>
                       </div>
                     </div>
@@ -71,7 +73,7 @@
           <!-- 媒体展示区域 -->
           <div class="feature-media">
             <div class="media-container">
-              <!-- 主视频显示 -->
+              <!-- 主视频显示,视频地址，视频封面图片 -->
               <div class="main-video">
                 <video
                   :src="feature.videoUrl"
@@ -119,7 +121,7 @@
 
     <!-- 图片预览模态框 -->
     <div v-if="showImagePreview" class="image-preview-modal" @click="closeImagePreview">
-      <div class="preview-container">
+      <div class="preview-container" @click.stop>
         <img :src="previewImageUrl" :alt="'预览图片'" class="preview-image" />
         <button class="close-button" @click="closeImagePreview">
           <span>&times;</span>
@@ -138,16 +140,18 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-
+//接受外部props(数据)
 defineProps({
   features: {
     type: Array,
     required: true,
   },
 })
-
+// 用于收集所有DOM元素的ref，进入视口动画
 const featureElements = ref([])
+// 用于控制卡片翻转状态
 const flippedCards = ref({})
+// 用于记录视频加载状态，控制是否显示备用按钮
 const videoLoaded = ref({})
 
 // 图片预览相关状态
@@ -156,6 +160,7 @@ const previewImageUrl = ref('')
 const currentGallery = ref([])
 const currentImageIndex = ref(0)
 
+// 用来保存交叉观察器实例的变量
 let observer = null
 
 // 卡片翻转控制
@@ -289,14 +294,14 @@ onBeforeUnmount(() => {
 <style scoped>
 /* 主容器样式 */
 .features-section {
-  padding: 120px 0;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  padding: 80px 0;
+  background-color: white;
   position: relative;
   min-height: 100vh;
 }
 
 .container {
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 0 auto;
   padding: 0 40px;
   position: relative;
@@ -306,19 +311,19 @@ onBeforeUnmount(() => {
 /* 标题区域 */
 .section-header {
   text-align: center;
-  margin-bottom: 80px;
+  margin-bottom: 50px;
 }
 
 .section-title {
   font-size: 3.5rem;
   font-weight: 700;
-  color: #1a202c;
-  margin-bottom: 24px;
+  color: black;
+  margin-bottom: 12px;
 }
 
 .section-subtitle {
   font-size: 1.3rem;
-  color: #64748b;
+  color: gray;
   max-width: 800px;
   margin: 0 auto;
 }
@@ -327,13 +332,13 @@ onBeforeUnmount(() => {
 .features-grid {
   display: flex;
   flex-direction: column;
-  gap: 120px;
+  gap: 100px;
 }
 
 .feature-item {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 80px;
+  gap: 50px;
   align-items: center;
   min-height: 600px;
   opacity: 0;
@@ -351,7 +356,6 @@ onBeforeUnmount(() => {
 
 .feature-content {
   grid-area: content;
-  padding: 0 20px;
 }
 
 .feature-media {
@@ -360,8 +364,8 @@ onBeforeUnmount(() => {
 
 /* 项目卡片样式 */
 .project-card {
-  perspective: 1000px;
-  height: 500px;
+  perspective: 2000px;
+  height: 540px;
   width: 100%;
   max-width: 450px;
   margin: 0 auto;
@@ -396,7 +400,7 @@ onBeforeUnmount(() => {
   justify-content: space-between;
   box-sizing: border-box;
 }
-
+/* 背面旋转180度 */
 .card-back {
   transform: rotateY(180deg);
 }
@@ -408,36 +412,36 @@ onBeforeUnmount(() => {
 }
 
 .project-title {
-  font-size: 2.2rem;
+  font-size: 2.4rem;
   font-weight: 600;
-  color: #1a202c;
-  margin-bottom: 20px;
+  color: black;
+  margin-bottom: 10px;
 }
 
 .project-tags {
   display: flex;
-  gap: 8px;
+  gap: 5px;
   flex-wrap: wrap;
   justify-content: center;
 }
 
 .tag {
-  background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%);
-  color: #4a5568;
+  background: linear-gradient(135deg, purple 0%, white 100%);
+  color: black;
   padding: 6px 14px;
   border-radius: 16px;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 500;
 }
 
 .project-description {
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   line-height: 1.8;
-  color: #4a5568;
+  color: gray;
   text-align: left;
   flex: 1;
   display: flex;
-  align-items: center;
+  align-items: start;
 }
 
 /* 背面内容 */
@@ -469,15 +473,15 @@ onBeforeUnmount(() => {
 }
 
 .author-name {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 600;
-  color: #1a202c;
-  margin-bottom: 8px;
+  color: black;
+  margin-bottom: 5px;
 }
 
 .author-title {
   font-size: 1rem;
-  color: #64748b;
+  color: grey;
 }
 
 .contact-section {
@@ -502,6 +506,7 @@ onBeforeUnmount(() => {
 .contact-value {
   color: #4a5568;
   font-size: 1rem;
+  word-break: break-all;
 }
 
 .project-link {

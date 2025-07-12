@@ -3,6 +3,7 @@ import HomePage from '@/views/home_page/HomePage.vue'
 import InformationCenter from '@/views/information_center/InformationCenter.vue'
 import AchievementShowcase from '@/views/achievement_showcase/AchievementShowcase.vue'
 import OurTeam from '@/views/our_team/OurTeam.vue'
+import TeamCenter from '@/views/team_center/TeamCenter.vue'
 import AboutUs from '@/views/about_us/AboutUs.vue'
 
 // 创建并直接导出 router 实例
@@ -32,6 +33,12 @@ const router = createRouter({
       path: '/achievement_showcase',
       name: 'achievement-showcase',
       component: AchievementShowcase,
+      // 此页面会默认显示页脚
+    },
+    {
+      path: '/team_center',
+      name: 'team-center',
+      component: TeamCenter,
       // 此页面会默认显示页脚
     },
     {

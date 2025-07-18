@@ -15,8 +15,12 @@
         <!-- 学院新闻 -->
         <div class="update-column news-column">
           <div class="column-header">
-            <div class="header-icon news-icon">
-              <span>🎓</span>
+            <div class="header-icon">
+              <img
+                src="@/assets/home_page/UpdatesSection/news-icon.svg"
+                alt="新闻图标"
+                class="news-icon"
+              />
             </div>
             <div class="header-content">
               <h3>学院新闻</h3>
@@ -59,7 +63,11 @@
         <div class="update-column competition-column">
           <div class="column-header">
             <div class="header-icon competition-icon">
-              <span>🏆</span>
+              <img
+                src="@/assets/home_page/UpdatesSection/competition-icon.svg"
+                alt="竞赛信息"
+                class="competition-icon"
+              />
             </div>
             <div class="header-content">
               <h3>竞赛信息</h3>
@@ -222,7 +230,7 @@ const isUrgent = (index) => {
 }
 
 .title-decoration {
-  width: 80px;
+  width: 100px;
   height: 4px;
   background: linear-gradient(90deg, transparent 0%, white 50%, transparent 100%);
   margin: 0 auto;
@@ -238,12 +246,12 @@ const isUrgent = (index) => {
 }
 
 .update-column {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(20px);
   border-radius: 24px;
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgb(255, 255, 255);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
 }
@@ -268,7 +276,7 @@ const isUrgent = (index) => {
 
 .update-column:hover {
   transform: translateY(-12px);
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 30px 80px rgba(var(--black), 0.2);
 }
 
 /* 列标题 */
@@ -277,30 +285,34 @@ const isUrgent = (index) => {
   display: flex;
   align-items: center;
   gap: 16px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%);
+  border-bottom: 1px solid rgba(var(--black), 0.08);
+  background: rgba(var(--white), 0.9);
 }
 
 .header-icon {
   width: 56px;
   height: 56px;
   border-radius: 16px;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.8rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 24px rgba(var(--black), 0.2);
   flex-shrink: 0;
 }
 
 .news-icon {
+  width: 56px;
+  height: 56px;
   background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
 }
 
 .competition-icon {
+  width: 56px;
+  height: 56px;
   background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
 }
-
+/* 自适应宽度的弹性项目 */
 .header-content {
   flex: 1;
 }
@@ -308,18 +320,18 @@ const isUrgent = (index) => {
 .header-content h3 {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #1a202c;
+  color: black;
   margin: 0 0 4px 0;
 }
 
 .update-count {
   font-size: 0.9rem;
-  color: #64748b;
+  color: grey;
   font-weight: 500;
 }
 
 .more-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
   color: white;
   border: none;
   padding: 10px 20px;
@@ -331,12 +343,12 @@ const isUrgent = (index) => {
   align-items: center;
   gap: 8px;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 12px rgba(var(--updatessection-primary-color-rgb), 0.3);
 }
 
 .more-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 6px 20px rgba(var(--updatessection-primary-color-rgb), 0.5);
 }
 
 .more-btn .arrow {
@@ -352,7 +364,7 @@ const isUrgent = (index) => {
   max-height: 480px;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(102, 126, 234, 0.3) transparent;
+  scrollbar-color: rgba(var(--updatessection-primary-color-rgb), 0.3) transparent;
 }
 
 .update-list-container::-webkit-scrollbar {
@@ -364,12 +376,12 @@ const isUrgent = (index) => {
 }
 
 .update-list-container::-webkit-scrollbar-thumb {
-  background: rgba(102, 126, 234, 0.3);
+  background: rgba(var(--updatessection-primary-color-rgb), 0.3);
   border-radius: 3px;
 }
 
 .update-list-container::-webkit-scrollbar-thumb:hover {
-  background: rgba(102, 126, 234, 0.5);
+  background: rgba(var(--updatessection-primary-color-rgb), 0.5);
 }
 
 /* 列表样式 */
@@ -377,12 +389,18 @@ const isUrgent = (index) => {
   list-style: none;
   padding: 0;
   margin: 0;
+  /* 删除底部滚动条 */
+  overflow: hidden;
 }
 
 .update-item {
   opacity: 0;
-  transform: translateY(20px);
-  animation: slideInUp 0.6s ease forwards;
+  transform: translateY(100px);
+  animation: slideInUp 1s ease forwards;
+  /* 为放大和阴影效果提供垂直和水平空间 */
+  /* padding: 8px; */
+  /* 抵消 padding 对布局的影响 */
+  /* margin: -8px; */
 }
 
 @keyframes slideInUp {
@@ -399,7 +417,7 @@ const isUrgent = (index) => {
   text-decoration: none;
   color: inherit;
   transition: all 0.3s ease;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(var(--black), 0.05);
   position: relative;
   overflow: hidden;
 }
@@ -414,10 +432,10 @@ const isUrgent = (index) => {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(102, 126, 234, 0.05) 50%,
+    rgba(var(--updatessection-primary-color-rgb), 0.05) 50%,
     transparent 100%
   );
-  transition: left 0.5s ease;
+  transition: left 1s ease;
 }
 
 .item-link:hover::before {
@@ -425,28 +443,32 @@ const isUrgent = (index) => {
 }
 
 .item-link:hover {
-  background: rgba(102, 126, 234, 0.02);
+  background: rgba(var(--updatessection-primary-color-rgb), 0.2);
   transform: translateX(8px);
 }
 
-.item-link:last-child {
+/* 首先找到 class="update-list" 的 <ul> 元素。
+然后，通过 > (子代选择器) 和 :last-child 伪类，它精确地选中了作为 <ul> 最后一个直接子元素的那个 <li> (.update-item)。
+最后，通过空格（后代选择器），它会选中这个特定的最后一个 <li> 内部的 <a> 元素 (.item-link)。 */
+.update-list > .update-item:last-child .item-link {
   border-bottom: none;
 }
 
+/* item左边那个点 */
 .item-indicator {
   width: 8px;
   height: 8px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
   border-radius: 50%;
   margin-right: 16px;
   flex-shrink: 0;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+  box-shadow: 0 0 0 3px rgba(var(--updatessection-primary-color-rgb), 0.2);
   transition: all 0.3s ease;
 }
 
 .item-link:hover .item-indicator {
   transform: scale(1.2);
-  box-shadow: 0 0 0 6px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 0 0 6px rgba(var(--updatessection-primary-color-rgb), 0.3);
 }
 
 .item-content {
@@ -458,17 +480,17 @@ const isUrgent = (index) => {
   display: block;
   font-size: 1.05rem;
   font-weight: 500;
-  color: #2d3748;
-  line-height: 1.4;
+  color: black;
   margin-bottom: 8px;
   white-space: nowrap;
   overflow: hidden;
+  /* 文本溢出处理方式 */
   text-overflow: ellipsis;
   transition: color 0.3s ease;
 }
 
 .item-link:hover .item-title {
-  color: #667eea;
+  color: var(--primary-color);
 }
 
 .item-meta {
@@ -480,7 +502,7 @@ const isUrgent = (index) => {
 
 .item-date {
   font-size: 0.85rem;
-  color: #64748b;
+  color: var(--item-date-color);
   font-weight: 500;
 }
 
@@ -497,19 +519,21 @@ const isUrgent = (index) => {
   background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
   color: white;
   box-shadow: 0 2px 4px rgba(72, 187, 120, 0.3);
+  animation: pulse 1s infinite;
 }
 
 .item-badge.hot {
   background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
   color: white;
   box-shadow: 0 2px 4px rgba(237, 137, 54, 0.3);
+  animation: pulse 1s infinite;
 }
 
 .item-badge.urgent {
   background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
   color: white;
   box-shadow: 0 2px 4px rgba(245, 101, 101, 0.3);
-  animation: pulse 2s infinite;
+  animation: pulse 1s infinite;
 }
 
 @keyframes pulse {
@@ -518,13 +542,13 @@ const isUrgent = (index) => {
     transform: scale(1);
   }
   50% {
-    transform: scale(1.05);
+    transform: scale(1.1);
   }
 }
 
 .item-arrow {
   margin-left: 12px;
-  color: #a0aec0;
+  color: var(--gray);
   font-size: 1.1rem;
   transition: all 0.3s ease;
   opacity: 0;
@@ -534,7 +558,7 @@ const isUrgent = (index) => {
 .item-link:hover .item-arrow {
   opacity: 1;
   transform: translateX(0);
-  color: #667eea;
+  color: var(--primary-color);
 }
 
 /* 底部装饰 */
@@ -558,7 +582,7 @@ const isUrgent = (index) => {
 
 .decoration-line {
   width: 60px;
-  height: 2px;
+  height: 3px;
   background: linear-gradient(
     90deg,
     transparent 0%,

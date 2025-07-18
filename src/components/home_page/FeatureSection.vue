@@ -76,7 +76,6 @@
               <!-- 主视频显示,视频地址，视频封面图片 -->
               <div class="main-video">
                 <video
-                  :src="feature.videoUrl"
                   :poster="feature.image"
                   controls
                   preload="metadata"
@@ -85,16 +84,23 @@
                   class="feature-video"
                   @error="handleVideoError"
                   @loadstart="handleVideoLoad"
+                  @play="onVideoPlay(feature.id)"
+                  @pause="onVideoPause(feature.id)"
                 >
                   <source :src="feature.videoUrl" type="video/mp4" />
                   <source :src="feature.videoUrl" type="video/webm" />
                   <source :src="feature.videoUrl" type="video/ogg" />
                   您的浏览器不支持视频播放
                 </video>
-                <!-- 只在视频加载失败时显示播放按钮 -->
-                <div v-if="!videoLoaded[feature.id]" class="video-overlay">
+                <!-- 视频遮罩层，用于显示播放按钮 -->
+                <div v-show="!isPlaying[feature.id]" class="video-overlay">
                   <button class="play-button" @click="playVideo(feature.id)">
-                    <span class="icon-play"></span>
+                    <!-- 将 src 属性替换为您的 SVG 文件路径 -->
+                    <img
+                      src="@/assets/home_page/FeatureSection/video_play.svg"
+                      alt="Play"
+                      class="play-icon"
+                    />
                   </button>
                 </div>
               </div>
@@ -109,7 +115,11 @@
                 >
                   <img :src="image" :alt="`项目图片 ${imgIndex + 1}`" />
                   <div class="thumbnail-overlay">
-                    <span class="icon-zoom"></span>
+                    <img
+                      src="@/assets/home_page/FeatureSection/image_enhance.svg"
+                      alt="Zoom"
+                      class="zoom-icon"
+                    />
                   </div>
                 </div>
               </div>
@@ -153,6 +163,8 @@ const featureElements = ref([])
 const flippedCards = ref({})
 // 用于记录视频加载状态，控制是否显示备用按钮
 const videoLoaded = ref({})
+// 用于跟踪视频是否正在播放
+const isPlaying = ref({})
 
 // 图片预览相关状态
 const showImagePreview = ref(false)
@@ -188,10 +200,23 @@ const handleVideoLoad = (event) => {
 const playVideo = (featureId) => {
   const videoElement = document.querySelector(`[data-feature-id="${featureId}"] video`)
   if (videoElement) {
-    videoElement.play().catch((e) => {
-      console.error('视频播放失败:', e)
-    })
+    videoElement
+      .play()
+      .then(() => {
+        isPlaying.value[featureId] = true
+      })
+      .catch((e) => {
+        console.error('视频播放失败:', e)
+      })
   }
+}
+
+const onVideoPlay = (featureId) => {
+  isPlaying.value[featureId] = true
+}
+
+const onVideoPause = (featureId) => {
+  isPlaying.value[featureId] = false
 }
 
 // 图片预览功能
@@ -445,6 +470,7 @@ onBeforeUnmount(() => {
 }
 
 /* 背面内容 */
+/* 主容器，整个组件最外层容器 */
 .author-section {
   height: 100%;
   display: flex;
@@ -465,7 +491,7 @@ onBeforeUnmount(() => {
   border-radius: 50%;
   object-fit: cover;
   margin-right: 20px;
-  border: 4px solid #e2e8f0;
+  border: 4px solid grey;
 }
 
 .author-details {
@@ -499,14 +525,14 @@ onBeforeUnmount(() => {
 .contact-label {
   display: block;
   font-weight: 600;
-  color: #2d3748;
+  color: black;
   margin-bottom: 8px;
 }
 
 .contact-value {
   color: #4a5568;
   font-size: 1rem;
-  word-break: break-all;
+  word-break: break-all; /* 断行，防止撑爆容器 */
 }
 
 .project-link {
@@ -518,7 +544,7 @@ onBeforeUnmount(() => {
 
 .project-link:hover {
   color: #764ba2;
-  text-decoration: underline;
+  /* text-decoration: underline; */
 }
 
 /* 媒体展示区域 */
@@ -526,6 +552,7 @@ onBeforeUnmount(() => {
   width: 100%;
 }
 
+/* 视频的主容器 */
 .main-video {
   position: relative;
   width: 100%;
@@ -533,9 +560,10 @@ onBeforeUnmount(() => {
   margin-bottom: 20px;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
 }
 
+/* 视频的样式 */
 .feature-video {
   width: 100%;
   height: 100%;
@@ -552,7 +580,7 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.2); /* 调整这里的最后一个值来改变透明度 */
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -566,8 +594,7 @@ onBeforeUnmount(() => {
   height: 80px;
   border: none;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  color: #667eea;
+  background: rgba(255, 255, 255, 0.2);
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
@@ -600,7 +627,7 @@ onBeforeUnmount(() => {
   transform: scale(1.05);
 }
 
-.thumbnail img {
+.thumbnail > img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -612,7 +639,7 @@ onBeforeUnmount(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -624,19 +651,14 @@ onBeforeUnmount(() => {
   opacity: 1;
 }
 
-/* 图标样式 */
-.icon-play::before,
-.icon-zoom::before {
-  font-size: 24px;
-  color: white;
+.play-icon {
+  width: 50px; /* 根据您的SVG调整大小 */
+  height: 50px; /* 根据您的SVG调整大小 */
 }
 
-.icon-play::before {
-  content: '▶';
-}
-
-.icon-zoom::before {
-  content: '🔍';
+.zoom-icon {
+  width: 40px;
+  height: 40px;
 }
 
 /* 图片预览模态框样式 */
@@ -646,7 +668,7 @@ onBeforeUnmount(() => {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.8);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -671,13 +693,13 @@ onBeforeUnmount(() => {
   height: auto;
   object-fit: contain; /* 保持图片比例，完整显示 */
   border-radius: 8px;
-  box-shadow: 0 20px 60px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 60px rgba(255, 255, 255, 0.2);
 }
 
 .close-button {
   position: absolute;
-  top: -50px;
-  right: -10px;
+  top: 0px;
+  right: -40px;
   background: rgba(0, 0, 0, 0.5);
   border: none;
   color: white;
@@ -745,10 +767,15 @@ onBeforeUnmount(() => {
 /* 响应式设计 */
 @media (max-width: 1024px) {
   .feature-item {
+    /* 屏幕较小的时候单列显示 */
     grid-template-columns: 1fr;
     gap: 40px;
   }
 
+  .thumbnail-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  /* 显示布局信息的顺序 */
   .feature-item.layout-left,
   .feature-item.layout-right {
     grid-template-areas: 'content' 'media';

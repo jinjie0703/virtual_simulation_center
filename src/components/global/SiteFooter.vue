@@ -5,17 +5,14 @@
       <div class="social-section">
         <span class="social-title">关注我们</span>
         <div class="social-icons">
-          <a href="#" aria-label="微信公众号" class="social-link">
-            <span class="icon-placeholder">微</span>
+          <a href="https://wx.qq.com/" aria-label="微信公众号" class="social-link">
+            <img src="@/assets/global/SiteFooter/WeChat_public.svg" class="icon-placeholder" />
           </a>
-          <a href="#" aria-label="视频号" class="social-link">
-            <span class="icon-placeholder">视</span>
+          <a href="https://www.douyin.com/" aria-label="抖音" class="social-link">
+            <img src="@/assets/global/SiteFooter/TikTok_CN.svg" class="icon-placeholder" />
           </a>
-          <a href="#" aria-label="腾讯视频" class="social-link">
-            <span class="icon-placeholder">腾</span>
-          </a>
-          <a href="#" aria-label="Bilibili" class="social-link">
-            <span class="icon-placeholder">B</span>
+          <a href="https://www.bilibili.com/" aria-label="bilibili" class="social-link">
+            <img src="@/assets/global/SiteFooter/Bilibili.svg" class="https://www.bilibili.com/" />
           </a>
         </div>
       </div>
@@ -29,13 +26,13 @@
             <h4 class="section-title">联系方式</h4>
             <ul class="contact-list">
               <li class="contact-item">
-                <span class="contact-text">电话：</span>
+                <span class="contact-text">电话：xxxxx</span>
               </li>
               <li class="contact-item">
-                <span class="contact-text">邮箱：</span>
+                <span class="contact-text">邮箱：xxxxx</span>
               </li>
               <li class="contact-item">
-                <span class="contact-text">邮编：</span>
+                <span class="contact-text">邮编：xxxxx</span>
               </li>
             </ul>
           </div>
@@ -44,13 +41,13 @@
             <h4 class="section-title">中心地址</h4>
             <ul class="contact-list">
               <li class="contact-item">
-                <span class="contact-text">武汉科技大学</span>
+                <span class="contact-text">xxxxx</span>
               </li>
               <li class="contact-item">
-                <span class="contact-text">教三楼</span>
+                <span class="contact-text">xxxxx</span>
               </li>
               <li class="contact-item">
-                <span class="contact-text">10101</span>
+                <span class="contact-text">xxxxx</span>
               </li>
             </ul>
           </div>
@@ -99,9 +96,10 @@ const currentYear = computed(() => new Date().getFullYear())
   margin: 0 auto;
 }
 
+/* 分割线样式 */
 .divider {
   border: none;
-  border-top: 1px solid #dee2e6;
+  border-top: 1px solid #ccd2d8;
   margin: 32px 0;
   opacity: 0.8;
 }

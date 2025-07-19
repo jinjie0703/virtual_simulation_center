@@ -3,7 +3,6 @@ package main
 
 import (
 	"log"
-
 	"api/internal/database" // 注意这里的导入路径
 	"api/internal/models"
 	"api/internal/routes"
@@ -23,7 +22,7 @@ func main() {
 
 	// 3. 自动迁移数据库模型 (可选，在开发环境很方便)
 	// 这会确保数据库中的表结构和你的 models 定义一致
-	err = database.DB.AutoMigrate(&models.Slide{})
+	err = database.DB.AutoMigrate(&models.HomePageCarousel{})
 	if err != nil {
 		log.Fatalf("Fatal: could not auto migrate database: %v", err)
 	}
@@ -33,7 +32,7 @@ func main() {
 
 	// 5. 启动服务器
 	log.Printf("Server starting on port %s", cfg.Server.Port)
-	if err := r.Run(cfg.Server.Port); err != nil {
+	if err := r.RunTLS(cfg.Server.Port, "./testcrt/server.pem", "./testcrt/server.key"); err != nil {
 		log.Fatalf("Fatal: Failed to run server: %v", err)
 	}
 

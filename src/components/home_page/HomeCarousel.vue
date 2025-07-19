@@ -1,15 +1,17 @@
 <template>
   <section class="hero-carousel">
-    <div class="carousel-container">
+    <div v-if="loading" class="carousel-loading">加载中...</div>
+    <div v-else-if="error" class="carousel-error">{{ error }}</div>
+    <div v-else-if="slides.length > 0" class="carousel-container">
       <!-- 轮播图片 -->
       <div class="carousel-inner">
         <div
           v-for="(slide, index) in slides"
-          :key="index"
+          :key="slide.ID"
           class="carousel-slide"
           :class="{ active: index === currentIndex }"
         >
-          <img :src="slide.imageUrl" :alt="slide.title" class="slide-image" />
+          <img :src="getImageUrl(slide.imageUrl)" :alt="slide.title" class="slide-image" />
           <div class="slide-overlay"></div>
         </div>
       </div>
@@ -24,8 +26,8 @@
 
       <!-- 中心内容区域 -->
       <div class="carousel-caption">
-        <h1>{{ slides[currentIndex].title }}</h1>
-        <p class="carousel-subtitle">{{ slides[currentIndex].subtitle }}</p>
+        <h1>{{ currentSlideTitle }}</h1>
+        <p class="carousel-subtitle">{{ currentSlideSubtitle }}</p>
       </div>
 
       <!-- 指示器 - 移动到底部 -->
@@ -44,32 +46,57 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+import axios from 'axios'
 
 const currentIndex = ref(0)
+const slides = ref([])
 let autoplayTimer = null
+const loading = ref(true)
+const error = ref(null)
+
+const API_BASE_URL = 'https://localhost:8080'
+
+const currentSlideTitle = computed(() => {
+  if (slides.value.length > 0 && slides.value[currentIndex.value]) {
+    return slides.value[currentIndex.value].title
+  }
+  return '加载中...'
+})
+
+const currentSlideSubtitle = computed(() => {
+  if (slides.value.length > 0 && slides.value[currentIndex.value]) {
+    return slides.value[currentIndex.value].subtitle
+  }
+  return '请稍候...'
+})
+
+const getImageUrl = (imageName) => {
+  if (!imageName) return ''
+  return `${API_BASE_URL}/static/images/home_page/HomeCarousel/${imageName}`
+}
 
 // 轮播数据
-const slides = ref([
-  {
-    title: '虚拟仿真实验平台',
-    subtitle: '构建沉浸式学习环境，开启教育新篇章',
-    imageUrl:
-      'https://images.unsplash.com/photo-1542370285-b8eb8317691c?q=80&w=1974&auto=format&fit=crop',
-  },
-  {
-    title: '智能化教学系统',
-    subtitle: 'AI驱动的个性化学习体验',
-    imageUrl:
-      'https://images.unsplash.com/photo-1519010470956-6d877008eaa4?q=80&w=2070&auto=format&fit=crop',
-  },
-  {
-    title: '数字化实验室',
-    subtitle: '打破时空限制，让实验无处不在',
-    imageUrl:
-      'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
-  },
-])
+// const slides = ref([
+//   {
+//     title: '虚拟仿真实验平台',
+//     subtitle: '构建沉浸式学习环境，开启教育新篇章',
+//     imageUrl:
+//       'https://images.unsplash.com/photo-1542370285-b8eb8317691c?q=80&w=1974&auto=format&fit=crop',
+//   },
+//   {
+//     title: '智能化教学系统',
+//     subtitle: 'AI驱动的个性化学习体验',
+//     imageUrl:
+//       'https://images.unsplash.com/photo-1519010470956-6d877008eaa4?q=80&w=2070&auto=format&fit=crop',
+//   },
+//   {
+//     title: '数字化实验室',
+//     subtitle: '打破时空限制，让实验无处不在',
+//     imageUrl:
+//       'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
+//   },
+// ])
 
 const nextSlide = () => {
   currentIndex.value = (currentIndex.value + 1) % slides.value.length
@@ -96,8 +123,18 @@ const stopAutoplay = () => {
   }
 }
 
-onMounted(() => {
-  startAutoplay()
+onMounted(async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/api/home_page_carousel`)
+    slides.value = response.data
+    if (slides.value.length > 0) {
+      startAutoplay()
+    }
+  } catch {
+    error.value = '加载轮播数据失败，请稍后再试。'
+  } finally {
+    loading.value = false
+  }
 })
 
 onUnmounted(() => {

@@ -5,14 +5,19 @@
       <div class="social-section">
         <span class="social-title">关注我们</span>
         <div class="social-icons">
-          <a href="https://wx.qq.com/" aria-label="微信公众号" class="social-link">
+          <a href="https://wx.qq.com/" aria-label="微信公众号" class="social-link" target="_blank">
             <img src="@/assets/global/SiteFooter/WeChat_public.svg" class="icon-placeholder" />
           </a>
-          <a href="https://www.douyin.com/" aria-label="抖音" class="social-link">
+          <a href="https://www.douyin.com/" aria-label="抖音" class="social-link" target="_blank">
             <img src="@/assets/global/SiteFooter/TikTok_CN.svg" class="icon-placeholder" />
           </a>
-          <a href="https://www.bilibili.com/" aria-label="bilibili" class="social-link">
-            <img src="@/assets/global/SiteFooter/Bilibili.svg" class="https://www.bilibili.com/" />
+          <a
+            href="https://www.bilibili.com/"
+            aria-label="bilibili"
+            class="social-link"
+            target="_blank"
+          >
+            <img src="@/assets/global/SiteFooter/Bilibili.svg" class="icon-placeholder" />
           </a>
         </div>
       </div>
@@ -115,7 +120,7 @@ const currentYear = computed(() => new Date().getFullYear())
 .social-title {
   font-size: 16px;
   font-weight: 600;
-  color: #2c3e50;
+  color: black;
 }
 
 .social-icons {
@@ -129,24 +134,23 @@ const currentYear = computed(() => new Date().getFullYear())
   justify-content: center;
   width: 36px;
   height: 36px;
-  background: linear-gradient(135deg, #4a90e2, #50e3c2);
+  background: transparent;
   border-radius: 8px;
-  color: white;
   text-decoration: none;
   font-weight: 600;
   font-size: 12px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 8px rgba(74, 144, 226, 0.2);
+  /* filter: drop-shadow(0 2px 8px rgba(74, 144, 226, 0.2)); */
 }
 
 .social-link:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(74, 144, 226, 0.3);
+  filter: drop-shadow(0 4px 16px rgba(74, 144, 226, 0.8));
 }
 
 .icon-placeholder {
-  font-size: 14px;
-  font-weight: bold;
+  width: 30px;
+  height: 30px;
 }
 
 /* ===== 联系我们部分 ===== */
@@ -170,7 +174,7 @@ const currentYear = computed(() => new Date().getFullYear())
 .section-title {
   font-size: 16px;
   font-weight: 600;
-  color: #2c3e50;
+  color: black;
   margin: 0 0 16px 0;
   padding-bottom: 8px;
   border-bottom: 2px solid #4a90e2;
@@ -188,18 +192,6 @@ const currentYear = computed(() => new Date().getFullYear())
 
 .contact-item {
   line-height: 1.6;
-}
-
-.contact-link {
-  color: #4a90e2;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  font-weight: 500;
-}
-
-.contact-link:hover {
-  color: #2980b9;
-  text-decoration: underline;
 }
 
 .contact-text {
@@ -222,10 +214,9 @@ const currentYear = computed(() => new Date().getFullYear())
   display: block;
   font-size: 28px;
   font-weight: 700;
-  color: #2c3e50;
+  color: gray;
   margin-bottom: 4px;
   background: linear-gradient(135deg, #2c3e50, #4a90e2);
-  -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }

@@ -18,28 +18,6 @@ import FeatureSection from '@/components/home_page/FeatureSection.vue'
 import UpdatesSection from '@/components/home_page/UpdatesSection.vue'
 import PartnersCarousel from '@/components/home_page/PartnersCarousel.vue'
 
-// 1. 轮播图的数据
-const carouselData = ref([
-  {
-    title: '虚拟仿真实验平台',
-    subtitle: '构建沉浸式学习环境，开启教育新篇章',
-    imageUrl:
-      'https://images.unsplash.com/photo-1542370285-b8eb8317691c?q=80&w=1974&auto=format&fit=crop',
-  },
-  {
-    title: '智能化教学系统',
-    subtitle: 'AI驱动的个性化学习体验',
-    imageUrl:
-      'https://images.unsplash.com/photo-1519010470956-6d877008eaa4?q=80&w=2070&auto=format&fit=crop',
-  },
-  {
-    title: '数字化实验室',
-    subtitle: '打破时空限制，让实验无处不在',
-    imageUrl:
-      'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
-  },
-])
-
 // 3. 成果展示的数据
 // ...existing code...
 const featureData = ref([
@@ -238,166 +216,202 @@ const competitionData = ref([
 const schoolsData = ref([
   {
     id: 1,
-    name: '哈尔滨工业大学',
-    logo: 'https://placehold.co/80x80/003366/FFFFFF?text=HIT',
+    name: 'google',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png',
     url: '#',
   },
   {
-    id: 2,
-    name: '华南理工大学',
-    logo: 'https://placehold.co/80x80/007A5E/FFFFFF?text=SCUT',
+    id: 1,
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png',
     url: '#',
   },
-  { id: 3, name: '南京大学', logo: 'https://placehold.co/80x80/5A007B/FFFFFF?text=NJU', url: '#' },
+  {
+    id: 1,
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png',
+    url: '#',
+  },
   {
     id: 4,
-    name: '四川农业大学',
-    logo: 'https://placehold.co/80x80/008080/FFFFFF?text=SICAU',
-    url: '#',
-  },
-  { id: 5, name: '中南大学', logo: 'https://placehold.co/80x80/005BAC/FFFFFF?text=CSU', url: '#' },
-  {
-    id: 6,
-    name: '中央民族大学',
-    logo: 'https://placehold.co/80x80/D8232A/FFFFFF?text=MUC',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/1920px-Microsoft_logo_%282012%29.svg.png',
     url: '#',
   },
   {
-    id: 7,
-    name: '北京理工大学',
-    logo: 'https://placehold.co/80x80/008000/FFFFFF?text=BIT',
+    id: 1,
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png',
     url: '#',
   },
   {
-    id: 8,
-    name: '大连海事大学',
-    logo: 'https://placehold.co/80x80/004B8D/FFFFFF?text=DMU',
-    url: '#',
-  },
-  { id: 9, name: '嘉应学院', logo: 'https://placehold.co/80x80/4682B4/FFFFFF?text=JYU', url: '#' },
-  { id: 10, name: '吉林大学', logo: 'https://placehold.co/80x80/002D62/FFFFFF?text=JLU', url: '#' },
-  {
-    id: 11,
-    name: '辽宁石油化工大学',
-    logo: 'https://placehold.co/80x80/00537E/FFFFFF?text=LNPU',
+    id: 1,
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png',
     url: '#',
   },
   {
-    id: 12,
-    name: '北华大学',
-    logo: 'https://placehold.co/80x80/006400/FFFFFF?text=BEIHUA',
+    id: 3,
+    name: '互联网巨头 C',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Sony_logo.svg/2560px-Sony_logo.svg.png',
+    url: '#',
+  },
+  {
+    id: 4,
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/1920px-Microsoft_logo_%282012%29.svg.png',
+    url: '#',
+  },
+  {
+    id: 3,
+    name: '互联网巨头 C',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Sony_logo.svg/2560px-Sony_logo.svg.png',
+    url: '#',
+  },
+  {
+    id: 5,
+    name: '制造业 E',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/2560px-IBM_logo.svg.png',
+    url: '#',
+  },
+  {
+    id: 4,
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/1920px-Microsoft_logo_%282012%29.svg.png',
+    url: '#',
+  },
+  {
+    id: 5,
+    name: '制造业 E',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/2560px-IBM_logo.svg.png',
+    url: '#',
+  },
+  {
+    id: 5,
+    name: '制造业 E',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/2560px-IBM_logo.svg.png',
+    url: '#',
+  },
+  {
+    id: 4,
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/1920px-Microsoft_logo_%282012%29.svg.png',
+    url: '#',
+  },
+  {
+    id: 5,
+    name: '制造业 E',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/2560px-IBM_logo.svg.png',
+    url: '#',
+  },
+  {
+    id: 4,
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/1920px-Microsoft_logo_%282012%29.svg.png',
+    url: '#',
+  },
+  {
+    id: 5,
+    name: '制造业 E',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/2560px-IBM_logo.svg.png',
+    url: '#',
+  },
+  {
+    id: 4,
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/1920px-Microsoft_logo_%282012%29.svg.png',
     url: '#',
   },
 ])
 
-// 模拟的合作企业数据 (如果您不需要，可以传入一个空数组 [])
+// 模拟的合作企业数据,名字虽然不用，但是仍需要存在数据库里面
 const companiesData = ref([
   {
     id: 1,
-    name: '科技公司 A',
-    logo: 'https://placehold.co/80x80/1A1A1A/FFFFFF?text=Tech+A',
-    url: '#',
-  },
-  {
-    id: 2,
-    name: '创新企业 B',
-    logo: 'https://placehold.co/80x80/FF6347/FFFFFF?text=Innovate+B',
-    url: '#',
-  },
-  {
-    id: 3,
-    name: '互联网巨头 C',
-    logo: 'https://placehold.co/80x80/1E90FF/FFFFFF?text=Web+C',
-    url: '#',
-  },
-  {
-    id: 4,
-    name: '金融集团 D',
-    logo: 'https://placehold.co/80x80/FFD700/000000?text=Finance+D',
-    url: '#',
-  },
-  {
-    id: 5,
-    name: '制造业 E',
-    logo: 'https://placehold.co/80x80/B0B0B0/FFFFFF?text=Manu+E',
-    url: '#',
-  },
-  {
-    id: 6,
-    name: '初创公司 F',
-    logo: 'https://placehold.co/80x80/32CD32/FFFFFF?text=Startup+F',
+    name: 'google',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png',
     url: '#',
   },
   {
     id: 1,
-    name: '科技公司 A',
-    logo: 'https://placehold.co/80x80/1A1A1A/FFFFFF?text=Tech+A',
-    url: '#',
-  },
-  {
-    id: 2,
-    name: '创新企业 B',
-    logo: 'https://placehold.co/80x80/FF6347/FFFFFF?text=Innovate+B',
-    url: '#',
-  },
-  {
-    id: 3,
-    name: '互联网巨头 C',
-    logo: 'https://placehold.co/80x80/1E90FF/FFFFFF?text=Web+C',
-    url: '#',
-  },
-  {
-    id: 4,
-    name: '金融集团 D',
-    logo: 'https://placehold.co/80x80/FFD700/000000?text=Finance+D',
-    url: '#',
-  },
-  {
-    id: 5,
-    name: '制造业 E',
-    logo: 'https://placehold.co/80x80/B0B0B0/FFFFFF?text=Manu+E',
-    url: '#',
-  },
-  {
-    id: 6,
-    name: '初创公司 F',
-    logo: 'https://placehold.co/80x80/32CD32/FFFFFF?text=Startup+F',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png',
     url: '#',
   },
   {
     id: 1,
-    name: '科技公司 A',
-    logo: 'https://placehold.co/80x80/1A1A1A/FFFFFF?text=Tech+A',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png',
     url: '#',
   },
   {
-    id: 2,
-    name: '创新企业 B',
-    logo: 'https://placehold.co/80x80/FF6347/FFFFFF?text=Innovate+B',
+    id: 4,
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/1920px-Microsoft_logo_%282012%29.svg.png',
+    url: '#',
+  },
+  {
+    id: 1,
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png',
+    url: '#',
+  },
+  {
+    id: 1,
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png',
     url: '#',
   },
   {
     id: 3,
     name: '互联网巨头 C',
-    logo: 'https://placehold.co/80x80/1E90FF/FFFFFF?text=Web+C',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Sony_logo.svg/2560px-Sony_logo.svg.png',
     url: '#',
   },
   {
     id: 4,
-    name: '金融集团 D',
-    logo: 'https://placehold.co/80x80/FFD700/000000?text=Finance+D',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/1920px-Microsoft_logo_%282012%29.svg.png',
+    url: '#',
+  },
+  {
+    id: 3,
+    name: '互联网巨头 C',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Sony_logo.svg/2560px-Sony_logo.svg.png',
     url: '#',
   },
   {
     id: 5,
     name: '制造业 E',
-    logo: 'https://placehold.co/80x80/B0B0B0/FFFFFF?text=Manu+E',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/2560px-IBM_logo.svg.png',
     url: '#',
   },
   {
-    id: 6,
-    name: '初创公司 F',
-    logo: 'https://placehold.co/80x80/32CD32/FFFFFF?text=Startup+F',
+    id: 4,
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/1920px-Microsoft_logo_%282012%29.svg.png',
+    url: '#',
+  },
+  {
+    id: 5,
+    name: '制造业 E',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/2560px-IBM_logo.svg.png',
+    url: '#',
+  },
+  {
+    id: 5,
+    name: '制造业 E',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/2560px-IBM_logo.svg.png',
+    url: '#',
+  },
+  {
+    id: 4,
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/1920px-Microsoft_logo_%282012%29.svg.png',
+    url: '#',
+  },
+  {
+    id: 5,
+    name: '制造业 E',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/2560px-IBM_logo.svg.png',
+    url: '#',
+  },
+  {
+    id: 4,
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/1920px-Microsoft_logo_%282012%29.svg.png',
+    url: '#',
+  },
+  {
+    id: 5,
+    name: '制造业 E',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/2560px-IBM_logo.svg.png',
+    url: '#',
+  },
+  {
+    id: 4,
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/1920px-Microsoft_logo_%282012%29.svg.png',
     url: '#',
   },
 ])

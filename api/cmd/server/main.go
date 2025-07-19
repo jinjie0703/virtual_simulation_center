@@ -2,11 +2,11 @@
 package main
 
 import (
-	"log"
-	"api/internal/database" // 注意这里的导入路径
-	"api/internal/models"
+	"api/internal/database"                // 注意这里的导入路径
+	models "api/internal/models/home_page" // 注意这里的导入路径，确保它指向新的模型文件
 	"api/internal/routes"
 	"api/pkg/config"
+	"log"
 )
 
 func main() {
@@ -16,7 +16,7 @@ func main() {
 		log.Fatalf("Fatal: could not load config: %v", err)
 	}
 
-  log.Printf("DEBUG: The DSN string read from config is: [%s]", cfg.Database.DSN)
+	log.Printf("DEBUG: The DSN string read from config is: [%s]", cfg.Database.DSN)
 	// 2. 连接数据库
 	database.Connect(cfg.Database.DSN)
 
@@ -36,5 +36,4 @@ func main() {
 		log.Fatalf("Fatal: Failed to run server: %v", err)
 	}
 
-	
 }

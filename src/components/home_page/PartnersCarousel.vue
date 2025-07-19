@@ -25,7 +25,6 @@
             class="partner-item"
           >
             <img :src="company.logo" :alt="company.name" class="partner-logo" />
-            <span class="partner-name">{{ company.name }}</span>
           </a>
         </div>
       </div>
@@ -52,7 +51,6 @@
             class="partner-item"
           >
             <img :src="school.logo" :alt="school.name" class="partner-logo" />
-            <span class="partner-name">{{ school.name }}</span>
           </a>
         </div>
       </div>
@@ -185,9 +183,9 @@ onUnmounted(() => {
 
 .section-title {
   text-align: center;
-  font-size: 28px;
+  font-size: 3rem;
   margin-bottom: 40px;
-  color: #333;
+  color: black;
   position: relative;
   display: inline-block;
   left: 50%;
@@ -197,27 +195,29 @@ onUnmounted(() => {
   content: '';
   display: block;
   width: 60%;
-  height: 2px;
-  background-color: #ccc;
-  margin: 10px auto 0;
+  height: 3px;
+  background-color: rgb(176, 170, 170);
+  margin: 15px auto 0;
 }
 
 .partners-section {
-  margin-bottom: 30px;
+  margin-bottom: 40px;
 }
 
 .partner-type {
   text-align: center;
-  font-size: 22px;
+  font-size: 2rem;
   margin-bottom: 20px;
-  color: #555;
-  font-weight: normal;
+  color: rgb(51, 49, 49);
+  font-weight: 500;
 }
 
 .carousel-container {
   overflow: hidden;
   position: relative;
   width: 100%;
+  padding-top: 20px;
+  padding-bottom: 20px;
 
   /* ✨ 新增：添加蒙版实现两端淡出效果 */
   -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
@@ -232,62 +232,28 @@ onUnmounted(() => {
 
 .partner-item {
   display: inline-flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  justify-content: center; /* 垂直居中 */
-  margin: 0 25px; /* 增加了间距 */
-  width: 150px; /* 增加了宽度 */
-  height: 150px; /* 设置固定高度 */
-  text-decoration: none;
-  color: #333;
+  margin: 0 15px; /* 增加了间距 */
+  width: 250px; /* 增加了宽度 */
+  height: 100px; /* 设置固定高度 */
+  padding: 15px;
   transition: transform 0.3s;
   background-color: white;
   border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
   padding: 15px;
   box-sizing: border-box;
 }
 
 .partner-item:hover {
   transform: scale(1.05);
-  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
 }
 
 .partner-logo {
-  width: 80px;
-  height: 80px;
-  object-fit: contain;
-  margin-bottom: 10px;
-}
-
-.partner-name {
-  font-size: 14px;
-  text-align: center;
   max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: normal;
-  line-height: 1.3;
-  height: 36px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  color: #666; /* 名字颜色调暗一点 */
-}
-
-@media (max-width: 768px) {
-  .partner-item {
-    width: 120px;
-    height: 120px;
-    margin: 0 15px;
-  }
-  .partner-logo {
-    width: 60px;
-    height: 60px;
-  }
-  .partner-name {
-    font-size: 12px;
-    height: 30px;
-  }
+  max-height: 100%;
+  object-fit: contain;
 }
 </style>

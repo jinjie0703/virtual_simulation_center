@@ -1,10 +1,11 @@
 package routes
 
 import (
-	"api/internal/handlers" // 注意这里的导入路径
+	handlers "api/internal/handlers/home_page" // 注意这里的导入路径
+
+	"time" // 导入 time 包用于配置
 
 	"github.com/gin-gonic/gin"
-	"time" // 导入 time 包用于配置
 
 	"github.com/gin-contrib/cors"
 )
@@ -13,7 +14,7 @@ func SetupRouter() *gin.Engine {
 	r := gin.Default()
 
 	// 中间件必须在路由前面注册
-  r.Use(cors.New(cors.Config{
+	r.Use(cors.New(cors.Config{
 		// AllowOrigins:     []string{"https://foo.com"}, // 生产环境使用这个，指定你的前端域名
 		AllowOrigins:     []string{"http://localhost:5173"}, // 开发环境，允许你的 Vue 前端地址访问
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
@@ -22,7 +23,7 @@ func SetupRouter() *gin.Engine {
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}))
-	r.Static("/static", "./public")  // 静态文件目录
+	r.Static("/static", "./public") // 静态文件目录
 
 	api := r.Group("/api")
 	{

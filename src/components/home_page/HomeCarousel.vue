@@ -76,28 +76,6 @@ const getImageUrl = (imageName) => {
   return `${API_BASE_URL}/static/images/home_page/HomeCarousel/${imageName}`
 }
 
-// 轮播数据
-// const slides = ref([
-//   {
-//     title: '虚拟仿真实验平台',
-//     subtitle: '构建沉浸式学习环境，开启教育新篇章',
-//     imageUrl:
-//       'https://images.unsplash.com/photo-1542370285-b8eb8317691c?q=80&w=1974&auto=format&fit=crop',
-//   },
-//   {
-//     title: '智能化教学系统',
-//     subtitle: 'AI驱动的个性化学习体验',
-//     imageUrl:
-//       'https://images.unsplash.com/photo-1519010470956-6d877008eaa4?q=80&w=2070&auto=format&fit=crop',
-//   },
-//   {
-//     title: '数字化实验室',
-//     subtitle: '打破时空限制，让实验无处不在',
-//     imageUrl:
-//       'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
-//   },
-// ])
-
 const nextSlide = () => {
   currentIndex.value = (currentIndex.value + 1) % slides.value.length
 }

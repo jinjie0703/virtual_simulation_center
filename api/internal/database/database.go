@@ -8,7 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
-// DB 是一个全局的数据库连接池
+// DB 是一个全局的数据库连接池，单例模式
 var DB *gorm.DB
 
 // Connect 函数使用传入的 DSN 字符串初始化数据库连接

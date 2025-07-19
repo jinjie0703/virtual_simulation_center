@@ -1,6 +1,6 @@
 # virtual_simulation_center
 
-武汉科技大学 虚拟仿真中心
+武汉科技大学虚拟仿真中心
 
 ## Recommended IDE
 

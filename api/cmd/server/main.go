@@ -4,7 +4,7 @@ package main
 import (
 	"api/internal/database"                // 注意这里的导入路径
 	models "api/internal/models/home_page" // 注意这里的导入路径，确保它指向新的模型文件
-	"api/internal/routes"
+	routes "api/internal/routes/home_page"
 	"api/pkg/config"
 	"log"
 )
@@ -22,7 +22,7 @@ func main() {
 
 	// 3. 自动迁移数据库模型 (可选，在开发环境很方便)
 	// 这会确保数据库中的表结构和你的 models 定义一致
-	err = database.DB.AutoMigrate(&models.HomePageCarousel{})
+	err = database.DB.AutoMigrate(&models.HomeCarousel{})
 	if err != nil {
 		log.Fatalf("Fatal: could not auto migrate database: %v", err)
 	}

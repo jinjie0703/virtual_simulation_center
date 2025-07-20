@@ -103,7 +103,7 @@ const stopAutoplay = () => {
 
 onMounted(async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/api/home_page_carousel`)
+    const response = await axios.get(`${API_BASE_URL}/api/HomeCarousel`)
     slides.value = response.data
     if (slides.value.length > 0) {
       startAutoplay()

@@ -3,6 +3,4 @@ server:
   port: ':8080'
 
 database:
-  # 把 your_password 换成你的数据库密码
-  # 把 vue_slides_db 换成你的数据库名，例如 virtual_simulation_center
   dsn: 'root:2594817591@tcp(127.0.0.1:3306)/virtual_simulation_center?charset=utf8mb4&parseTime=True&loc=Local'

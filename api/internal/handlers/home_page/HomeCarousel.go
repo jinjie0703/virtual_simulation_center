@@ -11,9 +11,9 @@ import (
 )
 
 // 我们可以把函数名也改得更贴切一些
-func GetHomePageCarousel(c *gin.Context) {
+func GetHomeCarousel(c *gin.Context) {
 	// 变量类型从 []models.Slide 改为 []models.HomePageCarousel
-	var carousels []models.HomeCarousel
+	var carousels []home_page.HomeCarousel
 
 	// GORM 查询现在会作用于 home_page_carousel 表
 	result := database.DB.Find(&carousels)

@@ -3,7 +3,7 @@
     <div class="container">
       <div class="section-header">
         <h2 class="section-title">Highligts</h2>
-        <p class="section-subtitle">Explore the results of our innovative projects</p>
+        <p class="section-subtitle">探索我们创新项目的成果</p>
       </div>
 
       <div class="features-grid">
@@ -149,7 +149,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
 //接受外部props(数据)
 defineProps({
   features: {
@@ -171,6 +171,9 @@ const showImagePreview = ref(false)
 const previewImageUrl = ref('')
 const currentGallery = ref([])
 const currentImageIndex = ref(0)
+
+// 用于保存滚动位置
+const scrollPosition = ref(0)
 
 // 用来保存交叉观察器实例的变量
 let observer = null
@@ -264,6 +267,8 @@ const nextImage = () => {
 
 // 键盘事件处理
 const handleKeyPress = (event) => {
+  if (document.fullscreenElement) return
+
   if (!showImagePreview.value) return
 
   switch (event.key) {
@@ -279,9 +284,25 @@ const handleKeyPress = (event) => {
   }
 }
 
+// 全屏切换处理
+const handleFullscreenChange = () => {
+  if (document.fullscreenElement) {
+    // 进入全屏时保存滚动位置
+    scrollPosition.value = window.scrollY
+  } else {
+    // 退出全屏时恢复滚动位置
+    // 使用 nextTick 确保在 DOM 更新后执行滚动
+    nextTick(() => {
+      window.scrollTo(0, scrollPosition.value)
+    })
+  }
+}
+
 onMounted(() => {
   // 添加键盘事件监听
   document.addEventListener('keydown', handleKeyPress)
+  // 添加全屏事件监听
+  document.addEventListener('fullscreenchange', handleFullscreenChange)
 
   if (!featureElements.value || featureElements.value.length === 0) return
 
@@ -306,6 +327,8 @@ onMounted(() => {
 onBeforeUnmount(() => {
   // 移除键盘事件监听
   document.removeEventListener('keydown', handleKeyPress)
+  // 移除全屏事件监听
+  document.removeEventListener('fullscreenchange', handleFullscreenChange)
 
   // 恢复页面滚动
   document.body.style.overflow = 'auto'

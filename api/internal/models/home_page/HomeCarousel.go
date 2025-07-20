@@ -15,5 +15,5 @@ type HomeCarousel struct {
 // TableName 方法告诉 GORM 这个结构体对应数据库中的哪一张表。
 // 如果没有这个方法，GORM 会默认去寻找 'home_page_carousels' (复数形式) 这张表。
 func (HomeCarousel) TableName() string {
-	return "HomeCarousel"
+	return "home_carousel"
 }

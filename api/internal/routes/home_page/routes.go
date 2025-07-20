@@ -1,8 +1,9 @@
 package routes
 
 import (
-	handlers "api/internal/handlers/home_page" // 注意这里的导入路径
+	// 注意这里的导入路径
 
+	"api/internal/handlers/home_page"
 	"time" // 导入 time 包用于配置
 
 	"github.com/gin-gonic/gin"
@@ -32,7 +33,7 @@ func SetupRouter() *gin.Engine {
 		// api.GET("/slides", handlers.GetHomePageCarousel)
 
 		// 或者，你也可以把 URL 也改得更贴切，这也是一种好方法
-		api.GET("/home_page_carousel", handlers.GetHomePageCarousel)
+		api.GET("/HomeCarousel", home_page.GetHomeCarousel)
 	}
 	return r
 }

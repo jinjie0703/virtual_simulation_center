@@ -16,7 +16,7 @@ defineProps({
 
 <style scoped>
 .achievement-header {
-  padding: 80px 20px;
+  padding: 120px 0px 80px 0px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   text-align: center;
   color: white;

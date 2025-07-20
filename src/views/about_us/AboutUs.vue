@@ -1,4 +1,10 @@
 <template>
+  <header class="achievement-header">
+    <div class="header-content">
+      <h1 class="title">关于我们</h1>
+      <p class="subtitle">每一个像素，都承载着对知识的无限热忱</p>
+    </div>
+  </header>
   <div class="about-us-container">
     <!-- 新增：装饰性背景元素 -->
     <div class="background-decoration">
@@ -10,18 +16,7 @@
     <section class="about-section story">
       <!-- 新增：图标装饰 -->
       <div class="section-icon">
-        <svg
-          width="48"
-          height="48"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M12 2L13.09 8.26L19 7L17.74 13.13L22 15L17.74 16.87L19 23L13.09 21.74L12 28L10.91 21.74L5 23L6.26 16.87L2 15L6.26 13.13L5 7L10.91 8.26L12 2Z"
-            fill="#4A90E2"
-          />
-        </svg>
+        <img src="@/assets/about_us/our_story.svg" alt="story icon" />
       </div>
       <h2>我们的故事</h2>
       <p>
@@ -34,18 +29,7 @@
     <section class="about-section mission">
       <!-- 新增：图标装饰 -->
       <div class="section-icon">
-        <svg
-          width="48"
-          height="48"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 3.5V2L14 2L13 2V3.5L7 7V9C7 10.1 7.9 11 9 11V16.5C7.8 17.1 7 18.4 7 20C7 21.7 8.3 23 10 23S13 21.7 13 20C13 18.4 12.2 17.1 11 16.5V11C12.1 11 13 10.1 13 9H21Z"
-            fill="#50E3C2"
-          />
-        </svg>
+        <img src="@/assets/about_us/our_mission.svg" alt="mission icon" />
       </div>
       <h2>我们的使命</h2>
       <p>
@@ -81,6 +65,27 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.achievement-header {
+  padding: 120px 0px 80px 0px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  text-align: center;
+  color: white;
+}
+.title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin: 0 0 15px;
+  letter-spacing: -1px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.subtitle {
+  font-size: 1.25rem;
+  max-width: 800px;
+  margin: 0 auto;
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
 .about-us-container {
   max-width: 1200px;
   margin: 0 auto;

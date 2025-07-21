@@ -1,3 +1,4 @@
+<!-- InformationCetner.vue这是主调用组件 -->
 <template>
   <div class="page-wrapper">
     <div class="page-content">
@@ -15,7 +16,7 @@ import InfoCenter from '@/components/information_center/InfoCenter.vue'
 .page-wrapper {
   min-height: 100vh;
   background: #f0f2f5;
-  padding-top: 80px; /* 为导航栏留出空间 */
+  /* padding-top: 80px; 为导航栏留出空间 */
 }
 
 .page-content {

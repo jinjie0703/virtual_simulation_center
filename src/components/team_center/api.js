@@ -750,12 +750,12 @@ const projectTeamsData = [
  * @param {number} delay 延迟时间（毫秒）
  * @returns {Promise<any>}
  */
-const mockApiCall = (data, delay = 500) => {
+const mockApiCall = (data) => {
   return new Promise((resolve) => {
     setTimeout(() => {
       // 返回一个深拷贝，以模拟真实API的不可变数据
       resolve(JSON.parse(JSON.stringify(data)))
-    }, delay)
+    })
   })
 }
 

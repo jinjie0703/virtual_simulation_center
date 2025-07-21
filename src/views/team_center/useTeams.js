@@ -29,7 +29,7 @@ export function useTeams(options) {
       // 延迟结束加载，以获得更好的视觉体验
       setTimeout(() => {
         loading.value = false
-      }, 300)
+      })
     }
   }
 

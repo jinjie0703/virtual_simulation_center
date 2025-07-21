@@ -1,3 +1,4 @@
+<!-- InfoTabs.vue -->
 <template>
   <div class="tabs-container">
     <div class="tabs">

@@ -1,3 +1,4 @@
+<!-- InfoGrid.vue -->
 <template>
   <div v-if="items.length > 0" class="info-grid">
     <InfoCard v-for="item in items" :key="item.id" :item="item" :type="itemType" />

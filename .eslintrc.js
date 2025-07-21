@@ -15,7 +15,7 @@ export default {
   },
   rules: {
     // 将 "unused" 相关的规则从错误(error)降级为警告(warn)
-    'no-unused-vars': 'warn',
+    'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
     'vue/no-unused-components': 'warn',
 
     // 其他自定义规则

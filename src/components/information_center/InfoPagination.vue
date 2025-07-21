@@ -1,3 +1,4 @@
+<!-- InfoPagination.vue -->
 <template>
   <div class="pagination">
     <button

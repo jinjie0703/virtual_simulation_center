@@ -1,3 +1,4 @@
+<!-- InfoCard.vue -->
 <template>
   <article class="info-card">
     <div class="card-image-wrapper">
@@ -19,16 +20,30 @@
           <span v-if="item.deadline" class="deadline">⏳ 截止：{{ item.deadline }}</span>
         </div>
         <div v-if="type === 'projects'" class="reward"><span>💰</span> {{ item.reward }}</div>
-        <a href="#" class="details-link">查看详情 →</a>
+        <router-link :to="detailRoute" class="details-link">查看详情 →</router-link>
       </div>
     </div>
   </article>
 </template>
 
 <script setup>
-defineProps({
+import { computed } from 'vue'
+
+const props = defineProps({
   item: Object,
   type: String,
+})
+
+const detailRoute = computed(() => {
+  const routeNameMap = {
+    news: 'NewsDetail',
+    competitions: 'CompetitionDetail',
+    projects: 'ProjectDetail',
+  }
+  return {
+    name: routeNameMap[props.type] || 'home-page', // Fallback route
+    params: { id: props.item.id },
+  }
 })
 </script>
 

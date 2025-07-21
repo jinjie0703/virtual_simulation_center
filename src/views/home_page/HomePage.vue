@@ -10,7 +10,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { allMockData } from '@/components/information_center/TestData.js'
 
 // 导入子组件
 import Carousel from '@/components/home_page/HomeCarousel.vue'
@@ -125,95 +126,8 @@ const featureData = ref([
 // ...existing code...
 
 // 4. 新闻与竞赛的数据
-const newsData = ref([
-  {
-    title: '我校虚拟仿真中心获得国家级教学成果奖',
-    date: '2024-05-20',
-    url: '#',
-    category: '学术荣誉',
-  },
-  {
-    title: '新一代VR教学平台正式启用',
-    date: '2024-05-15',
-    url: '#',
-    category: '技术更新',
-  },
-  {
-    title: '国际虚拟现实教育大会在我校举办',
-    date: '2024-05-10',
-    url: '#',
-    category: '学术会议',
-  },
-  {
-    title: 'AI实验助手项目获得科技进步奖',
-    date: '2024-05-05',
-    url: '#',
-    category: '科研成果',
-  },
-  {
-    title: '数字孪生实验室建设完成验收',
-    date: '2024-04-28',
-    url: '#',
-    category: '基础建设',
-  },
-  {
-    title: '虚拟仿真教学资源库正式上线',
-    date: '2024-04-20',
-    url: '#',
-    category: '资源共享',
-  },
-  {
-    title: '混合现实技术应用于临床医学教学',
-    date: '2024-04-15',
-    url: '#',
-    category: '应用拓展',
-  },
-])
-
-const competitionData = ref([
-  {
-    title: '全国大学生虚拟现实设计大赛报名开始',
-    date: '2024-05-18',
-    url: '#',
-    deadline: '2024-06-30',
-    level: '国家级',
-  },
-  {
-    title: '国际AI创新应用竞赛征集作品',
-    date: '2024-05-12',
-    url: '#',
-    deadline: '2024-06-15',
-    level: '国际级',
-  },
-  {
-    title: '数字化教学创新大赛开放注册',
-    date: '2024-05-09',
-    url: '#',
-    deadline: '2024-06-20',
-    level: '省级',
-  },
-  {
-    title: '混合现实技术挑战赛即将开幕',
-    date: '2024-05-02',
-    url: '#',
-    deadline: '2024-05-25',
-    level: '校级',
-  },
-  {
-    title: '智能实验设计竞赛作品征集中',
-    date: '2024-04-25',
-    url: '#',
-    deadline: '2024-06-10',
-    level: '国家级',
-  },
-  {
-    title: '虚拟仿真课程设计比赛启动',
-    date: '2024-04-18',
-    url: '#',
-    deadline: '2024-05-30',
-    level: '省级',
-  },
-])
+const newsData = computed(() => allMockData.news.slice(0, 7))
+const competitionData = computed(() => allMockData.competitions.slice(0, 6))
 const schoolsData = ref([
   {
     id: 1,

@@ -36,11 +36,14 @@
             <ul class="update-list">
               <li
                 v-for="(item, index) in newsItems"
-                :key="item.title"
+                :key="item.id"
                 class="update-item"
                 :style="{ animationDelay: `${index * 0.1}s` }"
               >
-                <a :href="item.url" class="item-link">
+                <router-link
+                  :to="{ name: 'NewsDetail', params: { id: item.id } }"
+                  class="item-link"
+                >
                   <div class="item-indicator"></div>
                   <div class="item-content">
                     <span class="item-title">{{ item.title }}</span>
@@ -53,7 +56,7 @@
                   <div class="item-arrow">
                     <i>➤</i>
                   </div>
-                </a>
+                </router-link>
               </li>
             </ul>
           </div>
@@ -83,11 +86,14 @@
             <ul class="update-list">
               <li
                 v-for="(item, index) in competitionItems"
-                :key="item.title"
+                :key="item.id"
                 class="update-item"
                 :style="{ animationDelay: `${index * 0.1}s` }"
               >
-                <a :href="item.url" class="item-link">
+                <router-link
+                  :to="{ name: 'CompetitionDetail', params: { id: item.id } }"
+                  class="item-link"
+                >
                   <div class="item-indicator"></div>
                   <div class="item-content">
                     <span class="item-title">{{ item.title }}</span>
@@ -100,7 +106,7 @@
                   <div class="item-arrow">
                     <i>➤</i>
                   </div>
-                </a>
+                </router-link>
               </li>
             </ul>
           </div>
@@ -343,12 +349,12 @@ const isUrgent = (index) => {
   align-items: center;
   gap: 8px;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(var(--updatessection-primary-color-rgb), 0.3);
+  box-shadow: 0 4px 12px rgba(var(--UpdatesSection-primary-color-rgb), 0.3);
 }
 
 .more-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(var(--updatessection-primary-color-rgb), 0.5);
+  box-shadow: 0 6px 20px rgba(var(--UpdatesSection-primary-color-rgb), 0.5);
 }
 
 .more-btn .arrow {
@@ -364,7 +370,7 @@ const isUrgent = (index) => {
   max-height: 480px;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(var(--updatessection-primary-color-rgb), 0.3) transparent;
+  scrollbar-color: rgba(var(--UpdatesSection-primary-color-rgb), 0.3) transparent;
 }
 
 .update-list-container::-webkit-scrollbar {
@@ -376,12 +382,12 @@ const isUrgent = (index) => {
 }
 
 .update-list-container::-webkit-scrollbar-thumb {
-  background: rgba(var(--updatessection-primary-color-rgb), 0.3);
+  background: rgba(var(--UpdatesSection-primary-color-rgb), 0.3);
   border-radius: 3px;
 }
 
 .update-list-container::-webkit-scrollbar-thumb:hover {
-  background: rgba(var(--updatessection-primary-color-rgb), 0.5);
+  background: rgba(var(--UpdatesSection-primary-color-rgb), 0.5);
 }
 
 /* 列表样式 */
@@ -432,7 +438,7 @@ const isUrgent = (index) => {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(var(--updatessection-primary-color-rgb), 0.05) 50%,
+    rgba(var(--UpdatesSection-primary-color-rgb), 0.05) 50%,
     transparent 100%
   );
   transition: left 1s ease;
@@ -443,7 +449,7 @@ const isUrgent = (index) => {
 }
 
 .item-link:hover {
-  background: rgba(var(--updatessection-primary-color-rgb), 0.2);
+  background: rgba(var(--UpdatesSection-primary-color-rgb), 0.2);
   transform: translateX(8px);
 }
 
@@ -462,13 +468,13 @@ const isUrgent = (index) => {
   border-radius: 50%;
   margin-right: 16px;
   flex-shrink: 0;
-  box-shadow: 0 0 0 3px rgba(var(--updatessection-primary-color-rgb), 0.2);
+  box-shadow: 0 0 0 3px rgba(var(--UpdatesSection-primary-color-rgb), 0.2);
   transition: all 0.3s ease;
 }
 
 .item-link:hover .item-indicator {
   transform: scale(1.2);
-  box-shadow: 0 0 0 6px rgba(var(--updatessection-primary-color-rgb), 0.3);
+  box-shadow: 0 0 0 6px rgba(var(---UpdatesSection-primary-color-rgb), 0.3);
 }
 
 .item-content {

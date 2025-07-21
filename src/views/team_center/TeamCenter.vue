@@ -1,5 +1,7 @@
+<!-- TeamCenter.vue -->
 <template>
   <div class="team-center-wrapper">
+    <!-- Header, Tabs, Search/Filter (这部分HTML结构不变) -->
     <div class="page-header">
       <h1>团队中心</h1>
       <p class="subtitle">寻找志同道合的伙伴，一起组队参加竞赛或开展项目</p>
@@ -9,13 +11,13 @@
       <div class="tabs">
         <button
           :class="['tab-button', { active: activeTab === 'competition' }]"
-          @click="changeTab('competition')"
+          @click="activeTab = 'competition'"
         >
           <i class="fas fa-trophy"></i> 竞赛组队
         </button>
         <button
           :class="['tab-button', { active: activeTab === 'project' }]"
-          @click="changeTab('project')"
+          @click="activeTab = 'project'"
         >
           <i class="fas fa-project-diagram"></i> 项目组队
         </button>
@@ -25,16 +27,10 @@
     <div class="search-filter-container">
       <div class="search-box">
         <i class="fas fa-search"></i>
-        <input
-          type="text"
-          v-model="searchQuery"
-          placeholder="搜索团队..."
-          @input="debounceSearch"
-        />
+        <input v-model="searchQuery" type="text" placeholder="搜索团队..." />
       </div>
       <div class="filter-options">
-        <select v-model="filterOption" @change="handleFilterChange">
-          <option value="all">全部</option>
+        <select v-model="filterOption">
           <option value="recent">最近发布</option>
           <option value="popular">最受欢迎</option>
         </select>
@@ -44,38 +40,49 @@
       </button>
     </div>
 
+    <!-- 团队列表 -->
     <div class="tab-content">
       <transition name="fade" mode="out-in">
-        <keep-alive>
-          <component
-            :is="activeComponent"
-            ref="activeTeamListComponent"
-            :search-query="searchQuery"
-            :filter-option="filterOption"
-            :current-page="currentPage"
-            :items-per-page="itemsPerPage"
-            @join-team="handleJoinTeam"
-            @update-total-items="updateTotalItems"
-            @clear-filters="clearFilters"
-          ></component>
-        </keep-alive>
+        <TeamList
+          :loading="loading"
+          :teams="paginatedTeams"
+          @join-team="handleOpenJoinModal"
+          @clear-filters="clearFilters"
+        >
+          <template #empty-state>
+            <i
+              :class="activeTab === 'competition' ? 'fas fa-trophy' : 'fas fa-project-diagram'"
+            ></i>
+            <h3>没有找到相关{{ activeTab === 'competition' ? '竞赛' : '项目' }}团队</h3>
+            <p>请尝试其他搜索条件或查看全部团队</p>
+          </template>
+        </TeamList>
       </transition>
     </div>
 
+    <!-- 分页 -->
     <Pagination
       :current-page="currentPage"
-      :total-items="totalItems"
+      :total-items="filteredTeams.length"
       :items-per-page="itemsPerPage"
       @page-changed="handlePageChange"
     />
 
-    <!-- 申请加入弹窗 -->
+    <!-- 模态框和通知 (这部分HTML结构不变) -->
+    <CreateTeamModal
+      v-if="showCreateModal"
+      :team-type="activeTab"
+      @close="showCreateModal = false"
+      @team-created="addTeam"
+    />
+
     <transition name="modal">
       <div v-if="showJoinModal" class="join-modal-overlay" @click.self="showJoinModal = false">
         <div class="join-modal-content">
+          <!-- ... 申请加入弹窗的内部结构 ... -->
           <div class="modal-header">
             <h3>申请加入团队</h3>
-            <button class="close-button" @click="showJoinModal = false">&times;</button>
+            <button class="close-button" @click="showJoinModal = false">×</button>
           </div>
           <div class="modal-body" v-if="selectedTeam">
             <p><strong>团队名称:</strong> {{ selectedTeam.name }}</p>
@@ -118,161 +125,79 @@
       </div>
     </transition>
 
-    <!-- 创建团队弹窗 -->
-    <CreateTeamModal
-      v-if="showCreateModal"
-      :team-type="activeTab"
-      @close="showCreateModal = false"
-      @team-created="handleTeamCreated"
-    />
-
-    <!-- 通知提示 -->
     <transition name="toast">
       <div v-if="showToast" class="toast-message" :class="toastType">
-        <i :class="toastIcon"></i>
-        {{ toastMessage }}
+        <i :class="toastIcon"></i> {{ toastMessage }}
       </div>
     </transition>
   </div>
 </template>
 
-<script>
-import CompetitionTeam from '@/components/team_center/CompetitionTeam.vue'
-import ProjectTeam from '@/components/team_center/ProjectTeam.vue'
+<script setup>
+import { ref } from 'vue'
+import TeamList from '@/components/team_center/TeamList.vue'
 import CreateTeamModal from '@/components/team_center/CreateTeamModal.vue'
-import Pagination from '@/components/team_center/Pagination.vue'
-import _ from 'lodash'
+import Pagination from '@/components/team_center/TeamPagination.vue'
 
-export default {
-  name: 'TeamCenter',
-  components: {
-    CompetitionTeam,
-    ProjectTeam,
-    CreateTeamModal,
-    Pagination,
-  },
-  data() {
-    return {
-      activeTab: 'competition',
-      searchQuery: '',
-      filterOption: 'all',
-      currentPage: 1,
-      itemsPerPage: 15, // 3列 x 5行
-      totalItems: 0,
-      showJoinModal: false,
-      showCreateModal: false,
-      selectedTeam: null,
-      joinReason: '',
-      contactInfo: '',
-      showToast: false,
-      toastMessage: '',
-      toastType: 'success',
-      toastTimeout: null,
-    }
-  },
-  computed: {
-    activeComponent() {
-      return this.activeTab === 'competition' ? 'CompetitionTeam' : 'ProjectTeam'
-    },
-    toastIcon() {
-      return {
-        success: 'fas fa-check-circle',
-        error: 'fas fa-exclamation-circle',
-        info: 'fas fa-info-circle',
-      }[this.toastType]
-    },
-  },
-  methods: {
-    changeTab(tab) {
-      if (this.activeTab === tab) return
-      this.activeTab = tab
-      this.clearFiltersAndResetPage()
-    },
-    // 使用 lodash 的 debounce 函数防止搜索过于频繁
-    debounceSearch: _.debounce(function () {
-      this.currentPage = 1
-    }, 300),
-    handleFilterChange() {
-      this.currentPage = 1
-    },
-    handlePageChange(page) {
-      this.currentPage = page
-      window.scrollTo({ top: 0, behavior: 'smooth' }) // 平滑滚动到顶部
-    },
-    updateTotalItems(total) {
-      this.totalItems = total
-    },
-    handleJoinTeam(team) {
-      this.selectedTeam = team
-      this.joinReason = ''
-      this.contactInfo = ''
-      this.showJoinModal = true
-    },
-    clearFilters() {
-      this.searchQuery = ''
-      this.filterOption = 'all'
-      this.currentPage = 1
-    },
-    clearFiltersAndResetPage() {
-      this.searchQuery = ''
-      this.filterOption = 'all'
-      this.currentPage = 1
-    },
-    handleTeamCreated(newTeam) {
-      // 确保组件已经挂载
-      this.$nextTick(() => {
-        if (this.$refs.activeTeamListComponent) {
-          this.$refs.activeTeamListComponent.addTeam(newTeam)
-          this.showToastMessage('团队创建成功！', 'success')
-        }
-      })
-    },
-    submitJoinApplication() {
-      // 这里可以添加实际的提交逻辑
-      this.showJoinModal = false
-      this.showToastMessage(
-        `已成功提交加入 "${this.selectedTeam.name}" 的申请，请等待审核`,
-        'success',
-      )
-      this.joinReason = ''
-      this.contactInfo = ''
-    },
-    showToastMessage(message, type = 'info') {
-      if (this.toastTimeout) {
-        clearTimeout(this.toastTimeout)
-      }
+// 1. 导入你的组合式函数
+import { useToast } from './useToast.js'
+import { useModals } from './useModals.js'
+import { useTeams } from './useTeams.js'
 
-      this.toastMessage = message
-      this.toastType = type
-      this.showToast = true
+// 2. 定义组件顶层的、驱动UI交互的状态
+const activeTab = ref('competition')
+const searchQuery = ref('')
+const filterOption = ref('recent')
+const currentPage = ref(1)
+const itemsPerPage = ref(20)
 
-      this.toastTimeout = setTimeout(() => {
-        this.showToast = false
-      }, 3000)
-    },
-  },
-  beforeUnmount() {
-    if (this.toastTimeout) {
-      clearTimeout(this.toastTimeout)
-    }
-  },
+// 3. 实例化组合式函数，建立逻辑联系
+const { showToast, toastMessage, toastType, toastIcon, showToastMessage } = useToast()
+const {
+  showCreateModal,
+  showJoinModal,
+  selectedTeam,
+  joinReason,
+  contactInfo,
+  handleOpenJoinModal,
+  submitJoinApplication,
+} = useModals(showToastMessage)
+const { loading, filteredTeams, paginatedTeams, addTeam } = useTeams({
+  activeTab,
+  searchQuery,
+  filterOption,
+  currentPage,
+  itemsPerPage,
+  showToastMessage,
+})
+
+// 4. 定义仅属于此组件的、简单的事件处理器
+const handlePageChange = (page) => {
+  currentPage.value = page
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+const clearFilters = () => {
+  searchQuery.value = ''
+  filterOption.value = 'recent'
+  // currentPage 的重置逻辑已在 useTeams 内部通过 watch 实现
 }
 </script>
 
 <style scoped>
+/* 样式保持不变 */
 .team-center-wrapper {
+  width: 100%;
   padding: 2rem;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   position: relative;
 }
-
 .page-header {
   text-align: center;
   margin-bottom: 2.5rem;
   animation: fadeIn 0.6s ease-out;
 }
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -283,25 +208,21 @@ export default {
     transform: translateY(0);
   }
 }
-
 h1 {
   font-size: 2.5rem;
   font-weight: 700;
   color: #2c3e50;
   margin-bottom: 0.5rem;
 }
-
 .subtitle {
   font-size: 1.1rem;
   color: #7f8c8d;
 }
-
 .tabs-container {
   display: flex;
   justify-content: center;
   margin-bottom: 2rem;
 }
-
 .tabs {
   display: flex;
   background-color: #f1f5f9;
@@ -309,7 +230,6 @@ h1 {
   padding: 0.4rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
-
 .tab-button {
   padding: 0.9rem 1.6rem;
   border: none;
@@ -322,23 +242,19 @@ h1 {
   border-radius: 8px;
   min-width: 140px;
 }
-
 .tab-button.active {
   background-color: #ffffff;
   color: #3498db;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
   transform: translateY(-1px);
 }
-
 .tab-button:hover:not(.active) {
   color: #3498db;
   background-color: rgba(255, 255, 255, 0.5);
 }
-
 .tab-button i {
   margin-right: 0.5rem;
 }
-
 .search-filter-container {
   display: flex;
   flex-wrap: wrap;
@@ -346,13 +262,11 @@ h1 {
   margin-bottom: 2rem;
   align-items: center;
 }
-
 .search-box {
   flex-grow: 1;
   position: relative;
   min-width: 250px;
 }
-
 .search-box i {
   position: absolute;
   left: 1rem;
@@ -360,7 +274,6 @@ h1 {
   transform: translateY(-50%);
   color: #94a3b8;
 }
-
 .search-box input {
   width: 100%;
   padding: 0.9rem 2.5rem;
@@ -370,35 +283,11 @@ h1 {
   transition: all 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
-
 .search-box input:focus {
   outline: none;
   border-color: #3498db;
   box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
 }
-
-.clear-search {
-  position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  color: #94a3b8;
-  cursor: pointer;
-  padding: 5px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-}
-
-.clear-search:hover {
-  background-color: #f1f5f9;
-  color: #64748b;
-}
-
 .filter-options select {
   padding: 0.9rem 2.5rem 0.9rem 1.2rem;
   border: 1px solid #e2e8f0;
@@ -414,13 +303,11 @@ h1 {
   background-size: 1em;
   transition: all 0.3s ease;
 }
-
 .filter-options select:focus {
   outline: none;
   border-color: #3498db;
   box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
 }
-
 .create-team-button {
   padding: 0.9rem 1.6rem;
   background-color: #3498db;
@@ -433,53 +320,46 @@ h1 {
   white-space: nowrap;
   box-shadow: 0 2px 6px rgba(52, 152, 219, 0.4);
 }
-
 .create-team-button:hover {
   background-color: #2980b9;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(52, 152, 219, 0.5);
 }
-
 .create-team-button:active {
   transform: translateY(0);
   box-shadow: 0 1px 3px rgba(52, 152, 219, 0.4);
 }
-
 .create-team-button i {
   margin-right: 0.5rem;
 }
-
-/* 淡入淡出动画 */
 .fade-enter-active,
 .fade-leave-active {
   transition:
     opacity 0.3s ease,
     transform 0.3s ease;
 }
-
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
   transform: translateY(10px);
 }
 
-/* 模态框动画 */
+.tab-content {
+  width: 100%;
+}
+
 .modal-enter-active,
 .modal-leave-active {
   transition: all 0.3s ease;
 }
-
 .modal-enter-from,
 .modal-leave-to {
   opacity: 0;
 }
-
 .modal-enter-from .join-modal-content,
 .modal-leave-to .join-modal-content {
   transform: scale(0.9);
 }
-
-/* 申请加入模态框 */
 .join-modal-overlay {
   position: fixed;
   top: 0;
@@ -492,7 +372,6 @@ h1 {
   align-items: center;
   z-index: 1000;
 }
-
 .join-modal-content {
   background: white;
   padding: 0;
@@ -504,7 +383,6 @@ h1 {
   overflow: hidden;
   transition: transform 0.3s ease;
 }
-
 .modal-header {
   background-color: #f8fafc;
   padding: 1.2rem 1.5rem;
@@ -513,13 +391,11 @@ h1 {
   justify-content: space-between;
   align-items: center;
 }
-
 .modal-header h3 {
   margin: 0;
   color: #334155;
   font-weight: 600;
 }
-
 .close-button {
   background: none;
   border: none;
@@ -528,26 +404,21 @@ h1 {
   color: #94a3b8;
   transition: color 0.2s ease;
 }
-
 .close-button:hover {
   color: #334155;
 }
-
 .modal-body {
   padding: 1.5rem;
 }
-
 .form-group {
   margin-bottom: 1.2rem;
 }
-
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
   color: #334155;
 }
-
 .form-group input,
 .form-group textarea {
   width: 100%;
@@ -557,21 +428,18 @@ h1 {
   font-size: 1rem;
   transition: all 0.3s ease;
 }
-
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
   border-color: #3498db;
   box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
 }
-
 .modal-footer {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
   margin-top: 1.5rem;
 }
-
 .cancel-button {
   padding: 0.7rem 1.2rem;
   background-color: #f1f5f9;
@@ -582,12 +450,10 @@ h1 {
   font-weight: 500;
   transition: all 0.2s ease;
 }
-
 .cancel-button:hover {
   background-color: #e2e8f0;
   color: #334155;
 }
-
 .submit-button {
   padding: 0.7rem 1.5rem;
   background-color: #3498db;
@@ -598,18 +464,14 @@ h1 {
   font-weight: 500;
   transition: all 0.3s ease;
 }
-
 .submit-button:hover:not(:disabled) {
   background-color: #2980b9;
 }
-
 .submit-button:disabled {
   background-color: #cbd5e1;
   cursor: not-allowed;
   opacity: 0.7;
 }
-
-/* Toast 消息通知 */
 .toast-message {
   position: fixed;
   bottom: 2rem;
@@ -626,84 +488,66 @@ h1 {
   min-width: 300px;
   max-width: 90%;
 }
-
 .toast-message i {
   margin-right: 0.8rem;
   font-size: 1.2rem;
 }
-
 .toast-message.success {
   border-left: 4px solid #10b981;
 }
-
 .toast-message.success i {
   color: #10b981;
 }
-
 .toast-message.error {
   border-left: 4px solid #ef4444;
 }
-
 .toast-message.error i {
   color: #ef4444;
 }
-
 .toast-message.info {
   border-left: 4px solid #3b82f6;
 }
-
 .toast-message.info i {
   color: #3b82f6;
 }
-
 .toast-enter-active,
 .toast-leave-active {
   transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
 }
-
 .toast-enter-from,
 .toast-leave-to {
   opacity: 0;
   transform: translate(-50%, 20px);
 }
-
-/* 响应式设计 */
 @media (max-width: 768px) {
   .team-center-wrapper {
     padding: 1.5rem;
   }
-
   h1 {
     font-size: 2rem;
   }
-
   .tabs {
     width: 100%;
   }
-
   .tab-button {
     min-width: 0;
     flex: 1;
     padding: 0.8rem 0.6rem;
     font-size: 0.9rem;
   }
-
   .search-filter-container {
     flex-direction: column;
     align-items: stretch;
   }
-
   .search-box,
   .filter-options,
   .create-team-button {
     width: 100%;
   }
-
   .create-team-button {
     order: -1;
     margin-bottom: 1rem;
   }
-
   .filter-options select {
     width: 100%;
   }

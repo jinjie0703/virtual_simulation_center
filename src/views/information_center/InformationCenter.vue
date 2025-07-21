@@ -8,6 +8,7 @@
 
 <script setup>
 import InfoCenter from '@/components/information_center/InfoCenter.vue'
+// import { useScroll } from '@/tools/useScroll.js'
 </script>
 
 <style scoped>

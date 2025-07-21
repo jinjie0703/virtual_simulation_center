@@ -1,12 +1,14 @@
+<!-- CreateTeamModal.vue -->
 <template>
-  <div class="modal-overlay" @click.self="$emit('close')">
+  <div class="modal-overlay" @click.self="emit('close')">
     <div class="modal-content">
       <div class="modal-header">
         <h2>创建{{ teamType === 'competition' ? '竞赛' : '项目' }}团队</h2>
-        <button class="close-button" @click="$emit('close')">&times;</button>
+        <button class="close-button" @click="emit('close')">×</button>
       </div>
 
       <form @submit.prevent="submitForm">
+        <!-- 表单内容保持不变 -->
         <div class="form-group">
           <label for="team-name">团队名称</label>
           <input
@@ -19,7 +21,6 @@
           />
           <div class="form-help">简洁明了的团队名称可以吸引更多关注 (最多50字符)</div>
         </div>
-
         <div class="form-group">
           <label for="team-description">团队简介</label>
           <textarea
@@ -32,7 +33,6 @@
           ></textarea>
           <div class="input-counter">{{ team.description.length }}/200</div>
         </div>
-
         <div class="form-group">
           <label for="team-tags">技术标签</label>
           <div class="tags-input-container">
@@ -41,7 +41,7 @@
               v-model="currentTag"
               @keydown.enter.prevent="addTag"
               @keydown.tab.prevent="addTag"
-              @keydown="addTag"
+              @keydown.,.prevent="addTag"
               type="text"
               placeholder="输入标签后按回车、Tab或逗号添加"
             />
@@ -49,12 +49,11 @@
           <div class="tags-display">
             <span v-for="(tag, index) in tags" :key="index" class="tag-item">
               {{ tag }}
-              <button type="button" @click="removeTag(index)" class="remove-tag">&times;</button>
+              <button type="button" @click="removeTag(index)" class="remove-tag">×</button>
             </span>
-            <span v-if="tags.length === 0" class="no-tags">请添加相关技术或主题标签</span>
+            <span v-if="tags.length === 0" class="no-tags">请添加相关技术或主题标签 (最多5个)</span>
           </div>
         </div>
-
         <div class="form-row">
           <div class="form-group">
             <label for="max-members">招募人数</label>
@@ -68,8 +67,6 @@
             />
             <div class="form-help">包括队长在内，最多10人</div>
           </div>
-
-          <!-- 竞赛特定字段 -->
           <template v-if="teamType === 'competition'">
             <div class="form-group">
               <label for="deadline">报名截止日期</label>
@@ -77,8 +74,6 @@
               <div class="form-help">设置合理的截止日期</div>
             </div>
           </template>
-
-          <!-- 项目特定字段 -->
           <template v-if="teamType === 'project'">
             <div class="form-group">
               <label for="difficulty">项目难度</label>
@@ -102,9 +97,8 @@
             </div>
           </template>
         </div>
-
         <div class="form-actions">
-          <button type="button" class="cancel-button" @click="$emit('close')">取消</button>
+          <button type="button" class="cancel-button" @click="emit('close')">取消</button>
           <button type="submit" class="submit-button" :disabled="isFormInvalid">
             <i class="fas fa-plus-circle"></i> 确认创建
           </button>
@@ -114,85 +108,74 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'CreateTeamModal',
-  props: {
-    teamType: {
-      type: String,
-      required: true, // 'competition' or 'project'
-    },
-  },
-  data() {
-    const today = new Date()
-    const year = today.getFullYear()
-    const month = String(today.getMonth() + 1).padStart(2, '0')
-    const day = String(today.getDate()).padStart(2, '0')
+<script setup>
+import { ref, reactive, computed, onMounted, nextTick } from 'vue'
 
-    return {
-      team: {
-        name: '',
-        description: '',
-        maxMembers: 5,
-        // 竞赛字段
-        deadline: '',
-        // 项目字段
-        difficulty: '中等',
-        duration: '',
-      },
-      currentTag: '',
-      tags: [],
-      minDate: `${year}-${month}-${day}`, // 今天的日期，格式为YYYY-MM-DD
-    }
-  },
-  computed: {
-    isFormInvalid() {
-      return !this.team.name || !this.team.description || this.tags.length === 0
-    },
-  },
-  methods: {
-    addTag() {
-      const tag = this.currentTag.trim()
-      if (tag && !this.tags.includes(tag) && this.tags.length < 5) {
-        this.tags.push(tag)
-        this.currentTag = ''
-      }
-    },
-    removeTag(index) {
-      this.tags.splice(index, 1)
-    },
-    submitForm() {
-      // 如果表单无效，不提交
-      if (this.isFormInvalid) return
+const props = defineProps({
+  teamType: { type: String, required: true },
+})
 
-      const newTeam = {
-        id: Date.now(), // 临时唯一ID
-        leader: '当前用户', // 假设为当前登录用户
-        memberCount: 1,
-        createdAt: new Date().toISOString(),
-        tags: this.tags,
-        ...this.team,
-      }
+const emit = defineEmits(['close', 'team-created'])
 
-      if (this.teamType === 'competition') {
-        newTeam.status = 'open'
-      }
+// 响应式表单数据
+const team = reactive({
+  name: '',
+  description: '',
+  maxMembers: 5,
+  deadline: '',
+  difficulty: '中等',
+  duration: '',
+})
+const currentTag = ref('')
+const tags = ref([])
 
-      this.$emit('team-created', newTeam)
-      this.$emit('close')
-    },
-  },
-  mounted() {
-    // 在模态框打开时聚焦团队名称输入框
-    this.$nextTick(() => {
-      const nameInput = document.getElementById('team-name')
-      if (nameInput) nameInput.focus()
-    })
-  },
+// 计算属性
+const minDate = computed(() => new Date().toISOString().split('T')[0])
+const isFormInvalid = computed(() => !team.name || !team.description || tags.value.length === 0)
+
+// 方法
+const addTag = () => {
+  const tag = currentTag.value.trim()
+  if (tag && !tags.value.includes(tag) && tags.value.length < 5) {
+    tags.value.push(tag)
+    currentTag.value = ''
+  }
 }
+
+const removeTag = (index) => {
+  tags.value.splice(index, 1)
+}
+
+const submitForm = () => {
+  if (isFormInvalid.value) return
+
+  const newTeam = {
+    id: Date.now(),
+    leader: '当前用户', // 实际应从用户状态管理获取
+    memberCount: 1,
+    createdAt: new Date().toISOString(),
+    tags: tags.value,
+    ...team,
+  }
+
+  if (props.teamType === 'competition') {
+    newTeam.status = 'open'
+  }
+
+  emit('team-created', newTeam)
+  emit('close')
+}
+
+// 生命周期钩子
+onMounted(() => {
+  nextTick(() => {
+    document.getElementById('team-name')?.focus()
+  })
+})
 </script>
 
 <style scoped>
+/* 样式与原文件保持一致 */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -206,7 +189,6 @@ export default {
   z-index: 1000;
   animation: fadeIn 0.2s ease-out;
 }
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -215,7 +197,6 @@ export default {
     opacity: 1;
   }
 }
-
 .modal-content {
   background: white;
   padding: 0;
@@ -228,7 +209,6 @@ export default {
   max-height: 90vh;
   overflow-y: auto;
 }
-
 @keyframes slideIn {
   from {
     transform: translateY(-30px);
@@ -239,21 +219,18 @@ export default {
     opacity: 1;
   }
 }
-
 .modal-header {
   position: relative;
   padding: 1.5rem;
   border-bottom: 1px solid #e2e8f0;
   background-color: #f8fafc;
 }
-
 h2 {
   margin: 0;
   font-size: 1.5rem;
   color: #1e293b;
   text-align: center;
 }
-
 .close-button {
   position: absolute;
   top: 1rem;
@@ -271,33 +248,27 @@ h2 {
   justify-content: center;
   border-radius: 50%;
 }
-
 .close-button:hover {
   color: #334155;
   background-color: rgba(226, 232, 240, 0.5);
 }
-
 form {
   padding: 1.5rem;
 }
-
 .form-group {
   margin-bottom: 1.2rem;
 }
-
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
   color: #334155;
 }
-
 .form-help {
   margin-top: 0.3rem;
   font-size: 0.8rem;
   color: #64748b;
 }
-
 .form-group input,
 .form-group textarea,
 .form-group select {
@@ -308,7 +279,6 @@ form {
   font-size: 1rem;
   transition: all 0.2s ease;
 }
-
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
@@ -316,34 +286,28 @@ form {
   border-color: #3498db;
   box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
 }
-
 .form-group textarea {
   resize: vertical;
   min-height: 80px;
 }
-
 .form-group input::placeholder,
 .form-group textarea::placeholder {
   color: #94a3b8;
 }
-
 .input-counter {
   text-align: right;
   margin-top: 0.3rem;
   font-size: 0.8rem;
   color: #64748b;
 }
-
 .form-row {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1rem;
 }
-
 .tags-input-container {
   position: relative;
 }
-
 .tags-display {
   display: flex;
   flex-wrap: wrap;
@@ -351,7 +315,6 @@ form {
   margin-top: 0.75rem;
   min-height: 30px;
 }
-
 .tag-item {
   background-color: #edf2f7;
   border-radius: 4px;
@@ -362,7 +325,6 @@ form {
   align-items: center;
   gap: 0.3rem;
 }
-
 .remove-tag {
   background: none;
   border: none;
@@ -373,24 +335,20 @@ form {
   line-height: 1;
   transition: color 0.2s;
 }
-
 .remove-tag:hover {
   color: #e53e3e;
 }
-
 .no-tags {
   color: #a0aec0;
   font-style: italic;
   font-size: 0.9rem;
 }
-
 .form-actions {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
   margin-top: 2rem;
 }
-
 .cancel-button {
   padding: 0.75rem 1.5rem;
   background-color: #f1f5f9;
@@ -401,12 +359,10 @@ form {
   font-weight: 500;
   transition: all 0.2s ease;
 }
-
 .cancel-button:hover {
   background-color: #e2e8f0;
   color: #334155;
 }
-
 .submit-button {
   padding: 0.75rem 1.5rem;
   background-color: #3498db;
@@ -420,50 +376,40 @@ form {
   align-items: center;
   gap: 0.5rem;
 }
-
 .submit-button:hover:not(:disabled) {
   background-color: #2980b9;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
 }
-
 .submit-button:active:not(:disabled) {
   transform: translateY(0);
 }
-
 .submit-button:disabled {
   background-color: #cbd5e1;
   cursor: not-allowed;
   opacity: 0.7;
 }
-
 .submit-button i {
   font-size: 1.1rem;
 }
-
 @media (max-width: 640px) {
   .modal-content {
     width: 95%;
     max-height: 95vh;
   }
-
   .form-row {
     grid-template-columns: 1fr;
   }
-
   .form-actions {
     flex-direction: column;
   }
-
   .cancel-button,
   .submit-button {
     width: 100%;
   }
-
   .cancel-button {
     order: 2;
   }
-
   .submit-button {
     order: 1;
     margin-bottom: 0.5rem;

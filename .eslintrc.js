@@ -20,5 +20,6 @@ export default {
 
     // 其他自定义规则
     'no-console': 'off',
+    'vue/multi-word-component-names': 'off',
   },
 }

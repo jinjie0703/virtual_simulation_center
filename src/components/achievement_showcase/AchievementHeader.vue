@@ -26,8 +26,8 @@ defineProps({
   font-size: 3.5rem;
   font-weight: 800;
   margin: 0 0 15px;
-  letter-spacing: -1px;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  animation: fadeInDown 1s ease-out;
 }
 .subtitle {
   font-size: 1.25rem;
@@ -35,5 +35,28 @@ defineProps({
   margin: 0 auto;
   opacity: 0.9;
   line-height: 1.6;
+  animation: fadeInUp 1s ease-out 0.3s both;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>

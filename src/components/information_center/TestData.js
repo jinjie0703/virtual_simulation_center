@@ -57,6 +57,7 @@ export const allMockData = {
     imageUrl: `https://picsum.photos/seed/comp${i}/400/250`,
     deadline: '2024-07-30',
     level: '国家级',
+    tags: ['AI', 'Vue.js', 'Python'],
   })),
   projects: Array.from({ length: 12 }, (_, i) => ({
     id: `proj-${i + 1}`,

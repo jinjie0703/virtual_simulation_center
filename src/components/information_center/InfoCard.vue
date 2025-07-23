@@ -8,7 +8,7 @@
       <div class="card-header">
         <span v-if="type === 'news'" class="card-category">{{ item.category }}</span>
         <span v-if="type === 'competitions'" class="card-category level">{{ item.level }}</span>
-        <div v-if="type === 'projects'" class="card-tags">
+        <div v-if="['competitions', 'projects'].includes(type)" class="card-tags">
           <span v-for="tag in item.tags" :key="tag" class="tag">{{ tag }}</span>
         </div>
       </div>
@@ -56,28 +56,38 @@ const detailRoute = computed(() => {
   display: flex;
   border: 1px solid #e2e8f0;
 }
+
 .info-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
 }
+
 .card-image-wrapper {
   width: 200px;
   flex-shrink: 0;
 }
+
 .card-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
+
 .card-content {
   padding: 25px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
+
 .card-header {
   margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
+
 .card-category {
   display: inline-block;
   padding: 4px 12px;
@@ -87,14 +97,17 @@ const detailRoute = computed(() => {
   background-color: #e9d8fd;
   color: #805ad5;
 }
+
 .card-category.level {
   background-color: #ccebfb;
   color: #3182ce;
 }
+
 .card-tags {
   display: flex;
   gap: 8px;
 }
+
 .tag {
   background: #e2e8f0;
   color: #4a5568;
@@ -103,6 +116,7 @@ const detailRoute = computed(() => {
   font-size: 0.75rem;
   font-weight: 500;
 }
+
 .card-title {
   font-size: 1.2rem;
   font-weight: 700;
@@ -110,6 +124,7 @@ const detailRoute = computed(() => {
   margin: 0 0 10px;
   line-height: 1.4;
 }
+
 .card-summary {
   font-size: 0.9rem;
   color: #718096;
@@ -117,6 +132,7 @@ const detailRoute = computed(() => {
   margin: 0 0 20px;
   flex-grow: 1;
 }
+
 .card-footer {
   display: flex;
   justify-content: space-between;
@@ -125,12 +141,14 @@ const detailRoute = computed(() => {
   border-top: 1px solid #edf2f7;
   padding-top: 15px;
 }
+
 .meta-info .date,
 .meta-info .deadline {
   font-size: 0.85rem;
   color: #a0aec0;
   font-weight: 500;
 }
+
 .details-link {
   text-decoration: none;
   color: #4c51bf;
@@ -138,6 +156,7 @@ const detailRoute = computed(() => {
   font-size: 0.9rem;
   transition: color 0.2s;
 }
+
 .details-link:hover {
   color: #667eea;
 }

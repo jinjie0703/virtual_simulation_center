@@ -19,7 +19,6 @@
           <span v-if="item.date" class="date">📅 {{ item.date }}</span>
           <span v-if="item.deadline" class="deadline">⏳ 截止：{{ item.deadline }}</span>
         </div>
-        <div v-if="type === 'projects'" class="reward"><span>💰</span> {{ item.reward }}</div>
         <router-link :to="detailRoute" class="details-link">查看详情 →</router-link>
       </div>
     </div>
@@ -131,14 +130,6 @@ const detailRoute = computed(() => {
   font-size: 0.85rem;
   color: #a0aec0;
   font-weight: 500;
-}
-.reward {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #dd6b20;
-}
-.reward span {
-  font-size: 1.2rem;
 }
 .details-link {
   text-decoration: none;

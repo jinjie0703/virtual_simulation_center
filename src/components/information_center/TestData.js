@@ -64,7 +64,6 @@ export const allMockData = {
     summary: '需要利用机器学习算法，根据学生的学习行为和成绩，动态生成最优学习路径。',
     imageUrl: `https://picsum.photos/seed/proj${i}/400/250`,
     deadline: '2024-08-15',
-    reward: `${5 + i}k`,
     tags: ['AI', 'Vue.js', 'Python'],
   })),
 }

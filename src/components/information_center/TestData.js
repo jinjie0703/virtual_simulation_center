@@ -3,12 +3,11 @@
 // 导出一份“高保真”的单篇文章模拟数据
 export const mockArticle = {
   id: 'news-1',
-  title: '我校虚拟仿真中心获得第1项国家级教学成果奖',
-  author: '虚拟仿真中心新闻部',
-  publishDate: '2024-05-25',
-  category: '学术荣誉',
-  tags: ['教学', 'VR', '国家级', '创新'],
-  // 核心：使用Markdown来模拟富文本内容
+  title: '标题',
+  author: '作者',
+  publishDate: '发布时间',
+  category: '类别',
+  tags: ['tag1', 'tag2', 'tag3', 'tag4'],
   content: `
 ## 1. 项目背景与挑战
 

@@ -1,7 +1,7 @@
 <!-- InfoCenter.vue -->
 <template>
   <InfoHeader title="信息中心" subtitle="洞悉前沿动态，把握机遇脉搏" />
-  <div class="main-content">
+  <div class="main-content" ref="mainContentRef">
     <InfoTabs :tabs="tabs" :active-tab="activeTab" @update:activeTab="changeTab" />
 
     <div class="content-area">
@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, nextTick } from 'vue'
 import InfoHeader from './InfoHeader.vue'
 import InfoTabs from './InfoTabs.vue'
 import InfoGrid from './InfoGrid.vue'
@@ -29,7 +29,9 @@ import { allMockData } from './TestData.js'
 
 const activeTab = ref('news')
 const currentPage = ref(1)
-const itemsPerPage = 10 // 2列 * 5行
+const itemsPerPage = 10
+
+const mainContentRef = ref(null)
 
 const tabs = [
   { id: 'news', name: '学院信息' },
@@ -37,8 +39,13 @@ const tabs = [
   { id: 'projects', name: '项目悬赏' },
 ]
 
-// --- 从外部文件导入数据 ---
 const allData = ref(allMockData)
+
+const scrollToTop = () => {
+  nextTick(() => {
+    mainContentRef.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  })
+}
 
 const currentItems = computed(() => allData.value[activeTab.value] || [])
 
@@ -53,12 +60,14 @@ const paginatedItems = computed(() => {
 const changeTab = (tabId) => {
   activeTab.value = tabId
   currentPage.value = 1
+  scrollToTop()
 }
 
 const goToPage = (page) => {
   if (page >= 1 && page <= totalPages.value) {
     currentPage.value = page
   }
+  scrollToTop()
 }
 </script>
 
@@ -67,10 +76,11 @@ const goToPage = (page) => {
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 20px 40px 20px;
+  scroll-margin-top: 80px;
 }
 
 .content-area {
-  min-height: 600px; /* 防止切换时页面抖动 */
+  min-height: 600px;
 }
 
 .fade-enter-active,

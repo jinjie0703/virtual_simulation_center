@@ -44,7 +44,7 @@ const changePage = (page) => {
     emit('page-changed', page)
   }
 }
-
+// 页数显示的逻辑
 const visiblePages = computed(() => {
   const total = props.totalPages
   const current = props.currentPage
@@ -95,7 +95,7 @@ const visiblePages = computed(() => {
   cursor: pointer;
   transition: all 0.2s ease;
   font-weight: 600;
-  color: #4a5568;
+  color: #2d3748;
 }
 .page-btn:disabled {
   opacity: 0.5;
@@ -103,18 +103,18 @@ const visiblePages = computed(() => {
 }
 .page-btn:not(:disabled):hover,
 .page-num:not(.active):not(.ellipsis):hover {
-  border-color: #4c51bf;
-  color: #4c51bf;
+  border-color: #2d3748;
+  color: #2d3748;
   transform: translateY(-2px);
 }
 .page-numbers {
   display: flex;
-  gap: 8px;
+  gap: 10px;
 }
 .page-num.active {
-  background-color: #4c51bf;
+  background-color: #2d3748;
   color: #fff;
-  border-color: #4c51bf;
+  border-color: #2d3748;
 }
 .page-num.ellipsis {
   border: none;

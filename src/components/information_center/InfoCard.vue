@@ -1,9 +1,6 @@
 <!-- InfoCard.vue -->
 <template>
   <article class="info-card">
-    <div class="card-image-wrapper">
-      <img :src="item.imageUrl" :alt="item.title" class="card-image" loading="lazy" />
-    </div>
     <div class="card-content">
       <div class="card-header">
         <span v-if="type === 'news'" class="card-category">{{ item.category }}</span>
@@ -60,17 +57,6 @@ const detailRoute = computed(() => {
 .info-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-}
-
-.card-image-wrapper {
-  width: 200px;
-  flex-shrink: 0;
-}
-
-.card-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
 .card-content {
@@ -151,14 +137,14 @@ const detailRoute = computed(() => {
 
 .details-link {
   text-decoration: none;
-  color: #4c51bf;
+  color: #2d3748;
   font-weight: 600;
   font-size: 0.9rem;
   transition: color 0.2s;
 }
 
 .details-link:hover {
-  color: #667eea;
+  color: #8fd3f4;
 }
 
 @media (max-width: 768px) {

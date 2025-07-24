@@ -42,11 +42,10 @@ export const mockArticle = {
 
 // 同时也导出您在InfoCenter中使用的列表数据，方便管理
 export const allMockData = {
-  news: Array.from({ length: 25 }, (_, i) => ({
+  news: Array.from({ length: 250 }, (_, i) => ({
     id: `news-${i + 1}`,
     title: `我校虚拟仿真中心获得第${i + 1}项国家级教学成果奖`,
     summary: '中心凭借其在沉浸式教学领域的创新实践，再次荣获国家级表彰，引领了教育技术的新潮流。',
-    imageUrl: `https://picsum.photos/seed/news${i}/400/250`,
     date: `2024-05-${25 - i > 0 ? 25 - i : 1}`,
     category: '学术荣誉',
   })),
@@ -54,7 +53,6 @@ export const allMockData = {
     id: `comp-${i + 1}`,
     title: `第${i + 1}届全国大学生虚拟现实设计大赛`,
     summary: '本次大赛旨在激发学生的创新精神和实践能力，推动VR技术在各行业的应用与发展。',
-    imageUrl: `https://picsum.photos/seed/comp${i}/400/250`,
     deadline: '2024-07-30',
     level: '国家级',
     tags: ['AI', 'Vue.js', 'Python'],
@@ -63,7 +61,6 @@ export const allMockData = {
     id: `proj-${i + 1}`,
     title: `开发一个基于AI的个性化学习路径推荐系统 #${i + 1}`,
     summary: '需要利用机器学习算法，根据学生的学习行为和成绩，动态生成最优学习路径。',
-    imageUrl: `https://picsum.photos/seed/proj${i}/400/250`,
     deadline: '2024-08-15',
     tags: ['AI', 'Vue.js', 'Python'],
   })),

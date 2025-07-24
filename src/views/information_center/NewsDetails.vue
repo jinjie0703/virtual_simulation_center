@@ -7,7 +7,7 @@
         <h1 class="main-title">{{ article.title }}</h1>
         <div class="meta-data">
           <span>作者：{{ article.author }}</span>
-          <span>发布于：{{ article.publishDate }}</span>
+          <span>发布时间：{{ article.publishDate }}</span>
         </div>
       </div>
     </header>
@@ -29,8 +29,8 @@
         <div class="sidebar-widget">
           <h3>相关推荐</h3>
           <ul class="related-list">
-            <li><a href="#">另一篇关于教学创新的文章</a></li>
-            <li><a href="#">国家级奖项的背后故事</a></li>
+            <li><a href="#">文章1</a></li>
+            <li><a href="#">文章2</a></li>
           </ul>
         </div>
       </aside>
@@ -286,6 +286,15 @@ onMounted(() => {
   border: none;
   border-top: 1px solid #e2e8f0;
   margin: 3em 0;
+}
+
+.loading-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 200px);
+  font-size: 1.5rem;
+  color: #4a5568;
 }
 
 /* 响应式设计 */

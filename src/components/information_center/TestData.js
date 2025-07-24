@@ -4,8 +4,8 @@
 export const mockArticle = {
   id: 'news-1',
   title: '标题',
-  author: '作者',
-  publishDate: '发布时间',
+  author: '',
+  publishDate: '',
   category: '类别',
   tags: ['tag1', 'tag2', 'tag3', 'tag4'],
   content: `

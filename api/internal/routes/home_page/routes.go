@@ -34,6 +34,9 @@ func SetupRouter() *gin.Engine {
 
 		// 或者，你也可以把 URL 也改得更贴切，这也是一种好方法
 		api.GET("/HomeCarousel", home_page.GetHomeCarousel)
+		api.GET("/PartnerCarousel", home_page.GetPartnerCarousel)
+		api.GET("/FeatureSection", home_page.GetFeatureSection)
+		api.GET("/UpdatesSection", home_page.GetUpdatesSection)
 	}
 	return r
 }

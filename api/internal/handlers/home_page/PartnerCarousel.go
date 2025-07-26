@@ -1,24 +1,43 @@
 package home_page
 
 import (
+	"log"
 	"net/http"
 
 	"api/internal/database"
 	"api/internal/models/home_page"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
-// GetPartnerCarousel 用于获取合作伙伴轮播数据
-func GetPartnerCarousel(c *gin.Context) {
-	var partners []home_page.PartnerCarousel
+// GetCarouselByType 根据类型获取公司或学校轮播数据
+func GetCarouselByType(c *gin.Context) {
+	carouselType := c.Query("type") // 获取 URL 查询参数 ?type=...
 
-	// 从 'partner_carousel' 表中查找所有记录
-	result := database.DB.Find(&partners)
+	var partners []home_page.PartnerCarousel
+	var result *gorm.DB
+
+	// 根据 type 参数动态选择查询的表
+	if carouselType == "companies" {
+		result = database.DB.Table("partner_carousel_companies").Find(&partners)
+	} else if carouselType == "schools" {
+		result = database.DB.Table("partner_carousel_schools").Find(&partners)
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid or missing type parameter"})
+		return
+	}
 
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve partner carousel data"})
 		return
+	}
+
+	log.Printf("Found %d partners for type %s", len(partners), carouselType)
+
+	// 为每个 partner 的 logo 构建完整的 URL
+	for i := range partners {
+		partners[i].Logo = "/static/images/home_page/PartnerCarousel/" + partners[i].Logo
 	}
 
 	c.JSON(http.StatusOK, partners)

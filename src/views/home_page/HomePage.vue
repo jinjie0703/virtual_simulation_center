@@ -1,23 +1,118 @@
 <template>
   <div class="homepage">
+    <div v-if="loading" class="loading">加载中...</div>
+    <div v-if="error" class="error">{{ error }}</div>
+
     <Carousel :slides="carouselData" />
     <div class="main-content">
       <FeatureSection :features="featureData" />
-      <UpdatesSection :newsItems="newsData" :competitionItems="competitionData" />
+      <UpdatesSection
+        :newsItems="updatesSectionNews"
+        :competitionItems="updatesSectionCompetitions"
+      />
       <PartnersCarousel :companies="companiesData" :schools="schoolsData" :scrollSpeed="1.2" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { allMockData } from '@/components/information_center/TestData.js'
+import { ref, computed, onMounted } from 'vue'
+// import { allMockData } from '@/components/information_center/TestData.js'
 
 // 导入子组件
 import Carousel from '@/components/home_page/HomeCarousel.vue'
 import FeatureSection from '@/components/home_page/FeatureSection.vue'
 import UpdatesSection from '@/components/home_page/UpdatesSection.vue'
 import PartnersCarousel from '@/components/home_page/PartnersCarousel.vue'
+
+// 响应式数据
+// const homeCarousel = ref([])
+const companiesData = ref([])
+const schoolsData = ref([])
+const updatesSectionNews = ref([])
+const updatesSectionCompetitions = ref([])
+const loading = ref(false)
+const error = ref(null)
+
+// API 基础 URL
+const API_BASE_URL = 'https://localhost:8080/api' // 根据你的服务器配置调整
+
+// 获取合作企业数据
+const fetchCompanies = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/PartnerCarousel?type=companies`)
+    if (!response.ok) throw new Error('Failed to fetch companies')
+    companiesData.value = await response.json()
+  } catch (err) {
+    console.error('Error fetching companies:', err)
+    error.value = err.message
+  }
+}
+
+// 获取合作学校数据
+const fetchSchools = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/PartnerCarousel?type=schools`)
+    if (!response.ok) throw new Error('Failed to fetch schools')
+    schoolsData.value = await response.json()
+  } catch (err) {
+    console.error('Error fetching schools:', err)
+    error.value = err.message
+  }
+}
+
+// 获取新闻动态数据
+const fetchUpdatesSectionNews = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/UpdatesSectionNews`)
+    if (!response.ok) throw new Error('Failed to fetch news updates')
+    updatesSectionNews.value = await response.json()
+  } catch (err) {
+    console.error('Error fetching news updates:', err)
+    error.value = err.message
+  }
+}
+
+// 获取竞赛动态数据
+const fetchUpdatesSectionCompetitions = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/UpdatesSectionCompetitions`)
+    if (!response.ok) throw new Error('Failed to fetch competitions')
+    updatesSectionCompetitions.value = await response.json()
+  } catch (err) {
+    console.error('Error fetching competitions:', err)
+    error.value = err.message
+  }
+}
+
+// 加载所有数据
+const loadAllData = async () => {
+  loading.value = true
+  error.value = null
+
+  try {
+    await Promise.all([
+      fetchCompanies(),
+      fetchSchools(),
+      fetchUpdatesSectionNews(),
+      fetchUpdatesSectionCompetitions(),
+    ])
+  } catch (err) {
+    console.error('Error loading data:', err)
+  } finally {
+    loading.value = false
+  }
+}
+
+// 格式化日期
+const formatDate = (dateString) => {
+  return new Date(dateString).toLocaleDateString('zh-CN')
+}
+
+// 组件挂载时加载数据
+onMounted(() => {
+  loadAllData()
+})
 
 // 3. 成果展示的数据
 // ...existing code...
@@ -124,212 +219,6 @@ const featureData = ref([
   },
 ])
 // ...existing code...
-
-// 4. 新闻与竞赛的数据
-const newsData = computed(() => allMockData.news.slice(0, 7))
-const competitionData = computed(() => allMockData.competitions.slice(0, 6))
-const schoolsData = ref([
-  {
-    id: 1,
-    name: 'google',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png',
-    url: '#',
-  },
-  {
-    id: 1,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png',
-    url: '#',
-  },
-  {
-    id: 1,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png',
-    url: '#',
-  },
-  {
-    id: 4,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/1920px-Microsoft_logo_%282012%29.svg.png',
-    url: '#',
-  },
-  {
-    id: 1,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png',
-    url: '#',
-  },
-  {
-    id: 1,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png',
-    url: '#',
-  },
-  {
-    id: 3,
-    name: '互联网巨头 C',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Sony_logo.svg/2560px-Sony_logo.svg.png',
-    url: '#',
-  },
-  {
-    id: 4,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/1920px-Microsoft_logo_%282012%29.svg.png',
-    url: '#',
-  },
-  {
-    id: 3,
-    name: '互联网巨头 C',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Sony_logo.svg/2560px-Sony_logo.svg.png',
-    url: '#',
-  },
-  {
-    id: 5,
-    name: '制造业 E',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/2560px-IBM_logo.svg.png',
-    url: '#',
-  },
-  {
-    id: 4,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/1920px-Microsoft_logo_%282012%29.svg.png',
-    url: '#',
-  },
-  {
-    id: 5,
-    name: '制造业 E',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/2560px-IBM_logo.svg.png',
-    url: '#',
-  },
-  {
-    id: 5,
-    name: '制造业 E',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/2560px-IBM_logo.svg.png',
-    url: '#',
-  },
-  {
-    id: 4,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/1920px-Microsoft_logo_%282012%29.svg.png',
-    url: '#',
-  },
-  {
-    id: 5,
-    name: '制造业 E',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/2560px-IBM_logo.svg.png',
-    url: '#',
-  },
-  {
-    id: 4,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/1920px-Microsoft_logo_%282012%29.svg.png',
-    url: '#',
-  },
-  {
-    id: 5,
-    name: '制造业 E',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/2560px-IBM_logo.svg.png',
-    url: '#',
-  },
-  {
-    id: 4,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/1920px-Microsoft_logo_%282012%29.svg.png',
-    url: '#',
-  },
-])
-
-// 模拟的合作企业数据,名字虽然不用，但是仍需要存在数据库里面
-const companiesData = ref([
-  {
-    id: 1,
-    name: 'google',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png',
-    url: '#',
-  },
-  {
-    id: 1,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png',
-    url: '#',
-  },
-  {
-    id: 1,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png',
-    url: '#',
-  },
-  {
-    id: 4,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/1920px-Microsoft_logo_%282012%29.svg.png',
-    url: '#',
-  },
-  {
-    id: 1,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png',
-    url: '#',
-  },
-  {
-    id: 1,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png',
-    url: '#',
-  },
-  {
-    id: 3,
-    name: '互联网巨头 C',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Sony_logo.svg/2560px-Sony_logo.svg.png',
-    url: '#',
-  },
-  {
-    id: 4,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/1920px-Microsoft_logo_%282012%29.svg.png',
-    url: '#',
-  },
-  {
-    id: 3,
-    name: '互联网巨头 C',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Sony_logo.svg/2560px-Sony_logo.svg.png',
-    url: '#',
-  },
-  {
-    id: 5,
-    name: '制造业 E',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/2560px-IBM_logo.svg.png',
-    url: '#',
-  },
-  {
-    id: 4,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/1920px-Microsoft_logo_%282012%29.svg.png',
-    url: '#',
-  },
-  {
-    id: 5,
-    name: '制造业 E',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/2560px-IBM_logo.svg.png',
-    url: '#',
-  },
-  {
-    id: 5,
-    name: '制造业 E',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/2560px-IBM_logo.svg.png',
-    url: '#',
-  },
-  {
-    id: 4,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/1920px-Microsoft_logo_%282012%29.svg.png',
-    url: '#',
-  },
-  {
-    id: 5,
-    name: '制造业 E',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/2560px-IBM_logo.svg.png',
-    url: '#',
-  },
-  {
-    id: 4,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/1920px-Microsoft_logo_%282012%29.svg.png',
-    url: '#',
-  },
-  {
-    id: 5,
-    name: '制造业 E',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/2560px-IBM_logo.svg.png',
-    url: '#',
-  },
-  {
-    id: 4,
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/1920px-Microsoft_logo_%282012%29.svg.png',
-    url: '#',
-  },
-])
 </script>
 
 <style scoped>

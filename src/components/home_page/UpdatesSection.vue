@@ -98,8 +98,8 @@
                   <div class="item-content">
                     <span class="item-title">{{ item.title }}</span>
                     <div class="item-meta">
-                      <span class="item-date">{{ formatDate(item.date) }}</span>
-                      <span class="item-badge new" v-if="isNew(item.date)">新</span>
+                      <span class="item-date">{{ formatDate(item.deadline) }}</span>
+                      <span class="item-badge new" v-if="isNew(item.deadline)">新</span>
                       <span class="item-badge urgent" v-if="isUrgent(index)">急</span>
                     </div>
                   </div>

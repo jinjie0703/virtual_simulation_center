@@ -16,7 +16,7 @@ func Connect(dsn string) {
 	var err error
 	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatal("Fatal: Failed to connect to database:", err)
+		log.Fatal("连接数据库失败:", err)
 	}
-	log.Println("Database connection successfully established")
+	log.Println("数据库连接建立成功")
 }

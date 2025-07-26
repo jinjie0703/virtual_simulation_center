@@ -1,12 +1,12 @@
 <!-- filepath: /C:/Users/25948/Desktop/virtual_simulation_center/src/views/OurTeam.vue -->
 <template>
-  <div class="our-team-container">
-    <!-- 页面标题 -->
-    <div class="team-header">
-      <h1 class="main-title">师资队伍</h1>
-      <p class="description">汇聚顶尖人才，打造创新团队</p>
+  <header class="team-header">
+    <div>
+      <h1 class="title">师资队伍</h1>
+      <p class="subtitle">汇聚顶尖人才，打造创新团队</p>
     </div>
-
+  </header>
+  <div class="our-team-container">
     <!-- 标签切换 -->
     <TeamTabs
       :tabs="tabsData"
@@ -371,13 +371,64 @@ watch(activeTab, () => {
 </script>
 
 <style scoped>
+.team-header {
+  padding: 120px 0px 80px 0px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin: 0 0 15px;
+  animation: fadeInDown 1s ease-out;
+  color: #2c3e50;
+  background: linear-gradient(135deg, #2c3e50, #4a90e2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  max-width: 800px;
+  margin: 0 auto;
+  opacity: 0.9;
+  line-height: 1.6;
+  animation: fadeInUp 1s ease-out 0.3s both;
+  color: #666;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 .our-team-container {
   /* 移除 max-width 或增大数值 */
   /* max-width: 1600px; */
   margin: 0 auto;
   padding: 60px 40px;
   font-family: 'Helvetica Neue', Arial, sans-serif;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background-color: #f8f9fa;
   min-height: 100vh;
   width: 100%; /* 添加这行确保全宽 */
 }
@@ -386,30 +437,6 @@ watch(activeTab, () => {
   min-height: 800px;
   position: relative;
   padding: 0 8%; /* 默认左右留白8% */
-}
-/* 页面标题部分 */
-.team-header {
-  text-align: center;
-  margin-bottom: 70px;
-}
-
-.main-title {
-  font-size: 3.5rem;
-  color: #2c3e50;
-  margin-bottom: 24px;
-  font-weight: 700;
-  background: linear-gradient(135deg, #2c3e50, #4a90e2);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.description {
-  font-size: 1.3rem;
-  color: #666;
-  line-height: 1.8;
-  max-width: 600px;
-  margin: 0 auto;
 }
 
 /* 成员展示区域 */

@@ -1,12 +1,12 @@
 <!-- TeamCenter.vue -->
 <template>
-  <div class="team-center-wrapper">
-    <!-- Header, Tabs, Search/Filter (这部分HTML结构不变) -->
-    <div class="page-header">
-      <h1>团队中心</h1>
+  <header class="team-header">
+    <div>
+      <h1 class="title">团队中心</h1>
       <p class="subtitle">寻找志同道合的伙伴，一起组队参加竞赛或开展项目</p>
     </div>
-
+  </header>
+  <div class="team-center-wrapper">
     <div class="tabs-container">
       <div class="tabs">
         <button
@@ -185,7 +185,56 @@ const clearFilters = () => {
 </script>
 
 <style scoped>
-/* 样式保持不变 */
+/* 标题样式 */
+.team-header {
+  padding: 120px 0px 80px 0px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #a1d3ff 0%, #2d92ff 100%);
+}
+
+.title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin: 0 0 15px;
+  color: #2c3e50;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  animation: fadeInDown 1s ease-out;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  max-width: 800px;
+  color: gray;
+  margin: 0 auto;
+  opacity: 0.9;
+  line-height: 1.6;
+  animation: fadeInUp 1s ease-out 0.3s both;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .team-center-wrapper {
   width: 100%;
   padding: 2rem;
@@ -193,31 +242,7 @@ const clearFilters = () => {
   margin: 0 auto;
   position: relative;
 }
-.page-header {
-  text-align: center;
-  margin-bottom: 2.5rem;
-  animation: fadeIn 0.6s ease-out;
-}
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-h1 {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #2c3e50;
-  margin-bottom: 0.5rem;
-}
-.subtitle {
-  font-size: 1.1rem;
-  color: #7f8c8d;
-}
+
 .tabs-container {
   display: flex;
   justify-content: center;

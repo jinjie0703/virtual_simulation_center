@@ -1,7 +1,7 @@
 <template>
   <div class="about-page">
     <header class="about-header">
-      <div class="header-content">
+      <div>
         <h1 class="title">关于我们</h1>
         <p class="subtitle">每一个像素，都承载着对知识的无限热忱</p>
       </div>

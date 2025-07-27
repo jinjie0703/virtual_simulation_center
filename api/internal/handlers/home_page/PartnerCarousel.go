@@ -37,10 +37,7 @@ func GetCarouselByType(c *gin.Context) {
 
 	// 为每个 partner 的 logo 构建完整的 URL
 	for i := range partners {
-		log.Printf("Original logo: %s", partners[i].Logo)
-
 		partners[i].Logo = "/static/images/home_page/PartnerCarousel/" + partners[i].Logo
-		log.Printf("Constructed logo URL: %s", partners[i].Logo)
 	}
 
 	c.JSON(http.StatusOK, partners)

@@ -24,7 +24,7 @@ func main() {
 
 	// 4. 启动服务器
 	log.Printf("服务开启的端口为 %s", cfg.Server.Port)
-	if err := r.RunTLS(cfg.Server.Port, "./testcrt/server.pem", "./testcrt/server.key"); err != nil {
+	if err := r.RunTLS(cfg.Server.Port, "./testcrt/localhost+2.pem", "./testcrt/localhost+2-key.pem"); err != nil {
 		log.Fatalf("Fatal: 服务启动失败: %v", err)
 	}
 

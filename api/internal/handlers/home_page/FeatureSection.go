@@ -13,11 +13,11 @@ import (
 func GetFeatureSection(c *gin.Context) {
 	var features []home_page.FeatureSection
 
-	// 从 'feature_section' 表中查找所有记录
-	result := database.DB.Find(&features)
+	// 明确指定表名，以确保查询的准确性
+	result := database.DB.Table(home_page.FeatureSection{}.TableName()).Find(&features)
 
 	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve feature section data"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "获取数据失败"})
 		return
 	}
 

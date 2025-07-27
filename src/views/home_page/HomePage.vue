@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 // import { allMockData } from '@/components/information_center/TestData.js'
 
 // 导入子组件
@@ -25,8 +25,7 @@ import FeatureSection from '@/components/home_page/FeatureSection.vue'
 import UpdatesSection from '@/components/home_page/UpdatesSection.vue'
 import PartnersCarousel from '@/components/home_page/PartnersCarousel.vue'
 
-// 响应式数据
-// const homeCarousel = ref([])
+const featureData = ref([])
 const companiesData = ref([])
 const schoolsData = ref([])
 const updatesSectionNews = ref([])
@@ -85,139 +84,162 @@ const fetchUpdatesSectionCompetitions = async () => {
   }
 }
 
+// 获取特性区域数据
+const fetchFeatureData = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/FeatureSection`)
+    if (!response.ok) throw new Error('Failed to fetch feature data')
+    featureData.value = await response.json()
+  } catch (err) {
+    console.error('Error fetching feature data:', err)
+    error.value = err.message
+  }
+}
+
 // 加载所有数据
+// 在 homepage.vue 中
+
 const loadAllData = async () => {
   loading.value = true
   error.value = null
 
-  try {
-    await Promise.all([
-      fetchCompanies(),
-      fetchSchools(),
-      fetchUpdatesSectionNews(),
-      fetchUpdatesSectionCompetitions(),
-    ])
-  } catch (err) {
-    console.error('Error loading data:', err)
-  } finally {
-    loading.value = false
-  }
-}
+  const promises = [
+    fetchFeatureData(),
+    fetchCompanies(),
+    fetchSchools(),
+    fetchUpdatesSectionNews(),
+    fetchUpdatesSectionCompetitions(),
+  ]
 
-// 格式化日期
-const formatDate = (dateString) => {
-  return new Date(dateString).toLocaleDateString('zh-CN')
+  const results = await Promise.allSettled(promises)
+
+  // 检查每个请求的结果
+  results.forEach((result, index) => {
+    if (result.status === 'rejected') {
+      const promiseNames = [
+        'FeatureData',
+        'Companies',
+        'Schools',
+        'UpdatesSectionNews',
+        'UpdatesSectionCompetitions',
+      ]
+      console.error(`Failed to load ${promiseNames[index]}:`, result.reason)
+      // 可选：设置一个更通用的错误信息
+      if (!error.value) {
+        error.value = `部分数据加载失败，请刷新页面重试。`
+      }
+    }
+  })
+
+  loading.value = false
 }
 
 // 组件挂载时加载数据
 onMounted(() => {
   loadAllData()
 })
+// const featureData = ref([
+//   {
+//     id: 1,
+//     title: '虚拟现实教学平台',
+//     description:
+//       '基于先进的VR技术构建的沉浸式教学环境，为学生提供真实感强、交互性好的学习体验。该平台集成了多种学科内容，支持个性化学习路径定制。基于先进的VR技术构建的沉浸式教学环境，为学生提供真实感强、交互性好的学习体验。该平台集成了多种学科内容，支持个性化学习路径定制。',
+//     image:
+//       'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop',
+//     tags: ['VR技术', '教学创新', '沉浸式体验'],
+//     author: '张教授',
+//     authorTitle: '虚拟现实研究中心主任',
+//     authorAvatar:
+//       'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=150&auto=format&fit=crop',
+//     contact1: '邮箱zhang@university.edu.cn',
+//     contact2: '电话123456789',
+//     projectUrl: 'https://github.com',
 
-// 3. 成果展示的数据
-// ...existing code...
-const featureData = ref([
-  {
-    id: 1,
-    title: '虚拟现实教学平台',
-    description:
-      '基于先进的VR技术构建的沉浸式教学环境，为学生提供真实感强、交互性好的学习体验。该平台集成了多种学科内容，支持个性化学习路径定制。基于先进的VR技术构建的沉浸式教学环境，为学生提供真实感强、交互性好的学习体验。该平台集成了多种学科内容，支持个性化学习路径定制。',
-    image:
-      'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop',
-    tags: ['VR技术', '教学创新', '沉浸式体验'],
-    author: '张教授',
-    authorTitle: '虚拟现实研究中心主任',
-    authorAvatar:
-      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=150&auto=format&fit=crop',
-    contact1: '邮箱zhang@university.edu.cn',
-    contact2: '电话123456789',
-    projectUrl: 'https://github.com',
+//     // 视频和图片库
+//     videoUrl: 'http://vjs.zencdn.net/v/oceans.mp4',
+//     gallery: [
+//       'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
+//       'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
+//       'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
+//       'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
+//     ],
+//   },
+//   {
+//     id: 1,
+//     title: '虚拟现实教学平台',
+//     description:
+//       '基于先进的VR技术构建的沉浸式教学环境，为学生提供真实感强、交互性好的学习体验。该平台集成了多种学科内容，支持个性化学习路径定制。基于先进的VR技术构建的沉浸式教学环境，为学生提供真实感强、交互性好的学习体验。该平台集成了多种学科内容，支持个性化学习路径定制。',
+//     image:
+//       'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop',
+//     tags: ['VR技术', '教学创新', '沉浸式体验'],
+//     author: '张教授',
+//     authorTitle: '虚拟现实研究中心主任',
+//     authorAvatar:
+//       'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=150&auto=format&fit=crop',
+//     contact1: '邮箱zhang@university.edu.cn',
+//     contact2: '电话123456789',
+//     projectUrl: 'https://github.com',
 
-    // 视频和图片库
-    videoUrl: 'http://vjs.zencdn.net/v/oceans.mp4',
-    gallery: [
-      'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
-    ],
-  },
-  {
-    id: 1,
-    title: '虚拟现实教学平台',
-    description:
-      '基于先进的VR技术构建的沉浸式教学环境，为学生提供真实感强、交互性好的学习体验。该平台集成了多种学科内容，支持个性化学习路径定制。基于先进的VR技术构建的沉浸式教学环境，为学生提供真实感强、交互性好的学习体验。该平台集成了多种学科内容，支持个性化学习路径定制。',
-    image:
-      'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop',
-    tags: ['VR技术', '教学创新', '沉浸式体验'],
-    author: '张教授',
-    authorTitle: '虚拟现实研究中心主任',
-    authorAvatar:
-      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=150&auto=format&fit=crop',
-    contact1: '邮箱zhang@university.edu.cn',
-    contact2: '电话123456789',
-    projectUrl: 'https://github.com',
+//     // 视频和图片库
+//     videoUrl: 'http://vjs.zencdn.net/v/oceans.mp4',
+//     gallery: [
+//       'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
+//       'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
+//       'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
+//       'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
+//     ],
+//   },
+//   {
+//     id: 1,
+//     title: '虚拟现实教学平台',
+//     description:
+//       '基于先进的VR技术构建的沉浸式教学环境，为学生提供真实感强、交互性好的学习体验。该平台集成了多种学科内容，支持个性化学习路径定制。基于先进的VR技术构建的沉浸式教学环境，为学生提供真实感强、交互性好的学习体验。该平台集成了多种学科内容，支持个性化学习路径定制。',
+//     image:
+//       'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop',
+//     tags: ['VR技术', '教学创新', '沉浸式体验'],
+//     author: '张教授',
+//     authorTitle: '虚拟现实研究中心主任',
+//     authorAvatar:
+//       'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=150&auto=format&fit=crop',
+//     contact1: '邮箱zhang@university.edu.cn',
+//     contact2: '电话123456789',
+//     projectUrl: 'https://github.com',
 
-    // 视频和图片库
-    videoUrl: 'http://vjs.zencdn.net/v/oceans.mp4',
-    gallery: [
-      'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
-    ],
-  },
-  {
-    id: 1,
-    title: '虚拟现实教学平台',
-    description:
-      '基于先进的VR技术构建的沉浸式教学环境，为学生提供真实感强、交互性好的学习体验。该平台集成了多种学科内容，支持个性化学习路径定制。基于先进的VR技术构建的沉浸式教学环境，为学生提供真实感强、交互性好的学习体验。该平台集成了多种学科内容，支持个性化学习路径定制。',
-    image:
-      'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop',
-    tags: ['VR技术', '教学创新', '沉浸式体验'],
-    author: '张教授',
-    authorTitle: '虚拟现实研究中心主任',
-    authorAvatar:
-      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=150&auto=format&fit=crop',
-    contact1: '邮箱zhang@university.edu.cn',
-    contact2: '电话123456789',
-    projectUrl: 'https://github.com',
+//     // 视频和图片库
+//     videoUrl: 'http://vjs.zencdn.net/v/oceans.mp4',
+//     gallery: [
+//       'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
+//       'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
+//       'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
+//       'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
+//     ],
+//   },
+//   {
+//     id: 1,
+//     title: '虚拟现实教学平台',
+//     description:
+//       '基于先进的VR技术构建的沉浸式教学环境，为学生提供真实感强、交互性好的学习体验。该平台集成了多种学科内容，支持个性化学习路径定制。基于先进的VR技术构建的沉浸式教学环境，为学生提供真实感强、交互性好的学习体验。该平台集成了多种学科内容，支持个性化学习路径定制。',
+//     image:
+//       'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop',
+//     tags: ['VR技术', '教学创新', '沉浸式体验'],
+//     author: '张教授',
+//     authorTitle: '虚拟现实研究中心主任',
+//     authorAvatar:
+//       'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=150&auto=format&fit=crop',
+//     contact1: '邮箱zhang@university.edu.cn',
+//     contact2: '电话123456789',
+//     projectUrl: 'https://github.com',
 
-    // 视频和图片库
-    videoUrl: 'http://vjs.zencdn.net/v/oceans.mp4',
-    gallery: [
-      'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
-    ],
-  },
-  {
-    id: 1,
-    title: '虚拟现实教学平台',
-    description:
-      '基于先进的VR技术构建的沉浸式教学环境，为学生提供真实感强、交互性好的学习体验。该平台集成了多种学科内容，支持个性化学习路径定制。基于先进的VR技术构建的沉浸式教学环境，为学生提供真实感强、交互性好的学习体验。该平台集成了多种学科内容，支持个性化学习路径定制。',
-    image:
-      'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop',
-    tags: ['VR技术', '教学创新', '沉浸式体验'],
-    author: '张教授',
-    authorTitle: '虚拟现实研究中心主任',
-    authorAvatar:
-      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=150&auto=format&fit=crop',
-    contact1: '邮箱zhang@university.edu.cn',
-    contact2: '电话123456789',
-    projectUrl: 'https://github.com',
-
-    // 视频和图片库
-    videoUrl: 'http://vjs.zencdn.net/v/oceans.mp4',
-    gallery: [
-      'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
-    ],
-  },
-])
+//     // 视频和图片库
+//     videoUrl: 'http://vjs.zencdn.net/v/oceans.mp4',
+//     gallery: [
+//       'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
+//       'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
+//       'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
+//       'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
+//     ],
+//   },
+// ])
 // ...existing code...
 </script>
 

@@ -8,7 +8,7 @@
 
       <div class="features-grid">
         <div
-          v-for="(feature, index) in features"
+          v-for="(feature, index) in processedFeatures"
           :key="feature.id"
           :class="['feature-item', index % 2 === 0 ? 'layout-left' : 'layout-right']"
           :data-feature-id="feature.id"
@@ -149,13 +149,44 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { ref, onMounted, onBeforeUnmount, nextTick, computed, watchEffect, watch } from 'vue'
 //接受外部props(数据)
-defineProps({
+const props = defineProps({
   features: {
     type: Array,
     required: true,
   },
+})
+
+watchEffect(() => {
+  console.log('2. [子组件] 接收到的 Props:', props.features)
+})
+
+const processedFeatures = computed(() => {
+  if (!Array.isArray(props.features)) {
+    return []
+  }
+  return props.features.map((feature) => {
+    // 后端已经返回了正确的数组，我们只需确保它是数组即可
+    const tags = Array.isArray(feature.Tags) ? feature.Tags : []
+    const gallery = Array.isArray(feature.Gallery) ? feature.Gallery : []
+
+    return {
+      id: feature.ID || feature.id,
+      title: feature.Title || feature.title,
+      description: feature.Description || feature.description,
+      image: feature.Image || feature.image,
+      author: feature.Author || feature.author,
+      authorTitle: feature.AuthorTitle || feature.authorTitle,
+      authorAvatar: feature.AuthorAvatar || feature.authorAvatar,
+      contact1: feature.Contact1 || feature.contact1,
+      contact2: feature.Contact2 || feature.contact2,
+      projectUrl: feature.ProjectUrl || feature.projectUrl,
+      videoUrl: feature.VideoUrl || feature.videoUrl,
+      tags: tags, // 直接使用处理后的数组
+      gallery: gallery, // 直接使用处理后的数组
+    }
+  })
 })
 // 用于收集所有DOM元素的ref，进入视口动画
 const featureElements = ref([])
@@ -177,6 +208,54 @@ const scrollPosition = ref(0)
 
 // 用来保存交叉观察器实例的变量
 let observer = null
+
+const setupObserver = () => {
+  // 清理旧的观察器
+  if (observer) {
+    observer.disconnect()
+  }
+
+  // 确保有元素可供观察
+  if (!featureElements.value || featureElements.value.length === 0) {
+    return
+  }
+
+  const options = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px',
+  }
+
+  observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate-in')
+        // 可选：一旦动画触发，就停止观察，以提高性能
+        observer.unobserve(entry.target)
+      }
+    })
+  }, options)
+
+  // 观察所有 feature 元素
+  featureElements.value.forEach((el) => {
+    if (el) {
+      observer.observe(el)
+    }
+  })
+}
+
+// 侦听 processedFeatures 的变化
+watch(
+  processedFeatures,
+  async (newFeatures) => {
+    if (newFeatures && newFeatures.length > 0) {
+      // 等待 v-for 循环完成并且 DOM 更新
+      await nextTick()
+      // DOM 更新后，设置观察器
+      setupObserver()
+    }
+  },
+  { deep: true }, // 使用 deep watch 以防数据嵌套
+)
 
 // 卡片翻转控制
 const handleMouseEnter = (index) => {
@@ -304,24 +383,10 @@ onMounted(() => {
   // 添加全屏事件监听
   document.addEventListener('fullscreenchange', handleFullscreenChange)
 
-  if (!featureElements.value || featureElements.value.length === 0) return
-
-  const options = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px',
+  // 初始加载时，如果已有数据，也尝试设置观察器
+  if (processedFeatures.value.length > 0) {
+    nextTick(setupObserver)
   }
-
-  observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('animate-in')
-      }
-    })
-  }, options)
-
-  featureElements.value.forEach((el) => {
-    if (el) observer.observe(el)
-  })
 })
 
 onBeforeUnmount(() => {

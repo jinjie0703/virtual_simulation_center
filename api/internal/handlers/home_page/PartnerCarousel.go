@@ -24,12 +24,12 @@ func GetCarouselByType(c *gin.Context) {
 	} else if carouselType == "schools" {
 		result = database.DB.Table("partner_carousel_schools").Find(&partners)
 	} else {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid or missing type parameter"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "无效或缺少类型参数"})
 		return
 	}
 
 	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve partner carousel data"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "无法检索合作伙伴轮播数据"})
 		return
 	}
 
@@ -37,7 +37,10 @@ func GetCarouselByType(c *gin.Context) {
 
 	// 为每个 partner 的 logo 构建完整的 URL
 	for i := range partners {
+		log.Printf("Original logo: %s", partners[i].Logo)
+
 		partners[i].Logo = "/static/images/home_page/PartnerCarousel/" + partners[i].Logo
+		log.Printf("Constructed logo URL: %s", partners[i].Logo)
 	}
 
 	c.JSON(http.StatusOK, partners)

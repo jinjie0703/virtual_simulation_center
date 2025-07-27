@@ -55,7 +55,7 @@ let autoplayTimer = null
 const loading = ref(true)
 const error = ref(null)
 
-const API_BASE_URL = 'https://localhost:8080'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 const currentSlideTitle = computed(() => {
   if (slides.value.length > 0 && slides.value[currentIndex.value]) {

@@ -24,7 +24,7 @@
             rel="noopener noreferrer"
             class="partner-item"
           >
-            <img :src="company.logo" :alt="company.name" class="partner-logo" />
+            <img :src="getImageUrl(company.logo)" :alt="company.name" class="partner-logo" />
           </a>
         </div>
       </div>
@@ -50,7 +50,7 @@
             rel="noopener noreferrer"
             class="partner-item"
           >
-            <img :src="school.logo" :alt="school.name" class="partner-logo" />
+            <img :src="getImageUrl(school.logo)" :alt="school.name" class="partner-logo" />
           </a>
         </div>
       </div>
@@ -75,6 +75,13 @@ const props = defineProps({
     default: 0.5, // 调慢了速度，效果更好
   },
 })
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+
+const getImageUrl = (logoUrl) => {
+  if (!logoUrl) return ''
+  return `${API_BASE_URL}${logoUrl}`
+}
 
 // 为 v-for 提供更稳定的 key
 const companiesDoubled = computed(() =>

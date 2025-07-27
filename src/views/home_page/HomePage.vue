@@ -53,7 +53,7 @@ const fetchCompanies = async () => {
 const fetchSchools = async () => {
   try {
     const response = await fetch(`${API_BASE_URL}/PartnerCarousel?type=schools`)
-    if (!response.ok) throw new Error('Failed to fetch schools')
+    if (!response.ok) throw new Error('获取数据失败')
     schoolsData.value = await response.json()
   } catch (err) {
     console.error('Error fetching schools:', err)

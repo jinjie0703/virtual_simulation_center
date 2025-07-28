@@ -83,11 +83,6 @@ onMounted(() => {
 </script>
 
 <style>
-/*
-  为了让 v-html 渲染出的内容能应用样式，我们在这里使用全局style。
-  如果您的项目配置了scoped CSS，可以改用 <style scoped> 和 ::v-deep 或 :deep() 选择器。
-*/
-
 .article-page {
   background-color: #f8f9fa;
   padding-bottom: 60px;

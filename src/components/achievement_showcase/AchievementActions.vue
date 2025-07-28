@@ -1,6 +1,7 @@
 <template>
   <div class="actions-container">
     <div class="search-wrapper">
+      <img src="@/assets/achievement_showcase/search.svg" alt="Search Icon" class="search-icon" />
       <input
         type="text"
         :value="modelValue"
@@ -8,23 +9,9 @@
         placeholder="搜索项目名称或标签..."
         class="search-input"
       />
-      <svg
-        class="search-icon"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-      >
-        <path
-          d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
-        />
-      </svg>
     </div>
     <button class="submit-btn" @click="$emit('open-submission')">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-        <path
-          d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"
-        />
-      </svg>
+      <img src="@/assets/achievement_showcase/submit.svg" alt="Submit Icon" class="submit-icon" />
       <span>提交新项目</span>
     </button>
   </div>
@@ -53,6 +40,15 @@ defineEmits(['update:modelValue', 'open-submission'])
   max-width: 400px;
 }
 
+.search-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+}
+
 .search-input {
   width: 100%;
   padding: 12px 20px 12px 45px;
@@ -66,16 +62,6 @@ defineEmits(['update:modelValue', 'open-submission'])
 .search-input:focus {
   border-color: #667eea;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
-}
-
-.search-icon {
-  position: absolute;
-  left: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 24px;
-  height: 24px;
-  color: #a0aec0;
 }
 
 .submit-btn {
@@ -100,7 +86,7 @@ defineEmits(['update:modelValue', 'open-submission'])
   box-shadow: 0 7px 14px rgba(102, 126, 234, 0.3);
 }
 
-.submit-btn svg {
+.submit-icon {
   width: 20px;
   height: 20px;
 }

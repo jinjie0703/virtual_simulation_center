@@ -174,7 +174,8 @@ const { loading, filteredTeams, paginatedTeams, addTeam } = useTeams({
 // 4. 定义仅属于此组件的、简单的事件处理器
 const handlePageChange = (page) => {
   currentPage.value = page
-  window.scrollTo({ top: 0, behavior: 'smooth' })
+  // 您可以在这里修改 `top` 的值来调整滚动高度
+  window.scrollTo({ top: 300, behavior: 'smooth' })
 }
 
 const clearFilters = () => {

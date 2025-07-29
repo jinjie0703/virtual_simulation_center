@@ -20,6 +20,7 @@
               class="project-card"
               @mouseenter="handleMouseEnter(index)"
               @mouseleave="handleMouseLeave(index)"
+              @click="handleCardClick(index)"
             >
               <div class="card-inner" :class="{ 'is-flipped': flippedCards[index] }">
                 <!-- 正面 -->
@@ -196,6 +197,8 @@ const flippedCards = ref({})
 const videoLoaded = ref({})
 // 用于跟踪视频是否正在播放
 const isPlaying = ref({})
+// 用于检测是否为触摸设备
+const isTouchDevice = ref(false)
 
 // 图片预览相关状态
 const showImagePreview = ref(false)
@@ -259,11 +262,22 @@ watch(
 
 // 卡片翻转控制
 const handleMouseEnter = (index) => {
-  flippedCards.value[index] = true
+  if (!isTouchDevice.value) {
+    flippedCards.value[index] = true
+  }
 }
 
 const handleMouseLeave = (index) => {
-  flippedCards.value[index] = false
+  if (!isTouchDevice.value) {
+    flippedCards.value[index] = false
+  }
+}
+
+// 为移动端添加点击事件处理
+const handleCardClick = (index) => {
+  if (isTouchDevice.value) {
+    flippedCards.value[index] = !flippedCards.value[index]
+  }
 }
 
 // 视频处理函数
@@ -378,6 +392,9 @@ const handleFullscreenChange = () => {
 }
 
 onMounted(() => {
+  // 检测是否为触摸设备
+  isTouchDevice.value = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+
   // 添加键盘事件监听
   document.addEventListener('keydown', handleKeyPress)
   // 添加全屏事件监听

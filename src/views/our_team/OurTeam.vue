@@ -28,6 +28,7 @@
             v-for="member in paginatedMembers"
             :key="`${activeTab}-${member.id}`"
             :member="member"
+            @click="showMemberDetails(member)"
           />
         </TransitionGroup>
 
@@ -46,6 +47,11 @@
         <p>当前分类下还没有添加成员</p>
       </div>
     </div>
+    <MemberDetailModal
+      :member="selectedMember"
+      :show="!!selectedMember"
+      @close="closeMemberDetails"
+    />
   </div>
 </template>
 
@@ -54,12 +60,14 @@ import { ref, computed, watch, nextTick } from 'vue'
 import MemberCard from '@/components/our_team/MemberCard.vue'
 import TeamPagination from '@/components/our_team/TeamPagination.vue'
 import TeamTabs from '@/components/our_team/TeamTabs.vue'
+import MemberDetailModal from '@/components/our_team/MemberDetailModal.vue'
 
 // 响应式数据
 const isLoading = ref(false)
 const activeTab = ref('teachers')
 const currentPage = ref(1)
-const itemsPerPage = 10 // 改为10个：一行5个，两行
+const itemsPerPage = 10 // 一行5个，两行
+const selectedMember = ref(null)
 
 // 示例数据 - 添加更多数据以便测试分页
 const teachers = ref([
@@ -345,6 +353,7 @@ const switchTab = async (tab) => {
   isLoading.value = true
   activeTab.value = tab
   currentPage.value = 1
+  selectedMember.value = null
 
   // 模拟加载延迟
   await nextTick()
@@ -353,14 +362,16 @@ const switchTab = async (tab) => {
   }, 300)
 }
 
+const scrollToTop = () => {
+  nextTick(() => {
+    window.scrollTo({ top: 300, behavior: 'smooth' })
+  })
+}
+
 const changePage = (page) => {
   if (page >= 1 && page <= totalPages.value && page !== currentPage.value) {
     currentPage.value = page
-    // 滚动到顶部
-    document.querySelector('.members-section')?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    })
+    scrollToTop()
   }
 }
 
@@ -368,6 +379,14 @@ const changePage = (page) => {
 watch(activeTab, () => {
   currentPage.value = 1
 })
+
+const showMemberDetails = (member) => {
+  selectedMember.value = member
+}
+
+const closeMemberDetails = () => {
+  selectedMember.value = null
+}
 </script>
 
 <style scoped>

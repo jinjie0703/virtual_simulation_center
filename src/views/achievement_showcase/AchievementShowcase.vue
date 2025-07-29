@@ -70,14 +70,13 @@ const achievementTemplate = {
 const generatedData = []
 
 // 3. 循环100次，批量生成数据
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 1000; i++) {
   generatedData.push({
     ...achievementTemplate, // 使用展开运算符(...)来复制模板对象的所有属性
     id: i + 1, // 关键：为每个新对象设置一个唯一的id，这对于测试和渲染都非常重要
   })
 }
 
-// 4. 使用最终生成好的100条数据来创建 ref
 const achievements = ref(generatedData)
 
 const selectedAchievement = ref(null)

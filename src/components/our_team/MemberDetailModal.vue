@@ -13,19 +13,19 @@
           </div>
           <div class="modal-body">
             <div class="detail-item">
-              <span class="label">📧 邮箱:</span>
+              <span class="label">联系方式:</span>
               <a :href="`mailto:${member.email}`" class="value-link">{{ member.email }}</a>
             </div>
             <div class="detail-item">
-              <span class="label">🏢 办公室:</span>
+              <span class="label">办公室:</span>
               <span class="value">{{ member.office }}</span>
             </div>
             <div class="detail-item">
-              <span class="label">🔬 研究方向:</span>
+              <span class="label">研究方向:</span>
               <span class="value">{{ member.research }}</span>
             </div>
             <div class="detail-item">
-              <span class="label">🏆 学术成果:</span>
+              <span class="label">学术成果:</span>
               <span class="value">{{ member.achievements }}</span>
             </div>
           </div>

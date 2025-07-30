@@ -86,16 +86,6 @@ const searchQuery = ref('')
 const currentPage = ref(1)
 const itemsPerPage = 15
 
-const scrollToTop = () => {
-  nextTick(() => {
-    // The element to scroll to may not be the direct parent,
-    // so we use a more robust method to find the scrollable container if needed.
-    // For now, let's assume the window scrolling is what's desired.
-    // 您可以在这里修改 `top` 的值来调整滚动高度
-    window.scrollTo({ top: 300, behavior: 'smooth' })
-  })
-}
-
 // 搜索筛选函数
 const filteredAchievements = computed(() => {
   if (!searchQuery.value) {
@@ -121,6 +111,11 @@ const totalPages = computed(() => {
 })
 
 // --- Methods ---
+const scrollToTop = () => {
+  nextTick(() => {
+    window.scrollTo({ top: 300, behavior: 'smooth' })
+  })
+}
 const goToPage = (page) => {
   if (page >= 1 && page <= totalPages.value) {
     currentPage.value = page
@@ -154,6 +149,6 @@ const handleSubmission = (newAchievement) => {
 .content-container {
   max-width: 1600px;
   margin: 0 auto;
-  padding: 0 40px 80px;
+  padding: 0 40px 40px;
 }
 </style>

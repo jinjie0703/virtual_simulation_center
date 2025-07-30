@@ -6,13 +6,13 @@
         type="text"
         :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)"
-        placeholder="搜索项目名称或标签..."
+        placeholder="搜索项目名称或标签"
         class="search-input"
       />
     </div>
     <button class="submit-btn" @click="$emit('open-submission')">
       <img src="@/assets/achievement_showcase/submit.svg" alt="Submit Icon" class="submit-icon" />
-      <span>提交新项目</span>
+      <span>提交项目</span>
     </button>
   </div>
 </template>

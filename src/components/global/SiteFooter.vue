@@ -34,7 +34,7 @@
                 <span class="contact-text">电话：xxxxx</span>
               </li>
               <li class="contact-item">
-                <span class="contact-text">邮箱：xxxxx</span>
+                <span class="contact-text">邮箱：2594817591@qq.com</span>
               </li>
               <li class="contact-item">
                 <span class="contact-text">邮编：xxxxx</span>

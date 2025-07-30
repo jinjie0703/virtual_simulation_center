@@ -4,11 +4,9 @@
       <img :src="member.avatar" :alt="member.name" class="avatar" @error="handleImageError" />
       <div class="avatar-overlay">
         <div class="view-details-hint">
-          <span class="hint-icon">👁️</span>
           <span class="hint-text">查看详情</span>
         </div>
       </div>
-      <div class="status-indicator" :class="getStatusClass()"></div>
     </div>
     <h3 class="member-name">{{ member.name }}</h3>
     <p class="member-title">{{ member.title }}</p>
@@ -17,25 +15,17 @@
 </template>
 
 <script setup>
-const props = defineProps({
-  member: {
-    type: Object,
-    required: true,
-  },
-})
+// const props = defineProps({
+//   member: {
+//     type: Object,
+//     required: true,
+//   },
+// })
 
 const handleImageError = (event) => {
   // 使用默认头像
   event.target.src =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face'
-}
-
-const getStatusClass = () => {
-  // 根据成员类型返回不同的状态指示器
-  if (props.member.title.includes('教授')) return 'professor'
-  if (props.member.title.includes('博士')) return 'doctor'
-  if (props.member.title.includes('研究生')) return 'graduate'
-  return 'student'
 }
 </script>
 
@@ -136,10 +126,6 @@ const getStatusClass = () => {
   flex-direction: column;
   align-items: center;
   gap: 6px;
-}
-
-.hint-icon {
-  font-size: 16px;
 }
 
 .member-name {

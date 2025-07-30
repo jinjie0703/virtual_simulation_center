@@ -9,7 +9,6 @@
     >
       <span class="tab-icon">{{ tab.icon }}</span>
       <span class="tab-text">{{ tab.name }}</span>
-      <span class="tab-count">({{ tab.count }})</span>
     </button>
   </div>
 </template>
@@ -117,12 +116,6 @@ const handleTabClick = (tabId) => {
 
 .tab-text {
   white-space: nowrap;
-}
-
-.tab-count {
-  font-size: 14px;
-  opacity: 0.8;
-  flex-shrink: 0;
 }
 
 @media (max-width: 768px) {

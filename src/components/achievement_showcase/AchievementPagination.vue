@@ -80,7 +80,7 @@ const visiblePages = computed(() => {
   justify-content: center;
   align-items: center;
   gap: 10px;
-  margin-top: 40px;
+  margin-bottom: 40px;
 }
 .page-btn,
 .page-num {

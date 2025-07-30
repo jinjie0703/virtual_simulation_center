@@ -13,13 +13,20 @@
           :class="['tab-button', { active: activeTab === 'competition' }]"
           @click="activeTab = 'competition'"
         >
-          <i class="fas fa-trophy"></i> 竞赛组队
+          <img
+            src="@/assets/team_center/competition.svg"
+            alt="竞赛组队图标"
+            class="competition-icon"
+          />
+          <span>竞赛组队</span>
         </button>
         <button
           :class="['tab-button', { active: activeTab === 'project' }]"
           @click="activeTab = 'project'"
         >
-          <i class="fas fa-project-diagram"></i> 项目组队
+          <!-- <i class="fas fa-project-diagram"></i> 项目组队 -->
+          <img src="@/assets/team_center/project.svg" alt="项目组队图标" class="project-icon" />
+          <span>项目组队</span>
         </button>
       </div>
     </div>
@@ -28,6 +35,12 @@
       <div class="search-box">
         <i class="fas fa-search"></i>
         <input v-model="searchQuery" type="text" placeholder="搜索团队..." />
+      </div>
+      <div class="filter-options">
+        <select v-model="filterOption">
+          <option value="recent">最近发布</option>
+          <option value="popular">最受欢迎</option>
+        </select>
       </div>
       <div class="filter-options">
         <select v-model="filterOption">
@@ -257,6 +270,9 @@ const clearFilters = () => {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 .tab-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
   padding: 0.9rem 1.6rem;
   border: none;
   background-color: transparent;
@@ -280,6 +296,14 @@ const clearFilters = () => {
 }
 .tab-button i {
   margin-right: 0.5rem;
+}
+.competition-icon {
+  width: 24px;
+  height: 24px;
+}
+.project-icon {
+  width: 24px;
+  height: 24px;
 }
 .search-filter-container {
   display: flex;

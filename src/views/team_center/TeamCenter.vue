@@ -24,7 +24,6 @@
           :class="['tab-button', { active: activeTab === 'project' }]"
           @click="activeTab = 'project'"
         >
-          <!-- <i class="fas fa-project-diagram"></i> 项目组队 -->
           <img src="@/assets/team_center/project.svg" alt="项目组队图标" class="project-icon" />
           <span>项目组队</span>
         </button>
@@ -36,18 +35,40 @@
         <i class="fas fa-search"></i>
         <input v-model="searchQuery" type="text" placeholder="搜索团队..." />
       </div>
+
+      <!-- 修改筛选组件区域，确保正确渲染 -->
       <div class="filter-options">
-        <select v-model="filterOption">
-          <option value="recent">最近发布</option>
-          <option value="popular">最受欢迎</option>
-        </select>
+        <!-- 排序下拉框 -->
+        <CustomSelect
+          v-model="filterOption"
+          :options="filterOptions"
+          placeholder="选择排序方式"
+          size="medium"
+          :min-width="'140px'"
+          @change="handleFilterChange"
+        />
+
+        <!-- 难度下拉框 -->
+        <CustomSelect
+          v-model="difficultyFilter"
+          :options="difficultyOptions"
+          placeholder="选择难度"
+          size="medium"
+          :min-width="'120px'"
+          @change="handleDifficultyChange"
+        />
+
+        <!-- 标签下拉框 -->
+        <CustomSelect
+          v-model="tagFilter"
+          :options="tagOptions"
+          placeholder="选择标签"
+          size="medium"
+          :min-width="'120px'"
+          @change="handleTagChange"
+        />
       </div>
-      <div class="filter-options">
-        <select v-model="filterOption">
-          <option value="recent">最近发布</option>
-          <option value="popular">最受欢迎</option>
-        </select>
-      </div>
+
       <button class="create-team-button" @click="showCreateModal = true">
         <i class="fas fa-plus"></i> 创建团队
       </button>
@@ -147,10 +168,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, watch } from 'vue'
 import TeamList from '@/components/team_center/TeamList.vue'
 import CreateTeamModal from '@/components/team_center/CreateTeamModal.vue'
 import Pagination from '@/components/team_center/TeamPagination.vue'
+// 确保路径正确 - 可能需要根据实际目录结构调整
+import CustomSelect from '@/components/common/CustomSelect.vue'
 
 // 1. 导入你的组合式函数
 import { useToast } from './useToast.js'
@@ -163,6 +186,80 @@ const searchQuery = ref('')
 const filterOption = ref('recent')
 const currentPage = ref(1)
 const itemsPerPage = ref(20)
+// 新增筛选状态
+const difficultyFilter = ref('')
+const tagFilter = ref('')
+
+// 修改：使用计算属性定义筛选选项
+const filterOptions = computed(() => [
+  { value: 'recent', label: '最近发布' },
+  { value: 'popular', label: '最受欢迎' },
+  { value: 'members', label: '人数最多' },
+  { value: 'newest', label: '最新创建' },
+])
+
+// 新增：难度选项
+const difficultyOptions = computed(() => [
+  { value: '', label: '全部难度' },
+  { value: 'easy', label: '简单' },
+  { value: 'medium', label: '中等' },
+  { value: 'hard', label: '困难' },
+  { value: 'expert', label: '专家' },
+])
+
+// 新增：标签选项
+const tagOptions = computed(() => {
+  // 根据activeTab返回不同的标签选项
+  if (activeTab.value === 'competition') {
+    return [
+      { value: '', label: '全部标签' },
+      { value: 'ai', label: '人工智能' },
+      { value: 'algorithm', label: '算法' },
+      { value: 'data', label: '数据分析' },
+      { value: 'security', label: '网络安全' },
+      { value: 'innovation', label: '创新设计' },
+    ]
+  } else {
+    return [
+      { value: '', label: '全部标签' },
+      { value: 'web', label: '网站开发' },
+      { value: 'mobile', label: '移动应用' },
+      { value: 'game', label: '游戏开发' },
+      { value: 'iot', label: '物联网' },
+      { value: 'research', label: '研究项目' },
+    ]
+  }
+})
+
+// 新增：处理筛选变化的方法
+const handleFilterChange = (value, option) => {
+  console.log('排序方式已更改:', option.label)
+  // 可以在这里添加额外的逻辑
+}
+
+// 新增：处理难度筛选变化
+const handleDifficultyChange = (value, option) => {
+  console.log('难度筛选已更改:', option.label)
+  // 重置到第一页
+  currentPage.value = 1
+}
+
+// 新增：处理标签筛选变化
+const handleTagChange = (value, option) => {
+  console.log('标签筛选已更改:', option.label)
+  // 重置到第一页
+  currentPage.value = 1
+}
+
+// 增加对activeTab的监听，当切换标签页时重置筛选选项
+watch(activeTab, () => {
+  // 切换标签页时重置标签筛选
+  tagFilter.value = ''
+  // 可能还需要重置难度筛选
+  // difficultyFilter.value = ''
+  // 重置到第一页
+  currentPage.value = 1
+})
 
 // 3. 实例化组合式函数，建立逻辑联系
 const { showToast, toastMessage, toastType, toastIcon, showToastMessage } = useToast()
@@ -179,6 +276,8 @@ const { loading, filteredTeams, paginatedTeams, addTeam } = useTeams({
   activeTab,
   searchQuery,
   filterOption,
+  difficultyFilter, // 新增筛选参数
+  tagFilter, // 新增筛选参数
   currentPage,
   itemsPerPage,
   showToastMessage,
@@ -187,14 +286,14 @@ const { loading, filteredTeams, paginatedTeams, addTeam } = useTeams({
 // 4. 定义仅属于此组件的、简单的事件处理器
 const handlePageChange = (page) => {
   currentPage.value = page
-  // 您可以在这里修改 `top` 的值来调整滚动高度
   window.scrollTo({ top: 300, behavior: 'smooth' })
 }
 
 const clearFilters = () => {
   searchQuery.value = ''
   filterOption.value = 'recent'
-  // currentPage 的重置逻辑已在 useTeams 内部通过 watch 实现
+  difficultyFilter.value = '' // 清除难度筛选
+  tagFilter.value = '' // 清除标签筛选
 }
 </script>
 
@@ -338,26 +437,22 @@ const clearFilters = () => {
   border-color: #3498db;
   box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
 }
-.filter-options select {
-  padding: 0.9rem 2.5rem 0.9rem 1.2rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  font-size: 1rem;
-  background-color: white;
-  cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 1rem center;
-  background-size: 1em;
-  transition: all 0.3s ease;
+
+/* 修改筛选选项样式，确保正确显示 */
+.filter-options {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  min-height: 40px; /* 确保有足够的高度 */
 }
-.filter-options select:focus {
-  outline: none;
-  border-color: #3498db;
-  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+
+/* 添加一些选择器样式确保渲染正确 */
+:deep(.custom-select) {
+  margin-bottom: 4px;
+  margin-top: 4px;
 }
+
 .create-team-button {
   padding: 0.9rem 1.6rem;
   background-color: #3498db;
@@ -598,7 +693,14 @@ const clearFilters = () => {
     order: -1;
     margin-bottom: 1rem;
   }
-  .filter-options select {
+  .filter-options {
+    width: 100%;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  /* 在小屏幕上让每个选择器占满宽度 */
+  :deep(.custom-select) {
     width: 100%;
   }
 }

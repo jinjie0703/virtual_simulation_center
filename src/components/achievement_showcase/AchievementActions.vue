@@ -10,18 +10,115 @@
         class="search-input"
       />
     </div>
-    <button class="submit-btn" @click="$emit('open-submission')">
-      <img src="@/assets/achievement_showcase/submit.svg" alt="Submit Icon" class="submit-icon" />
-      <span>提交项目</span>
-    </button>
+
+    <div class="right-actions">
+      <div class="filters-wrapper">
+        <CustomSelect
+          :model-value="props.categoryFilter || ''"
+          :options="categoryOptions"
+          placeholder="选择分类"
+          size="medium"
+          min-width="100px"
+          trigger-class="filter-trigger"
+          options-class="filter-options"
+          @update:model-value="handleCategoryChange"
+        />
+
+        <CustomSelect
+          :model-value="props.statusFilter || ''"
+          :options="statusOptions"
+          placeholder="选择状态"
+          size="medium"
+          min-width="100px"
+          trigger-class="filter-trigger"
+          options-class="filter-options"
+          @update:model-value="handleStatusChange"
+        />
+
+        <CustomSelect
+          :model-value="props.timeFilter || ''"
+          :options="timeOptions"
+          placeholder="排序方式"
+          size="medium"
+          min-width="100px"
+          trigger-class="filter-trigger"
+          options-class="filter-options"
+          @update:model-value="handleTimeChange"
+        />
+      </div>
+
+      <button class="submit-btn" @click="$emit('open-submission')">
+        <img src="@/assets/achievement_showcase/submit.svg" alt="Submit Icon" class="submit-icon" />
+        <span>提交项目</span>
+      </button>
+    </div>
   </div>
 </template>
 
 <script setup>
-defineProps({
+import {} from 'vue'
+import CustomSelect from '@/components/common/CustomSelect.vue'
+
+const props = defineProps({
   modelValue: String,
+  categoryFilter: {
+    type: String,
+    default: '',
+  },
+  statusFilter: {
+    type: String,
+    default: '',
+  },
+  timeFilter: {
+    type: String,
+    default: '',
+  },
 })
-defineEmits(['update:modelValue', 'open-submission'])
+
+const emit = defineEmits([
+  'update:modelValue',
+  'update:categoryFilter',
+  'update:statusFilter',
+  'update:timeFilter',
+  'open-submission',
+])
+
+// 筛选选项数据
+const categoryOptions = [
+  { label: '全部分类', value: '' },
+  { label: '虚拟仿真', value: 'simulation' },
+  { label: '人工智能', value: 'ai' },
+  { label: '物联网', value: 'iot' },
+  { label: 'Web开发', value: 'web' },
+  { label: '移动应用', value: 'mobile' },
+]
+
+const statusOptions = [
+  { label: '全部状态', value: '' },
+  { label: '进行中', value: 'active' },
+  { label: '已完成', value: 'completed' },
+  { label: '待审核', value: 'pending' },
+]
+
+const timeOptions = [
+  { label: '默认排序', value: '' },
+  { label: '最新发布', value: 'latest' },
+  { label: '最受欢迎', value: 'popular' },
+  { label: '最早发布', value: 'oldest' },
+]
+
+// 事件处理
+const handleCategoryChange = (value) => {
+  emit('update:categoryFilter', value)
+}
+
+const handleStatusChange = (value) => {
+  emit('update:statusFilter', value)
+}
+
+const handleTimeChange = (value) => {
+  emit('update:timeFilter', value)
+}
 </script>
 
 <style scoped>
@@ -64,6 +161,71 @@ defineEmits(['update:modelValue', 'open-submission'])
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
 }
 
+.right-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.filters-wrapper {
+  display: flex;
+  gap: 8px;
+}
+
+/* 自定义 CustomSelect 在此页面的样式 */
+:deep(.filter-trigger) {
+  border-radius: 50px !important;
+  border-color: #e2e8f0 !important;
+  padding: 12px 16px !important;
+  font-size: 0.95rem !important;
+  background: white !important;
+  transition: all 0.3s ease !important;
+  height: 48px !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  min-width: 100px !important;
+}
+
+:deep(.filter-trigger:hover) {
+  border-color: #667eea !important;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1) !important;
+}
+
+:deep(.custom-select.select-open .filter-trigger) {
+  border-color: #667eea !important;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2) !important;
+}
+
+:deep(.filter-options) {
+  border-radius: 12px !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15) !important;
+  margin-top: 8px !important;
+}
+
+:deep(.filter-options .select-option) {
+  padding: 10px 16px !important;
+  font-size: 0.95rem !important;
+  border-left: none !important;
+  transition: all 0.2s ease !important;
+}
+
+:deep(.filter-options .select-option:hover) {
+  background-color: #f1f5f9 !important;
+  color: #667eea !important;
+}
+
+:deep(.filter-options .select-option.active) {
+  background-color: #eff6ff !important;
+  color: #667eea !important;
+  font-weight: 500 !important;
+}
+
+:deep(.custom-select) {
+  min-width: 100px !important;
+}
+
 .submit-btn {
   display: inline-flex;
   align-items: center;
@@ -78,6 +240,8 @@ defineEmits(['update:modelValue', 'open-submission'])
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 6px rgba(102, 126, 234, 0.2);
+  height: 48px;
+  box-sizing: border-box;
 }
 
 .submit-btn:hover {

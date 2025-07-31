@@ -5,10 +5,16 @@ import { ref, computed, watch } from 'vue'
 // 即使你不提供它，这里的结构也是清晰的
 import * as Api from '@/components/team_center/api'
 
-export function useTeams(options) {
-  const { activeTab, searchQuery, filterOption, currentPage, itemsPerPage, showToastMessage } =
-    options
-
+export function useTeams({
+  activeTab,
+  searchQuery,
+  filterOption,
+  difficultyFilter,
+  tagFilter,
+  currentPage,
+  itemsPerPage,
+  showToastMessage,
+}) {
   const loading = ref(true)
   const allTeams = ref([])
 
@@ -55,7 +61,17 @@ export function useTeams(options) {
       )
     }
 
-    // 2. 排序
+    // 2. 难度过滤
+    if (difficultyFilter.value) {
+      teams = teams.filter((team) => team.difficulty === difficultyFilter.value)
+    }
+
+    // 3. 标签过滤
+    if (tagFilter.value) {
+      teams = teams.filter((team) => team.tags && team.tags.includes(tagFilter.value))
+    }
+
+    // 4. 排序
     if (filterOption.value === 'popular') {
       teams.sort((a, b) => b.memberCount / b.maxMembers - a.memberCount / a.maxMembers)
     } else {
@@ -67,7 +83,7 @@ export function useTeams(options) {
   })
 
   // 监听筛选条件变化，自动重置到第一页
-  watch([searchQuery, filterOption], () => {
+  watch([searchQuery, filterOption, difficultyFilter, tagFilter], () => {
     currentPage.value = 1
   })
 

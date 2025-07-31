@@ -1,20 +1,60 @@
 <template>
-  <div class="tab-switcher">
-    <button
-      v-for="tab in tabs"
-      :key="tab.id"
-      :class="['tab-button', { active: activeTab === tab.id }]"
-      @click="handleTabClick(tab.id)"
-      :disabled="isLoading"
-    >
-      <span class="tab-icon">{{ tab.icon }}</span>
-      <span class="tab-text">{{ tab.name }}</span>
-    </button>
+  <div class="tab-container">
+    <!-- 搜索框区域 -->
+    <div class="search-section">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          :value="searchKeyword"
+          @input="handleSearch"
+          placeholder="搜索团队成员..."
+          class="search-input"
+          :disabled="isLoading"
+        />
+      </div>
+    </div>
+
+    <!-- 标签区域 -->
+    <div class="tab-switcher">
+      <button
+        v-for="tab in tabs"
+        :key="tab.id"
+        :class="['tab-button', { active: activeTab === tab.id }]"
+        @click="handleTabClick(tab.id)"
+        :disabled="isLoading"
+      >
+        <span class="tab-icon">{{ tab.icon }}</span>
+        <span class="tab-text">{{ tab.name }}</span>
+        <span class="tab-count">({{ tab.count }})</span>
+      </button>
+    </div>
+
+    <!-- 筛选菜单区域 -->
+    <div class="filter-section">
+      <div class="filter-dropdown">
+        <button class="filter-button" @click="toggleFilterMenu" :disabled="isLoading">
+          <span class="filter-icon">⚙️</span>
+          <span class="filter-text">筛选</span>
+          <span class="dropdown-arrow" :class="{ open: showFilterMenu }">▼</span>
+        </button>
+        <div v-if="showFilterMenu" class="filter-menu">
+          <div
+            v-for="option in filterOptions"
+            :key="option.value"
+            :class="['filter-option', { active: selectedFilter === option.value }]"
+            @click="handleFilterSelect(option.value)"
+          >
+            {{ option.label }}
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import {} from 'vue'
+import { ref } from 'vue'
 
 defineProps({
   tabs: {
@@ -29,20 +69,117 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  searchKeyword: {
+    type: String,
+    default: '',
+  },
+  filterOptions: {
+    type: Array,
+    default: () => [
+      { label: '全部', value: 'all' },
+      { label: '按姓名排序', value: 'name' },
+      { label: '按职位排序', value: 'position' },
+      { label: '按部门排序', value: 'department' },
+    ],
+  },
+  selectedFilter: {
+    type: String,
+    default: 'all',
+  },
 })
 
-const emit = defineEmits(['switchTab'])
+const emit = defineEmits(['switchTab', 'search', 'filter'])
+
+const showFilterMenu = ref(false)
 
 const handleTabClick = (tabId) => {
   emit('switchTab', tabId)
 }
+
+const handleSearch = (event) => {
+  emit('search', event.target.value)
+}
+
+const toggleFilterMenu = () => {
+  showFilterMenu.value = !showFilterMenu.value
+}
+
+const handleFilterSelect = (filterValue) => {
+  emit('filter', filterValue)
+  showFilterMenu.value = false
+}
 </script>
 
 <style scoped>
+.tab-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 50px;
+  gap: 30px;
+  position: relative;
+  padding: 0 8%;
+}
+
+.search-section {
+  flex: 0 0 320px;
+  display: flex;
+  justify-content: flex-start;
+  margin-left: -8%;
+  padding-left: 8%;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 3px solid #e1e5e9;
+  border-radius: 30px;
+  padding: 12px 20px;
+  gap: 12px;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.search-box:hover {
+  border-color: #4a90e2;
+  box-shadow: 0 5px 20px rgba(74, 144, 226, 0.1);
+}
+
+.search-box:focus-within {
+  border-color: #4a90e2;
+  box-shadow: 0 5px 20px rgba(74, 144, 226, 0.2);
+}
+
+.search-icon {
+  font-size: 18px;
+  color: #666;
+  flex-shrink: 0;
+}
+
+.search-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+  color: #333;
+  width: 100%;
+  font-weight: 500;
+}
+
+.search-input::placeholder {
+  color: #999;
+}
+
+.search-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .tab-switcher {
+  flex: 1;
   display: flex;
   justify-content: center;
-  margin-bottom: 50px;
   gap: 30px;
   flex-wrap: wrap;
 }
@@ -118,7 +255,191 @@ const handleTabClick = (tabId) => {
   white-space: nowrap;
 }
 
+.tab-count {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.filter-section {
+  flex: 0 0 250px;
+  display: flex;
+  justify-content: flex-end;
+  margin-right: -8%;
+  padding-right: 8%;
+}
+
+.filter-dropdown {
+  position: relative;
+}
+
+.filter-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  border: 3px solid #e1e5e9;
+  background: white;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.filter-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.filter-button:hover:not(:disabled) {
+  border-color: #4a90e2;
+  color: #4a90e2;
+  box-shadow: 0 5px 20px rgba(74, 144, 226, 0.1);
+}
+
+.filter-icon {
+  font-size: 16px;
+}
+
+.filter-text {
+  flex: 1;
+}
+
+.dropdown-arrow {
+  font-size: 12px;
+  transition: transform 0.3s ease;
+}
+
+.dropdown-arrow.open {
+  transform: rotate(180deg);
+}
+
+.filter-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  background: white;
+  border: 2px solid #e1e5e9;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  min-width: 200px;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.filter-option {
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  color: #666;
+}
+
+.filter-option:hover {
+  background: #f8f9fa;
+  color: #4a90e2;
+}
+
+.filter-option.active {
+  background: linear-gradient(135deg, #4a90e2, #50e3c2);
+  color: white;
+}
+
+@media (max-width: 1400px) {
+  .tab-container {
+    padding: 0 6%;
+  }
+
+  .search-section {
+    flex: 0 0 300px;
+    margin-left: -6%;
+    padding-left: 6%;
+  }
+
+  .filter-section {
+    margin-right: -6%;
+    padding-right: 6%;
+  }
+}
+
+@media (max-width: 1100px) {
+  .tab-container {
+    padding: 0 4%;
+  }
+
+  .search-section {
+    flex: 0 0 280px;
+    margin-left: -4%;
+    padding-left: 4%;
+  }
+
+  .filter-section {
+    margin-right: -4%;
+    padding-right: 4%;
+  }
+}
+
+@media (max-width: 1024px) {
+  .tab-container {
+    flex-direction: column;
+    gap: 20px;
+    padding: 0 3%;
+  }
+
+  .search-section,
+  .filter-section {
+    flex: none;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .search-section {
+    justify-content: flex-start;
+  }
+
+  .filter-section {
+    justify-content: flex-end;
+  }
+
+  .tab-switcher {
+    gap: 15px;
+  }
+}
+
+@media (max-width: 800px) {
+  .tab-container {
+    padding: 0 3%;
+  }
+
+  .search-section {
+    margin-left: -3%;
+    padding-left: 3%;
+  }
+
+  .filter-section {
+    margin-right: -3%;
+    padding-right: 3%;
+  }
+}
+
 @media (max-width: 768px) {
+  .tab-container {
+    flex-direction: column;
+    gap: 20px;
+    padding: 0 2%;
+  }
+
+  .search-section,
+  .filter-section {
+    margin: 0;
+    padding: 0;
+  }
+
   .tab-switcher {
     gap: 15px;
     flex-direction: column;
@@ -134,6 +455,31 @@ const handleTabClick = (tabId) => {
   .tab-icon {
     font-size: 20px;
   }
+
+  .search-box {
+    padding: 10px 16px;
+  }
+
+  .filter-button {
+    padding: 10px 16px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 600px) {
+  .tab-container {
+    padding: 0 2%;
+  }
+
+  .search-section {
+    margin-left: -2%;
+    padding-left: 2%;
+  }
+
+  .filter-section {
+    margin-right: -2%;
+    padding-right: 2%;
+  }
 }
 
 @media (max-width: 480px) {
@@ -141,6 +487,12 @@ const handleTabClick = (tabId) => {
     min-width: 180px;
     padding: 10px 20px;
     font-size: 15px;
+  }
+
+  .search-box,
+  .filter-button {
+    padding: 8px 14px;
+    font-size: 14px;
   }
 }
 </style>

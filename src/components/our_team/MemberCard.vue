@@ -15,12 +15,12 @@
 </template>
 
 <script setup>
-// const props = defineProps({
-//   member: {
-//     type: Object,
-//     required: true,
-//   },
-// })
+defineProps({
+  member: {
+    type: Object,
+    required: true,
+  },
+})
 
 const handleImageError = (event) => {
   // 使用默认头像

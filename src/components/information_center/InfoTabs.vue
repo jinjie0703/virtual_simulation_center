@@ -4,8 +4,8 @@
     <!-- 搜索框 -->
     <div class="search-box">
       <input
-        v-model="searchKeyword"
-        @input="handleSearch"
+        :value="searchQuery"
+        @input="emit('search', $event.target.value)"
         type="text"
         placeholder="按标题和概述搜索..."
         class="search-input"
@@ -40,38 +40,66 @@
       </button>
     </div>
 
-    <!-- 时间筛选按钮 -->
-    <div class="filter-box">
-      <button @click="handleTimeFilter" class="filter-btn">
+    <!-- 时间筛选 -->
+    <div class="filter-box" ref="filterBoxRef">
+      <button @click="toggleDropdown" class="filter-btn">
         <svg class="filter-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M3 4H21V6H3V4ZM3 11H15V13H3V11ZM3 18H9V20H3V18Z" fill="currentColor" />
         </svg>
-        时间筛选
+        {{ selectedFilterLabel }}
       </button>
+      <transition name="dropdown">
+        <div v-if="isDropdownOpen" class="dropdown-menu">
+          <button
+            v-for="filter in timeFilters"
+            :key="filter.value"
+            @click="selectTimeFilter(filter)"
+            class="dropdown-item"
+          >
+            {{ filter.text }}
+          </button>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, watch, onMounted, nextTick } from 'vue'
+import { ref, watch, onMounted, nextTick, onBeforeUnmount } from 'vue'
 
 const props = defineProps({
   tabs: Array,
   activeTab: String,
+  searchQuery: String,
 })
 const emit = defineEmits(['update:activeTab', 'search', 'timeFilter'])
 
-// 搜索关键词
-const searchKeyword = ref('')
+// 时间筛选
+const filterBoxRef = ref(null)
+const isDropdownOpen = ref(false)
+const timeFilters = ref([
+  { value: 'all', text: '全部时间' },
+  { value: 'oneMonth', text: '最近一个月' },
+  { value: 'threeMonths', text: '最近三个月' },
+  { value: 'sixMonths', text: '最近半年' },
+  { value: 'oneYear', text: '最近一年' },
+])
+const selectedFilterLabel = ref('时间筛选')
 
-// 搜索处理函数
-const handleSearch = () => {
-  emit('search', searchKeyword.value)
+const toggleDropdown = () => {
+  isDropdownOpen.value = !isDropdownOpen.value
 }
 
-// 时间筛选处理函数
-const handleTimeFilter = () => {
-  emit('timeFilter')
+const selectTimeFilter = (filter) => {
+  selectedFilterLabel.value = filter.text
+  emit('timeFilter', filter.value)
+  isDropdownOpen.value = false
+}
+
+const handleClickOutside = (event) => {
+  if (filterBoxRef.value && !filterBoxRef.value.contains(event.target)) {
+    isDropdownOpen.value = false
+  }
 }
 
 // 1. 创建 Ref 来存储滑块的位置和宽度
@@ -100,23 +128,28 @@ const updateSlider = () => {
 // 4. 监听 activeTab 的变化，当它变化时更新滑块
 watch(
   () => props.activeTab,
-  () => {
+  (newTab, oldTab) => {
     updateSlider()
+    // 当 tab 切换时，重置筛选
+    if (newTab !== oldTab) {
+      selectedFilterLabel.value = '时间筛选'
+    }
   },
 )
 
-// 5. 在组件挂载后，也需要立即设置一次滑块的初始位置
 onMounted(async () => {
-  // 使用 nextTick 确保 v-for 渲染完成，tabRefs 已经有值
   await nextTick()
   updateSlider()
-
-  // 立即设置滑块位置后，再添加过渡效果，避免初始加载时有动画
   await nextTick()
   const tabsEl = document.querySelector('.tabs')
   if (tabsEl) {
     tabsEl.style.setProperty('--slider-transition', 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)')
   }
+  document.addEventListener('click', handleClickOutside)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside)
 })
 </script>
 
@@ -168,6 +201,7 @@ onMounted(async () => {
   right: 0;
   display: flex;
   align-items: center;
+  z-index: 10; /* 确保下拉菜单在最上层 */
 }
 
 .filter-btn {
@@ -185,7 +219,8 @@ onMounted(async () => {
   transition: all 0.3s ease;
 }
 
-.filter-btn:hover {
+.filter-btn:hover,
+.filter-btn.active {
   border-color: #8fd3f4;
   color: #8fd3f4;
 }
@@ -233,5 +268,51 @@ onMounted(async () => {
 
 .tab-btn.active {
   color: #8fd3f4;
+}
+
+/* 下拉菜单样式 */
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 150px;
+}
+
+.dropdown-item {
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  background-color: transparent;
+  text-align: left;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #f0f2f5;
+  color: #8fd3f4;
+}
+
+/* 下拉菜单过渡动画 */
+.dropdown-enter-active,
+.dropdown-leave-active {
+  transition: all 0.2s ease-out;
+}
+
+.dropdown-enter-from,
+.dropdown-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
 }
 </style>

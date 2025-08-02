@@ -7,6 +7,11 @@
     <main class="content-container">
       <AchievementActions
         v-model="searchQuery"
+        v-model:teacherFilter="teacherFilter"
+        v-model:tagFilter="tagFilter"
+        v-model:timeFilter="timeFilter"
+        :teacher-options="teacherOptions"
+        :tag-options="tagOptions"
         @open-submission="isSubmissionModalVisible = true"
       />
       <AchievementGrid :achievements="paginatedAchievements" @view-details="openDetailsModal" />
@@ -52,6 +57,7 @@ const achievementTemplate = {
   authorTitle: '虚拟现实研究中心主任',
   authorAvatar:
     'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=150&auto=format&fit=crop',
+  publishDate: new Date(),
   contact1: '邮箱zhang@university.edu.cn',
   contact2: '电话123456789',
   projectUrl: 'https://github.com',
@@ -83,20 +89,77 @@ const selectedAchievement = ref(null)
 const isModalVisible = ref(false)
 const isSubmissionModalVisible = ref(false)
 const searchQuery = ref('')
+const teacherFilter = ref('')
+const tagFilter = ref('')
+const timeFilter = ref('')
 const currentPage = ref(1)
 const itemsPerPage = 15
 
+// 动态生成筛选选项
+const teacherOptions = computed(() => {
+  const teachers = new Set(achievements.value.map((a) => a.author))
+  const options = Array.from(teachers).map((teacher) => ({ label: teacher, value: teacher }))
+  return [{ label: '所有教师', value: '' }, ...options]
+})
+
+const tagOptions = computed(() => {
+  const tags = new Set(achievements.value.flatMap((a) => a.tags))
+  const options = Array.from(tags).map((tag) => ({ label: tag, value: tag }))
+  return [{ label: '所有标签', value: '' }, ...options]
+})
+
 // 搜索筛选函数
 const filteredAchievements = computed(() => {
-  if (!searchQuery.value) {
-    return achievements.value
+  let filtered = achievements.value
+
+  // 教师筛选
+  if (teacherFilter.value) {
+    filtered = filtered.filter((achievement) => achievement.author === teacherFilter.value)
   }
-  const lowerCaseQuery = searchQuery.value.toLowerCase()
-  return achievements.value.filter((achievement) => {
-    const titleMatch = achievement.title.toLowerCase().includes(lowerCaseQuery)
-    const tagMatch = achievement.tags.some((tag) => tag.toLowerCase().includes(lowerCaseQuery))
-    return titleMatch || tagMatch
-  })
+
+  // 标签筛选
+  if (tagFilter.value) {
+    filtered = filtered.filter((achievement) => achievement.tags.includes(tagFilter.value))
+  }
+
+  // 时间筛选
+  if (timeFilter.value) {
+    const now = new Date()
+    const filterDate = new Date()
+
+    switch (timeFilter.value) {
+      case 'week':
+        filterDate.setDate(now.getDate() - 7)
+        break
+      case 'month':
+        filterDate.setMonth(now.getMonth() - 1)
+        break
+      case 'three_months':
+        filterDate.setMonth(now.getMonth() - 3)
+        break
+      case 'half_year':
+        filterDate.setMonth(now.getMonth() - 6)
+        break
+      case 'year':
+        filterDate.setFullYear(now.getFullYear() - 1)
+        break
+    }
+
+    filtered = filtered.filter((achievement) => new Date(achievement.publishDate) >= filterDate)
+  }
+
+  // 搜索查询
+  if (searchQuery.value) {
+    const lowerCaseQuery = searchQuery.value.toLowerCase()
+    filtered = filtered.filter((achievement) => {
+      const titleMatch = achievement.title.toLowerCase().includes(lowerCaseQuery)
+      const tagMatch = achievement.tags.some((tag) => tag.toLowerCase().includes(lowerCaseQuery))
+      const authorMatch = achievement.author.toLowerCase().includes(lowerCaseQuery)
+      return titleMatch || tagMatch || authorMatch
+    })
+  }
+
+  return filtered
 })
 
 // 分页计算属性

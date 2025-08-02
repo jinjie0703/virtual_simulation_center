@@ -63,7 +63,11 @@ export function useTeams({
 
     // 2. 难度过滤
     if (difficultyFilter.value) {
-      teams = teams.filter((team) => team.difficulty === difficultyFilter.value)
+      teams = teams.filter(
+        (team) =>
+          Object.prototype.hasOwnProperty.call(team, 'difficulty') &&
+          team.difficulty === difficultyFilter.value,
+      )
     }
 
     // 3. 标签过滤
@@ -72,11 +76,28 @@ export function useTeams({
     }
 
     // 4. 排序
-    if (filterOption.value === 'popular') {
-      teams.sort((a, b) => b.memberCount / b.maxMembers - a.memberCount / a.maxMembers)
-    } else {
-      // 默认按 'recent' (最近) 排序
-      teams.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    switch (filterOption.value) {
+      case 'deadline':
+        // 仅当团队有deadline属性时排序
+        teams.sort((a, b) => {
+          if (a.deadline && b.deadline) {
+            return new Date(a.deadline) - new Date(b.deadline)
+          }
+          return 0 // 保持原顺序
+        })
+        break
+      case 'members_desc':
+        teams.sort((a, b) => (b.memberCount || 0) - (a.memberCount || 0))
+        break
+      case 'members_asc':
+        teams.sort(
+          (a, b) => (a.maxMembers - a.memberCount || 0) - (b.maxMembers - b.memberCount || 0),
+        )
+        break
+      case 'newest':
+      default:
+        teams.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        break
     }
 
     return teams

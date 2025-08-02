@@ -14,33 +14,33 @@
     <div class="right-actions">
       <div class="filters-wrapper">
         <CustomSelect
-          :model-value="props.categoryFilter || ''"
-          :options="categoryOptions"
-          placeholder="选择分类"
+          :model-value="props.teacherFilter || ''"
+          :options="teacherOptions"
+          placeholder="按教师筛选"
           size="medium"
-          min-width="100px"
+          min-width="140px"
           trigger-class="filter-trigger"
           options-class="filter-options"
-          @update:model-value="handleCategoryChange"
+          @update:model-value="handleTeacherChange"
         />
 
         <CustomSelect
-          :model-value="props.statusFilter || ''"
-          :options="statusOptions"
-          placeholder="选择状态"
+          :model-value="props.tagFilter || ''"
+          :options="tagOptions"
+          placeholder="按标签筛选"
           size="medium"
-          min-width="100px"
+          min-width="140px"
           trigger-class="filter-trigger"
           options-class="filter-options"
-          @update:model-value="handleStatusChange"
+          @update:model-value="handleTagChange"
         />
 
         <CustomSelect
           :model-value="props.timeFilter || ''"
           :options="timeOptions"
-          placeholder="排序方式"
+          placeholder="发布时间"
           size="medium"
-          min-width="100px"
+          min-width="140px"
           trigger-class="filter-trigger"
           options-class="filter-options"
           @update:model-value="handleTimeChange"
@@ -56,16 +56,15 @@
 </template>
 
 <script setup>
-import {} from 'vue'
 import CustomSelect from '@/components/common/CustomSelect.vue'
 
 const props = defineProps({
   modelValue: String,
-  categoryFilter: {
+  teacherFilter: {
     type: String,
     default: '',
   },
-  statusFilter: {
+  tagFilter: {
     type: String,
     default: '',
   },
@@ -73,47 +72,40 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  teacherOptions: {
+    type: Array,
+    required: true,
+  },
+  tagOptions: {
+    type: Array,
+    required: true,
+  },
 })
 
 const emit = defineEmits([
   'update:modelValue',
-  'update:categoryFilter',
-  'update:statusFilter',
+  'update:teacherFilter',
+  'update:tagFilter',
   'update:timeFilter',
   'open-submission',
 ])
 
-// 筛选选项数据
-const categoryOptions = [
-  { label: '全部分类', value: '' },
-  { label: '虚拟仿真', value: 'simulation' },
-  { label: '人工智能', value: 'ai' },
-  { label: '物联网', value: 'iot' },
-  { label: 'Web开发', value: 'web' },
-  { label: '移动应用', value: 'mobile' },
-]
-
-const statusOptions = [
-  { label: '全部状态', value: '' },
-  { label: '进行中', value: 'active' },
-  { label: '已完成', value: 'completed' },
-  { label: '待审核', value: 'pending' },
-]
-
 const timeOptions = [
-  { label: '默认排序', value: '' },
-  { label: '最新发布', value: 'latest' },
-  { label: '最受欢迎', value: 'popular' },
-  { label: '最早发布', value: 'oldest' },
+  { label: '所有时间', value: '' },
+  { label: '一周内', value: 'week' },
+  { label: '一个月内', value: 'month' },
+  { label: '三个月内', value: 'three_months' },
+  { label: '半年内', value: 'half_year' },
+  { label: '一年内', value: 'year' },
 ]
 
 // 事件处理
-const handleCategoryChange = (value) => {
-  emit('update:categoryFilter', value)
+const handleTeacherChange = (value) => {
+  emit('update:teacherFilter', value)
 }
 
-const handleStatusChange = (value) => {
-  emit('update:statusFilter', value)
+const handleTagChange = (value) => {
+  emit('update:tagFilter', value)
 }
 
 const handleTimeChange = (value) => {
@@ -223,7 +215,7 @@ const handleTimeChange = (value) => {
 }
 
 :deep(.custom-select) {
-  min-width: 100px !important;
+  min-width: 140px !important;
 }
 
 .submit-btn {

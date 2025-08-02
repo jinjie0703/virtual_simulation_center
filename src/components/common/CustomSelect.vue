@@ -7,10 +7,7 @@
   >
     <div class="select-trigger" :class="triggerClass">
       <span class="select-value">{{ selectedOption?.label || placeholder }}</span>
-      <i
-        :class="['fas', iconClass, { 'rotated': isOpen }]"
-        :style="{ fontSize: iconSize }"
-      ></i>
+      <i :class="['fas', iconClass, { rotated: isOpen }]" :style="{ fontSize: iconSize }"></i>
     </div>
     <transition :name="transitionName">
       <ul v-if="isOpen" class="select-options" :class="optionsClass">
@@ -18,7 +15,7 @@
           v-for="option in options"
           :key="option.value"
           @click.stop="selectOption(option)"
-          :class="{ 'active': option.value === modelValue, 'disabled': option.disabled }"
+          :class="{ active: option.value === modelValue, disabled: option.disabled }"
           class="select-option"
         >
           <slot name="option" :option="option">
@@ -40,62 +37,62 @@ import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 const props = defineProps({
   modelValue: {
     type: [String, Number],
-    default: ''
+    default: '',
   },
   options: {
     type: Array,
     required: true,
-    default: () => []
+    default: () => [],
   },
   placeholder: {
     type: String,
-    default: '请选择'
+    default: '请选择',
   },
   disabled: {
     type: Boolean,
-    default: false
+    default: false,
   },
   clearable: {
     type: Boolean,
-    default: false
+    default: false,
   },
   size: {
     type: String,
     default: 'medium', // small, medium, large
-    validator: (value) => ['small', 'medium', 'large'].includes(value)
+    validator: (value) => ['small', 'medium', 'large'].includes(value),
   },
   minWidth: {
     type: String,
-    default: '140px'
+    default: '140px',
   },
   maxWidth: {
     type: String,
-    default: 'auto'
+    default: 'auto',
   },
   iconClass: {
     type: String,
-    default: 'fa-chevron-down'
+    default: 'fa-chevron-down',
   },
   iconSize: {
     type: String,
-    default: '0.8rem'
+    default: '0.8rem',
   },
   transitionName: {
     type: String,
-    default: 'dropdown'
+    default: 'dropdown',
   },
   emptyText: {
     type: String,
-    default: '暂无数据'
+    default: '暂无数据',
   },
   triggerClass: {
     type: String,
-    default: ''
+    default: '',
   },
   optionsClass: {
     type: String,
-    default: ''
-  }
+    default: '',
+  },
 })
 
 // 定义 emits
@@ -107,7 +104,7 @@ const selectRef = ref(null)
 
 // 计算属性
 const selectedOption = computed(() => {
-  return props.options.find(option => option.value === props.modelValue)
+  return props.options.find((option) => option.value === props.modelValue)
 })
 
 const sizeClass = computed(() => `select-${props.size}`)
@@ -146,12 +143,15 @@ onUnmounted(() => {
 })
 
 // 监听 disabled 状态变化
-watch(() => props.disabled, (newVal) => {
-  if (newVal && isOpen.value) {
-    isOpen.value = false
-    emit('visible-change', false)
-  }
-})
+watch(
+  () => props.disabled,
+  (newVal) => {
+    if (newVal && isOpen.value) {
+      isOpen.value = false
+      emit('visible-change', false)
+    }
+  },
+)
 </script>
 
 <style scoped>
@@ -160,6 +160,11 @@ watch(() => props.disabled, (newVal) => {
   user-select: none;
   min-width: v-bind(minWidth);
   max-width: v-bind(maxWidth);
+  z-index: 1; /* Default z-index */
+}
+
+.custom-select.select-open {
+  z-index: 1001; /* Higher z-index when open */
 }
 
 .custom-select.select-disabled {
@@ -239,7 +244,7 @@ watch(() => props.disabled, (newVal) => {
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  z-index: 1000;
+  z-index: 1000; /* Ensure dropdown is above other content */
   margin: 0;
   padding: 0.5rem 0;
   list-style: none;

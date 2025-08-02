@@ -29,33 +29,10 @@
         <span class="tab-count">({{ tab.count }})</span>
       </button>
     </div>
-
-    <!-- 筛选菜单区域 -->
-    <div class="filter-section">
-      <div class="filter-dropdown">
-        <button class="filter-button" @click="toggleFilterMenu" :disabled="isLoading">
-          <span class="filter-icon">⚙️</span>
-          <span class="filter-text">筛选</span>
-          <span class="dropdown-arrow" :class="{ open: showFilterMenu }">▼</span>
-        </button>
-        <div v-if="showFilterMenu" class="filter-menu">
-          <div
-            v-for="option in filterOptions"
-            :key="option.value"
-            :class="['filter-option', { active: selectedFilter === option.value }]"
-            @click="handleFilterSelect(option.value)"
-          >
-            {{ option.label }}
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-
 defineProps({
   tabs: {
     type: Array,
@@ -73,24 +50,9 @@ defineProps({
     type: String,
     default: '',
   },
-  filterOptions: {
-    type: Array,
-    default: () => [
-      { label: '全部', value: 'all' },
-      { label: '按姓名排序', value: 'name' },
-      { label: '按职位排序', value: 'position' },
-      { label: '按部门排序', value: 'department' },
-    ],
-  },
-  selectedFilter: {
-    type: String,
-    default: 'all',
-  },
 })
 
-const emit = defineEmits(['switchTab', 'search', 'filter'])
-
-const showFilterMenu = ref(false)
+const emit = defineEmits(['switchTab', 'search'])
 
 const handleTabClick = (tabId) => {
   emit('switchTab', tabId)
@@ -98,15 +60,6 @@ const handleTabClick = (tabId) => {
 
 const handleSearch = (event) => {
   emit('search', event.target.value)
-}
-
-const toggleFilterMenu = () => {
-  showFilterMenu.value = !showFilterMenu.value
-}
-
-const handleFilterSelect = (filterValue) => {
-  emit('filter', filterValue)
-  showFilterMenu.value = false
 }
 </script>
 
@@ -177,11 +130,14 @@ const handleFilterSelect = (filterValue) => {
 }
 
 .tab-switcher {
-  flex: 1;
   display: flex;
   justify-content: center;
   gap: 30px;
   flex-wrap: wrap;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
 }
 
 .tab-button {
@@ -260,95 +216,6 @@ const handleFilterSelect = (filterValue) => {
   opacity: 0.8;
 }
 
-.filter-section {
-  flex: 0 0 250px;
-  display: flex;
-  justify-content: flex-end;
-  margin-right: -8%;
-  padding-right: 8%;
-}
-
-.filter-dropdown {
-  position: relative;
-}
-
-.filter-button {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 20px;
-  border: 3px solid #e1e5e9;
-  background: white;
-  border-radius: 30px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #666;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  min-width: 120px;
-  justify-content: center;
-}
-
-.filter-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.filter-button:hover:not(:disabled) {
-  border-color: #4a90e2;
-  color: #4a90e2;
-  box-shadow: 0 5px 20px rgba(74, 144, 226, 0.1);
-}
-
-.filter-icon {
-  font-size: 16px;
-}
-
-.filter-text {
-  flex: 1;
-}
-
-.dropdown-arrow {
-  font-size: 12px;
-  transition: transform 0.3s ease;
-}
-
-.dropdown-arrow.open {
-  transform: rotate(180deg);
-}
-
-.filter-menu {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  margin-top: 8px;
-  background: white;
-  border: 2px solid #e1e5e9;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  min-width: 200px;
-  z-index: 100;
-  overflow: hidden;
-}
-
-.filter-option {
-  padding: 12px 20px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 500;
-  color: #666;
-}
-
-.filter-option:hover {
-  background: #f8f9fa;
-  color: #4a90e2;
-}
-
-.filter-option.active {
-  background: linear-gradient(135deg, #4a90e2, #50e3c2);
-  color: white;
-}
-
 @media (max-width: 1400px) {
   .tab-container {
     padding: 0 6%;
@@ -358,11 +225,6 @@ const handleFilterSelect = (filterValue) => {
     flex: 0 0 300px;
     margin-left: -6%;
     padding-left: 6%;
-  }
-
-  .filter-section {
-    margin-right: -6%;
-    padding-right: 6%;
   }
 }
 
@@ -376,11 +238,6 @@ const handleFilterSelect = (filterValue) => {
     margin-left: -4%;
     padding-left: 4%;
   }
-
-  .filter-section {
-    margin-right: -4%;
-    padding-right: 4%;
-  }
 }
 
 @media (max-width: 1024px) {
@@ -390,8 +247,7 @@ const handleFilterSelect = (filterValue) => {
     padding: 0 3%;
   }
 
-  .search-section,
-  .filter-section {
+  .search-section {
     flex: none;
     width: 100%;
     margin: 0;
@@ -400,10 +256,6 @@ const handleFilterSelect = (filterValue) => {
 
   .search-section {
     justify-content: flex-start;
-  }
-
-  .filter-section {
-    justify-content: flex-end;
   }
 
   .tab-switcher {
@@ -420,11 +272,6 @@ const handleFilterSelect = (filterValue) => {
     margin-left: -3%;
     padding-left: 3%;
   }
-
-  .filter-section {
-    margin-right: -3%;
-    padding-right: 3%;
-  }
 }
 
 @media (max-width: 768px) {
@@ -434,8 +281,7 @@ const handleFilterSelect = (filterValue) => {
     padding: 0 2%;
   }
 
-  .search-section,
-  .filter-section {
+  .search-section {
     margin: 0;
     padding: 0;
   }
@@ -475,11 +321,6 @@ const handleFilterSelect = (filterValue) => {
     margin-left: -2%;
     padding-left: 2%;
   }
-
-  .filter-section {
-    margin-right: -2%;
-    padding-right: 2%;
-  }
 }
 
 @media (max-width: 480px) {
@@ -489,8 +330,7 @@ const handleFilterSelect = (filterValue) => {
     font-size: 15px;
   }
 
-  .search-box,
-  .filter-button {
+  .search-box {
     padding: 8px 14px;
     font-size: 14px;
   }

@@ -45,7 +45,6 @@
           placeholder="选择排序方式"
           size="medium"
           :min-width="'140px'"
-          @change="handleFilterChange"
         />
 
         <!-- 难度下拉框 -->
@@ -55,7 +54,6 @@
           placeholder="选择难度"
           size="medium"
           :min-width="'120px'"
-          @change="handleDifficultyChange"
         />
 
         <!-- 标签下拉框 -->
@@ -65,7 +63,6 @@
           placeholder="选择标签"
           size="medium"
           :min-width="'120px'"
-          @change="handleTagChange"
         />
       </div>
 
@@ -183,7 +180,7 @@ import { useTeams } from './useTeams.js'
 // 2. 定义组件顶层的、驱动UI交互的状态
 const activeTab = ref('competition')
 const searchQuery = ref('')
-const filterOption = ref('recent')
+const filterOption = ref('') // 默认无排序，UI显示placeholder
 const currentPage = ref(1)
 const itemsPerPage = ref(20)
 // 新增筛选状态
@@ -191,12 +188,18 @@ const difficultyFilter = ref('')
 const tagFilter = ref('')
 
 // 修改：使用计算属性定义筛选选项
-const filterOptions = computed(() => [
-  { value: 'recent', label: '最近发布' },
-  { value: 'popular', label: '最受欢迎' },
-  { value: 'members', label: '人数最多' },
-  { value: 'newest', label: '最新创建' },
-])
+const filterOptions = computed(() => {
+  const options = [
+    { value: 'newest', label: '最新创建' },
+    { value: 'members_desc', label: '人数最多' },
+    { value: 'members_asc', label: '急需招人' },
+  ]
+  // 只有竞赛组队有“临近截止”选项
+  if (activeTab.value === 'competition') {
+    options.splice(1, 0, { value: 'deadline', label: '临近截止' })
+  }
+  return options
+})
 
 // 新增：难度选项
 const difficultyOptions = computed(() => [
@@ -231,33 +234,15 @@ const tagOptions = computed(() => {
   }
 })
 
-// 新增：处理筛选变化的方法
-const handleFilterChange = (value, option) => {
-  console.log('排序方式已更改:', option.label)
-  // 可以在这里添加额外的逻辑
-}
-
-// 新增：处理难度筛选变化
-const handleDifficultyChange = (value, option) => {
-  console.log('难度筛选已更改:', option.label)
-  // 重置到第一页
-  currentPage.value = 1
-}
-
-// 新增：处理标签筛选变化
-const handleTagChange = (value, option) => {
-  console.log('标签筛选已更改:', option.label)
-  // 重置到第一页
-  currentPage.value = 1
-}
-
 // 增加对activeTab的监听，当切换标签页时重置筛选选项
-watch(activeTab, () => {
-  // 切换标签页时重置标签筛选
+watch(activeTab, (newTab, oldTab) => {
+  if (newTab === oldTab) return
+
+  // 切换标签页时重置所有筛选
+  searchQuery.value = ''
+  filterOption.value = ''
+  difficultyFilter.value = ''
   tagFilter.value = ''
-  // 可能还需要重置难度筛选
-  // difficultyFilter.value = ''
-  // 重置到第一页
   currentPage.value = 1
 })
 
@@ -291,9 +276,9 @@ const handlePageChange = (page) => {
 
 const clearFilters = () => {
   searchQuery.value = ''
-  filterOption.value = 'recent'
-  difficultyFilter.value = '' // 清除难度筛选
-  tagFilter.value = '' // 清除标签筛选
+  filterOption.value = ''
+  difficultyFilter.value = ''
+  tagFilter.value = ''
 }
 </script>
 

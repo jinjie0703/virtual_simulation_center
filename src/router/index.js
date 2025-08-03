@@ -5,7 +5,7 @@ import AchievementShowcase from '@/views/achievement_showcase/AchievementShowcas
 import OurTeam from '@/views/our_team/OurTeam.vue'
 import TeamCenter from '@/views/team_center/TeamCenter.vue'
 import AboutUs from '@/views/about_us/AboutUs.vue'
-import NewsDetail from '@/views/information_center/NewsDetails.vue'
+import DetailsPage from '@/views/information_center/DetailsPage.vue'
 
 // 创建并直接导出 router 实例
 const router = createRouter({
@@ -55,28 +55,33 @@ const router = createRouter({
       // 此页面会默认显示页脚
     },
     {
-      // :id 是动态参数，它会匹配 /news/news-1, /news/any-id 等
       path: '/news/:id',
       name: 'NewsDetail',
-      component: NewsDetail,
-      props: true, // 允许将路由参数作为 props 传递给组件
+      component: DetailsPage,
+      props: true,
+      meta: { itemType: 'news' },
     },
     {
       path: '/competitions/:id',
       name: 'CompetitionDetail',
-      component: NewsDetail, // 复用详情页组件
+      component: DetailsPage,
       props: true,
+      meta: { itemType: 'competitions' },
     },
     {
       path: '/projects/:id',
       name: 'ProjectDetail',
-      component: NewsDetail, // 复用详情页组件
+      component: DetailsPage,
       props: true,
+      meta: { itemType: 'projects' },
     },
   ],
-  scrollBehavior(_to, _from, _savedPosition) {
-    // 始终滚动到顶部
-    return { top: 0 }
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { top: 0 }
+    }
   },
 })
 

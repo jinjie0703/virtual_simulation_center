@@ -68,6 +68,27 @@
                 <span class="author-title">{{ achievement.authorTitle }}</span>
               </div>
             </div>
+            <!-- Team Members Section -->
+            <div
+              class="team-members-section"
+              v-if="achievement.teamMembers && achievement.teamMembers.length"
+            >
+              <h4>团队成员</h4>
+              <div class="members-grid">
+                <div
+                  v-for="member in achievement.teamMembers"
+                  :key="member.name"
+                  class="member-card"
+                >
+                  <img :src="member.avatar" :alt="member.name" class="member-avatar" />
+                  <div class="member-details">
+                    <span class="member-name">{{ member.name }}</span>
+                    <span class="member-role">{{ member.role }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div class="contact-section">
               <div class="contact-item" v-if="achievement.contact1">
                 <span class="contact-label">联系方式:</span>
@@ -431,6 +452,50 @@ onBeforeUnmount(() => {
 .author-title {
   color: #6c757d;
   font-size: 0.9rem;
+}
+
+/* Team Members Section */
+.team-members-section {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e2e8f0;
+}
+.team-members-section h4 {
+  font-size: 1.2rem;
+  color: #343a40;
+  margin-bottom: 15px;
+}
+.members-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 20px;
+}
+.member-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.member-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  object-fit: cover;
+  border: 2px solid #e2e8f0;
+}
+.member-details {
+  line-height: 1.4;
+}
+.member-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #212529;
+}
+.member-role {
+  font-size: 0.8rem;
+  color: #6c757d;
+  display: block;
 }
 
 /* Contact Section Styles from FeatureSection */

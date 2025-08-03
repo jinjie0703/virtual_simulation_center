@@ -1,6 +1,9 @@
 package information_center
 
-import "api/internal/models"
+import (
+	"api/internal/database"
+	"api/internal/models"
+)
 
 // Project 定义了项目招募信息的数据结构。
 type Project struct {
@@ -10,4 +13,16 @@ type Project struct {
 	Deadline         string `json:"deadline" db:"deadline"`
 	Tags             string `json:"tags" db:"tags"`
 	DetailURL        string `json:"detail_url" db:"detail_url"`
+}
+
+func GetAllProjects() ([]Project, error) {
+	var projects []Project
+	err := database.DB.Find(&projects).Error
+	return projects, err
+}
+
+func GetProjectByID(id int) (Project, error) {
+	var project Project
+	err := database.DB.First(&project, id).Error
+	return project, err
 }

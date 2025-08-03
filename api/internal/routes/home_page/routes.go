@@ -30,10 +30,15 @@ func SetupRouter() *gin.Engine {
 		api.GET("/FeatureSection", home_page.GetFeatureSection)
 		api.GET("/UpdatesSectionNews", home_page.GetUpdatesSectionNews)
 		api.GET("/UpdatesSectionCompetitions", home_page.GetUpdatesSectionCompetitions)
+
+		infoGroup := api.Group("/information_center")
 		{
 			infoGroup.GET("/news", information_center.GetNewsHandler)
+			infoGroup.GET("/news/:id", information_center.GetNewsByIDHandler)
 			infoGroup.GET("/competitions", information_center.GetCompetitionsHandler)
+			infoGroup.GET("/competitions/:id", information_center.GetCompetitionByIDHandler)
 			infoGroup.GET("/projects", information_center.GetProjectsHandler)
+			infoGroup.GET("/projects/:id", information_center.GetProjectByIDHandler)
 		}
 	}
 	return r

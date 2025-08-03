@@ -2,22 +2,36 @@ package information_center
 
 import (
 	"net/http"
-	"api/internal/database"
+	"strconv"
+
 	"api/internal/models/information_center"
 
 	"github.com/gin-gonic/gin"
 )
 
-// GetNewsHandler 处理获取新闻列表的请求
+// GetNewsHandler handles the request to get all news.
 func GetNewsHandler(c *gin.Context) {
-	// 调用数据层获取数据
-	newsList, err := database.GetAllNews()
+	newsList, err := information_center.GetAllNews()
 	if err != nil {
-		// 如果数据库查询出错，返回服务器内部错误
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve news from database"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve news"})
+		return
+	}
+	c.JSON(http.StatusOK, newsList)
+}
+
+// GetNewsByIDHandler handles the request to get a single news article by its ID.
+func GetNewsByIDHandler(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid news ID"})
 		return
 	}
 
-	// 成功获取数据，返回200 OK 和新闻列表
-	c.JSON(http.StatusOK, newsList)
+	news, err := information_center.GetNewsByID(id)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "News not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, news)
 }

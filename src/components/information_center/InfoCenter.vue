@@ -27,14 +27,17 @@
 </template>
 
 <script setup>
-import { ref, computed, nextTick } from 'vue'
+import { ref, computed, onMounted, nextTick, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import axios from 'axios'
 import InfoHeader from './InfoHeader.vue'
 import InfoTabs from './InfoTabs.vue'
 import InfoGrid from './InfoGrid.vue'
 import InfoPagination from './InfoPagination.vue'
-import { allMockData } from './TestData.js'
 
-const activeTab = ref('news')
+const route = useRoute()
+const router = useRouter()
+const activeTab = ref(route.query.tab || 'news')
 const currentPage = ref(1)
 const itemsPerPage = 10
 
@@ -46,7 +49,33 @@ const tabs = [
   { id: 'projects', name: '项目悬赏' },
 ]
 
-const allData = ref(allMockData)
+const allData = ref({
+  news: [],
+  competitions: [],
+  projects: [],
+})
+
+const fetchData = async () => {
+  try {
+    const response = await axios.get(
+      `https://localhost:8080/api/information_center/${activeTab.value}`,
+    )
+    allData.value[activeTab.value] = response.data
+  } catch (error) {
+    console.error(`Failed to fetch ${activeTab.value}:`, error)
+  }
+}
+
+onMounted(fetchData)
+
+watch(
+  () => route.query.tab,
+  (newTab) => {
+    if (newTab && tabs.some((t) => t.id === newTab)) {
+      activeTab.value = newTab
+    }
+  },
+)
 
 const scrollToTop = () => {
   nextTick(() => {
@@ -59,6 +88,8 @@ const changeTab = (tabId) => {
   currentPage.value = 1
   searchKeyword.value = ''
   timeFilter.value = 'all'
+  router.replace({ query: { tab: tabId } }) // 更新 URL 以反映当前选项卡
+  fetchData()
   scrollToTop()
 }
 
@@ -92,7 +123,7 @@ const filteredAndSortedItems = computed(() => {
   // 1. 标准化数据，统一日期字段为 effectiveDate，并修正搜索字段
   let normalizedItems = items.map((item) => ({
     ...item,
-    effectiveDate: new Date(item.date || item.deadline),
+    effectiveDate: new Date(item.publish_date || item.deadline),
   }))
 
   // 2. 搜索筛选

@@ -6,15 +6,17 @@
         <span v-if="type === 'news'" class="card-category">{{ item.category }}</span>
         <span v-if="type === 'competitions'" class="card-category level">{{ item.level }}</span>
         <div v-if="['competitions', 'projects'].includes(type)" class="card-tags">
-          <span v-for="tag in item.tags" :key="tag" class="tag">{{ tag }}</span>
+          <span v-for="tag in (item.tags || '').split(',')" :key="tag" class="tag">{{ tag }}</span>
         </div>
       </div>
       <h3 class="card-title">{{ item.title }}</h3>
       <p class="card-summary">{{ item.summary }}</p>
       <div class="card-footer">
         <div class="meta-info">
-          <span v-if="item.date" class="date">发布日期：{{ item.date }}</span>
-          <span v-if="item.deadline" class="deadline">截止：{{ item.deadline }}</span>
+          <span v-if="item.publish_date" class="date"
+            >发布日期：{{ formatDate(item.publish_date) }}</span
+          >
+          <span v-if="item.deadline" class="deadline">截止：{{ formatDate(item.deadline) }}</span>
         </div>
         <router-link :to="detailRoute" class="details-link">查看详情 →</router-link>
       </div>
@@ -30,6 +32,11 @@ const props = defineProps({
   type: String,
 })
 
+const formatDate = (dateString) => {
+  if (!dateString) return ''
+  return new Date(dateString).toISOString().split('T')[0]
+}
+
 const detailRoute = computed(() => {
   const routeNameMap = {
     news: 'NewsDetail',
@@ -37,8 +44,9 @@ const detailRoute = computed(() => {
     projects: 'ProjectDetail',
   }
   return {
-    name: routeNameMap[props.type] || 'home-page', // Fallback route
+    name: routeNameMap[props.type] || 'home-page',
     params: { id: props.item.id },
+    query: { tab: props.type },
   }
 })
 </script>

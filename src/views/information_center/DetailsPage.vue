@@ -1,43 +1,38 @@
-<!-- src/views/NewsDetail.vue -->
+<!-- src/views/information_center/DetailsPage.vue -->
 <template>
-  <div class="article-page" v-if="article">
+  <div class="article-page" v-if="item">
     <header class="article-header">
       <div class="header-content-wrapper">
-        <span class="category-badge">{{ article.category }}</span>
-        <h1 class="main-title">{{ article.title }}</h1>
+        <span class="category-badge">{{ item.category || item.level }}</span>
+        <h1 class="main-title">{{ item.title }}</h1>
         <div class="meta-data">
-          <span>作者：{{ article.author }}</span>
-          <span>发布时间：{{ article.publishDate }}</span>
+          <span v-if="item.author">作者：{{ item.author }}</span>
+          <span v-if="item.publish_date">发布时间：{{ formatDate(item.publish_date) }}</span>
+          <span v-if="item.deadline">截止时间：{{ formatDate(item.deadline) }}</span>
         </div>
       </div>
     </header>
 
-    <main class="article-body-container">
+    <main class="article-body-container" :class="{ 'no-sidebar': itemType === 'news' }">
       <div class="article-main-content">
-        <!-- 动态渲染的Markdown内容将在这里显示 -->
         <div class="prose" v-html="formattedContent"></div>
         <button @click="goBack" class="back-link">← 返回上一页</button>
       </div>
 
-      <aside class="article-sidebar">
+      <aside class="article-sidebar" v-if="itemType !== 'news'">
         <div class="sidebar-widget">
-          <h3>文章标签</h3>
+          <h3>标签</h3>
           <div class="tags-cloud">
-            <span v-for="tag in article.tags" :key="tag" class="tag">{{ tag }}</span>
+            <span v-for="tag in (item.tags || '').split(',')" :key="tag" class="tag">{{
+              tag
+            }}</span>
           </div>
-        </div>
-        <div class="sidebar-widget">
-          <h3>相关推荐</h3>
-          <ul class="related-list">
-            <li><a href="#">文章1</a></li>
-            <li><a href="#">文章2</a></li>
-          </ul>
         </div>
       </aside>
     </main>
   </div>
   <div v-else class="loading-state">
-    <p>正在加载文章...</p>
+    <p>正在加载内容...</p>
   </div>
 </template>
 
@@ -46,43 +41,61 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
-
-// 引入我们的模拟数据
-import { mockArticle } from '@/components/information_center/TestData.js'
+import axios from 'axios'
 
 const route = useRoute()
 const router = useRouter()
-const article = ref(null)
+const item = ref(null)
+const itemType = ref(route.meta.itemType || 'news')
 
 const goBack = () => {
   router.back()
 }
 
-// 计算属性，用于安全地将Markdown转换为HTML
+const formatDate = (dateString) => {
+  if (!dateString) return ''
+  return new Date(dateString).toISOString().split('T')[0]
+}
+
 const formattedContent = computed(() => {
-  if (article.value && article.value.content) {
-    const rawHtml = marked.parse(article.value.content)
+  if (item.value && item.value.content) {
+    const rawHtml = marked.parse(item.value.content)
     return DOMPurify.sanitize(rawHtml)
   }
   return ''
 })
 
-onMounted(() => {
-  const articleId = route.params.id
+onMounted(async () => {
+  const itemId = route.params.id
+  try {
+    const itemResponse = await axios.get(
+      `https://localhost:8080/api/information_center/${itemType.value}/${itemId}`,
+    )
+    const itemData = itemResponse.data
 
-  // --- 模拟API请求 ---
-  // 真实场景: article.value = await fetch(`/api/news/${articleId}`).then(res => res.json())
-  console.log(`正在查找ID为 "${articleId}" 的文章...`)
+    if (itemData.detail_url) {
+      try {
+        const contentResponse = await axios.get(itemData.detail_url)
+        itemData.content = contentResponse.data
+      } catch (contentError) {
+        console.error(`Failed to fetch content from ${itemData.detail_url}:`, contentError)
+        // 如果无法从 detail_url 获取内容，我们可以选择显示一条消息或使用默认内容
+        itemData.content = '# 内容加载失败\n\n无法从指定的 URL 加载文章内容。'
+      }
+    } else {
+      // 如果没有 detail_url，也设置一个默认内容
+      itemData.content = '# 暂无详细内容'
+    }
 
-  // 在这个示例中，我们简单地加载唯一的模拟文章
-  // 在真实应用中，您会用 find 方法在文章列表中查找
-  // article.value = allMockData.news.find(a => a.id === articleId)
-  article.value = mockArticle
-  // --- 模拟结束 ---
+    item.value = itemData
+  } catch (error) {
+    console.error(`Failed to fetch initial ${itemType.value} data:`, error)
+  }
 })
 </script>
 
 <style>
+/* Styles from NewsDetails.vue can be copied here */
 .article-page {
   background-color: #f8f9fa;
   padding-bottom: 60px;
@@ -132,10 +145,16 @@ onMounted(() => {
 .article-body-container {
   display: flex;
   max-width: 1200px;
-  margin: -40px auto 0; /* 负外边距让内容区和头部有重叠，更现代 */
+  margin: -40px auto 0;
   gap: 40px;
   padding: 0 20px;
   align-items: flex-start;
+}
+
+.article-body-container.no-sidebar .article-main-content {
+  flex: 1;
+  max-width: 1080px; /* Increased width for better readability */
+  margin: 0 auto;
 }
 
 .article-main-content {
@@ -149,7 +168,7 @@ onMounted(() => {
 .article-sidebar {
   flex: 1;
   position: sticky;
-  top: 100px; /* 滚动时侧边栏会固定 */
+  top: 100px;
 }
 
 .sidebar-widget {
@@ -183,26 +202,6 @@ onMounted(() => {
   background-color: #4c51bf;
   color: white;
 }
-.related-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.related-list li a {
-  display: block;
-  padding: 10px 0;
-  text-decoration: none;
-  color: #2d3748;
-  border-bottom: 1px solid #f0f2f5;
-  transition: all 0.2s;
-}
-.related-list li a:hover {
-  color: #4c51bf;
-  transform: translateX(5px);
-}
-.related-list li:last-child a {
-  border-bottom: none;
-}
 .back-link {
   display: inline-block;
   margin-top: 40px;
@@ -212,10 +211,9 @@ onMounted(() => {
   padding: 10px 20px;
   border-radius: 8px;
   background-color: #f0f2f5;
-  /* --- 新增样式以重置按钮默认外观 --- */
   border: none;
-  font-family: inherit; /* 继承父元素的字体 */
-  font-size: inherit; /* 继承父元素的字号 */
+  font-family: inherit;
+  font-size: inherit;
   cursor: pointer;
   transition: background-color 0.2s;
 }
@@ -224,7 +222,6 @@ onMounted(() => {
   background-color: #e2e8f0;
 }
 
-/* 核心：为动态生成的HTML内容（文章本身）设计样式 */
 .prose {
   line-height: 1.8;
   color: #34495e;
@@ -292,7 +289,6 @@ onMounted(() => {
   color: #4a5568;
 }
 
-/* 响应式设计 */
 @media (max-width: 992px) {
   .article-body-container {
     flex-direction: column;

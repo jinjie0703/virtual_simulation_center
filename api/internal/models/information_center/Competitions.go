@@ -7,7 +7,7 @@ import (
 
 // Competition 定义了竞赛信息的数据结构。
 type Competition struct {
-	models.BaseModel         // 嵌入基础模型
+	models.BaseModel        // 嵌入基础模型
 	Title            string `json:"title" db:"title"`
 	Summary          string `json:"summary" db:"summary"`
 	Deadline         string `json:"deadline" db:"deadline"`
@@ -20,4 +20,10 @@ func GetAllCompetitions() ([]Competition, error) {
 	var competitions []Competition
 	err := database.DB.Find(&competitions).Error
 	return competitions, err
+}
+
+func GetCompetitionByID(id int) (Competition, error) {
+	var competition Competition
+	err := database.DB.First(&competition, id).Error
+	return competition, err
 }

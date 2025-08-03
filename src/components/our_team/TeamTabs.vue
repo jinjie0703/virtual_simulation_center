@@ -23,7 +23,7 @@
         @click="handleTabClick(tab.id)"
         :disabled="isLoading"
       >
-        <span class="tab-icon">{{ tab.icon }}</span>
+        <!-- <span class="tab-icon">{{ tab.icon }}</span> -->
         <span class="tab-text">{{ tab.name }}</span>
       </button>
     </div>
@@ -193,12 +193,6 @@ const handleSearch = (event) => {
 .tab-button.active::before {
   left: 0;
 }
-
-.tab-icon {
-  font-size: 22px;
-  flex-shrink: 0;
-}
-
 .tab-text {
   white-space: nowrap;
 }
@@ -283,10 +277,6 @@ const handleSearch = (event) => {
     padding: 12px 24px;
     font-size: 16px;
     min-width: 200px;
-  }
-
-  .tab-icon {
-    font-size: 20px;
   }
 
   .search-box {

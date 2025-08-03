@@ -13,8 +13,10 @@
       :activeTab="activeTab"
       :isLoading="isLoading"
       :searchKeyword="searchKeyword"
+      :selectedFilter="selectedFilter"
       @switchTab="switchTab"
       @search="handleSearch"
+      @filter="handleFilter"
     />
     <!-- 成员展示区域 -->
     <div class="members-section">
@@ -72,8 +74,9 @@ console.log('useTabSwitcher 结果:', { activeTab: activeTab.value, isLoading: i
 // 成员详情模态框状态
 const selectedMember = ref(null)
 
-// 搜索状态
+// 搜索和筛选状态
 const searchKeyword = ref('')
+const selectedFilter = ref('all')
 
 // 显示成员详情
 const showMemberDetails = (member) => {
@@ -93,6 +96,12 @@ const handleSearch = (keyword) => {
   resetPage()
 }
 
+// 筛选处理函数
+const handleFilter = (filterType) => {
+  selectedFilter.value = filterType
+  resetPage()
+}
+
 // 计算当前成员列表
 const currentMembers = computed(() => {
   try {
@@ -107,6 +116,15 @@ const currentMembers = computed(() => {
           member.position.toLowerCase().includes(keyword) ||
           member.department.toLowerCase().includes(keyword),
       )
+    }
+
+    // 应用排序筛选
+    if (selectedFilter.value === 'name') {
+      members = [...members].sort((a, b) => a.name.localeCompare(b.name))
+    } else if (selectedFilter.value === 'position') {
+      members = [...members].sort((a, b) => a.position.localeCompare(b.position))
+    } else if (selectedFilter.value === 'department') {
+      members = [...members].sort((a, b) => a.department.localeCompare(b.department))
     }
 
     console.log('计算当前成员:', { activeTab: activeTab.value, members })
@@ -124,7 +142,7 @@ const {
   paginatedItems: paginatedMembers,
   changePage: pageChange,
   resetPage,
-} = usePagination(currentMembers, 10)
+} = usePagination(currentMembers, 12)
 
 // 页面切换功能
 const changePage = (page) => {
@@ -138,6 +156,7 @@ const changePage = (page) => {
 watch(activeTab, () => {
   resetPage()
   searchKeyword.value = ''
+  selectedFilter.value = 'all'
 })
 
 // 组件挂载时的调试

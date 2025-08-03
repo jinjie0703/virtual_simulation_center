@@ -7,20 +7,12 @@
         :value="searchQuery"
         @input="emit('search', $event.target.value)"
         type="text"
-        placeholder="按标题和概述搜索..."
+        placeholder="按标题和概述搜索"
         class="search-input"
       />
-      <svg class="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
+      <img src="@/assets/information_center/search.svg" class="search-icon" alt="search icon" />
     </div>
-
+    <!-- 标签 -->
     <div
       class="tabs"
       ref="tabsRef"
@@ -39,13 +31,9 @@
         {{ tab.name }}
       </button>
     </div>
-
-    <!-- 时间筛选 -->
+    <!-- 筛选 -->
     <div class="filter-box" ref="filterBoxRef">
       <button @click="toggleDropdown" class="filter-btn">
-        <svg class="filter-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M3 4H21V6H3V4ZM3 11H15V13H3V11ZM3 18H9V20H3V18Z" fill="currentColor" />
-        </svg>
         {{ selectedFilterLabel }}
       </button>
       <transition name="dropdown">
@@ -74,7 +62,6 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:activeTab', 'search', 'timeFilter'])
 
-// 时间筛选
 const filterBoxRef = ref(null)
 const isDropdownOpen = ref(false)
 const timeFilters = ref([
@@ -84,7 +71,7 @@ const timeFilters = ref([
   { value: 'sixMonths', text: '最近半年' },
   { value: 'oneYear', text: '最近一年' },
 ])
-const selectedFilterLabel = ref('时间筛选')
+const selectedFilterLabel = ref('发布时间')
 
 const toggleDropdown = () => {
   isDropdownOpen.value = !isDropdownOpen.value
@@ -195,13 +182,12 @@ onBeforeUnmount(() => {
   color: #a0aec0;
 }
 
-/* 筛选按钮样式 - 绝对右对齐 */
 .filter-box {
   position: absolute;
   right: 0;
   display: flex;
   align-items: center;
-  z-index: 10; /* 确保下拉菜单在最上层 */
+  z-index: 10;
 }
 
 .filter-btn {
@@ -225,21 +211,14 @@ onBeforeUnmount(() => {
   color: #8fd3f4;
 }
 
-.filter-icon {
-  width: 16px;
-  height: 16px;
-}
-
-/* tabs保持居中 */
 .tabs {
-  position: relative; /* 成为伪元素定位的基准 */
+  position: relative;
   display: inline-flex;
   background-color: white;
   border-radius: 999px;
   padding: 6px;
 }
 
-/* 滑块 */
 .tabs::before {
   content: '';
   position: absolute;

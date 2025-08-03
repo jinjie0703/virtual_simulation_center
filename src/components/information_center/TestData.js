@@ -52,7 +52,7 @@ export const allMockData = {
     id: `comp-${i + 1}`,
     title: `第${i + 1}届全国大学生虚拟现实设计大赛`,
     summary: '本次大赛旨在激发学生的创新精神和实践能力，推动VR技术在各行业的应用与发展。',
-    date: '2024-07-30', // deadline 重命名为 date
+    deadline: '2024-07-30', // deadline 重命名为 date
     level: '国家级',
     tags: ['AI', 'Vue.js', 'Python'],
   })),

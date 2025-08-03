@@ -2,6 +2,7 @@ package routes
 
 import (
 	"api/internal/handlers/home_page"
+	"api/internal/handlers/information_center"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -25,10 +26,15 @@ func SetupRouter() *gin.Engine {
 	api := r.Group("/api")
 	{
 		api.GET("/HomeCarousel", home_page.GetHomeCarousel)
-		api.GET("/PartnerCarousel", home_page.GetCarouselByType) // 更新处理器
+		api.GET("/PartnerCarousel", home_page.GetCarouselByType)
 		api.GET("/FeatureSection", home_page.GetFeatureSection)
 		api.GET("/UpdatesSectionNews", home_page.GetUpdatesSectionNews)
 		api.GET("/UpdatesSectionCompetitions", home_page.GetUpdatesSectionCompetitions)
+		{
+			infoGroup.GET("/news", information_center.GetNewsHandler)
+			infoGroup.GET("/competitions", information_center.GetCompetitionsHandler)
+			infoGroup.GET("/projects", information_center.GetProjectsHandler)
+		}
 	}
 	return r
 }

@@ -3,7 +3,6 @@
     <!-- 搜索框区域 -->
     <div class="search-section">
       <div class="search-box">
-        <span class="search-icon">🔍</span>
         <input
           type="text"
           :value="searchKeyword"
@@ -26,7 +25,6 @@
       >
         <span class="tab-icon">{{ tab.icon }}</span>
         <span class="tab-text">{{ tab.name }}</span>
-        <span class="tab-count">({{ tab.count }})</span>
       </button>
     </div>
   </div>
@@ -102,12 +100,6 @@ const handleSearch = (event) => {
 .search-box:focus-within {
   border-color: #4a90e2;
   box-shadow: 0 5px 20px rgba(74, 144, 226, 0.2);
-}
-
-.search-icon {
-  font-size: 18px;
-  color: #666;
-  flex-shrink: 0;
 }
 
 .search-input {
@@ -209,11 +201,6 @@ const handleSearch = (event) => {
 
 .tab-text {
   white-space: nowrap;
-}
-
-.tab-count {
-  font-size: 14px;
-  opacity: 0.8;
 }
 
 @media (max-width: 1400px) {

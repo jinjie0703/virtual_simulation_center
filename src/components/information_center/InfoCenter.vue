@@ -72,7 +72,7 @@ const goToPage = (page) => {
 // --- 搜索和筛选的状态 ---
 const searchKeyword = ref('')
 const timeFilter = ref('all') // 'all', 'oneMonth', 'threeMonths', 'sixMonths', 'oneYear'
-const sortOrder = ref('desc') // 'desc' = 降序 (最新), 'asc' = 升序 (最旧)
+const sortOrder = ref('desc') // 降序
 
 // --- 事件处理函数 ---
 const onSearch = (keyword) => {

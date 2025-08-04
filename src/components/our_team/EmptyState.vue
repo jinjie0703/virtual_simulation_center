@@ -1,6 +1,5 @@
 <template>
   <div class="empty-state">
-    <div class="empty-icon">👥</div>
     <h3>暂无成员信息</h3>
     <p>当前分类下还没有添加成员</p>
   </div>
@@ -16,12 +15,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
-
-.empty-icon {
-  font-size: 4rem;
-  margin-bottom: 20px;
-  opacity: 0.5;
 }
 
 .empty-state h3 {

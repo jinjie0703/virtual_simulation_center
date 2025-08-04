@@ -23,7 +23,6 @@
         @click="handleTabClick(tab.id)"
         :disabled="isLoading"
       >
-        <!-- <span class="tab-icon">{{ tab.icon }}</span> -->
         <span class="tab-text">{{ tab.name }}</span>
       </button>
     </div>
@@ -76,8 +75,6 @@ const handleSearch = (event) => {
   flex: 0 0 320px;
   display: flex;
   justify-content: flex-start;
-  margin-left: -8%;
-  padding-left: 8%;
 }
 
 .search-box {
@@ -197,106 +194,52 @@ const handleSearch = (event) => {
   white-space: nowrap;
 }
 
-@media (max-width: 1400px) {
-  .tab-container {
-    padding: 0 6%;
-  }
-
-  .search-section {
-    flex: 0 0 300px;
-    margin-left: -6%;
-    padding-left: 6%;
-  }
-}
-
-@media (max-width: 1100px) {
-  .tab-container {
-    padding: 0 4%;
-  }
-
-  .search-section {
-    flex: 0 0 280px;
-    margin-left: -4%;
-    padding-left: 4%;
-  }
-}
-
 @media (max-width: 1024px) {
   .tab-container {
     flex-direction: column;
-    gap: 20px;
-    padding: 0 3%;
+    gap: 25px;
+    padding: 0 5%;
   }
 
   .search-section {
     flex: none;
     width: 100%;
+    max-width: 400px;
     margin: 0;
     padding: 0;
   }
 
-  .search-section {
-    justify-content: flex-start;
-  }
-
   .tab-switcher {
-    gap: 15px;
-  }
-}
-
-@media (max-width: 800px) {
-  .tab-container {
-    padding: 0 3%;
-  }
-
-  .search-section {
-    margin-left: -3%;
-    padding-left: 3%;
+    position: relative;
+    left: auto;
+    transform: none;
+    gap: 20px;
+    width: 100%;
   }
 }
 
 @media (max-width: 768px) {
   .tab-container {
-    flex-direction: column;
     gap: 20px;
-    padding: 0 2%;
-  }
-
-  .search-section {
-    margin: 0;
-    padding: 0;
+    padding: 0 4%;
   }
 
   .tab-switcher {
-    gap: 15px;
     flex-direction: column;
     align-items: center;
+    gap: 15px;
   }
 
   .tab-button {
     padding: 12px 24px;
     font-size: 16px;
-    min-width: 200px;
+    min-width: 220px;
+    width: 100%;
+    max-width: 300px;
   }
 
   .search-box {
     padding: 10px 16px;
-  }
-
-  .filter-button {
-    padding: 10px 16px;
-    font-size: 15px;
-  }
-}
-
-@media (max-width: 600px) {
-  .tab-container {
-    padding: 0 2%;
-  }
-
-  .search-section {
-    margin-left: -2%;
-    padding-left: 2%;
   }
 }
 
@@ -309,6 +252,9 @@ const handleSearch = (event) => {
 
   .search-box {
     padding: 8px 14px;
+  }
+
+  .search-input {
     font-size: 14px;
   }
 }

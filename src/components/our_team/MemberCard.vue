@@ -23,10 +23,9 @@ defineProps({
 })
 
 const handleImageError = (event) => {
-  // 使用默认头像
-  event.target.src =
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face'
-}
+  // 头像加载错误时显示一个1px的空白图片
+  event.target.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+};
 </script>
 
 <style scoped>

@@ -6,6 +6,7 @@
 </template>
 
 <style scoped>
+/* 加载状态的容器 */
 .loading-state {
   display: flex;
   flex-direction: column;
@@ -16,6 +17,7 @@
   min-height: 400px;
 }
 
+/* 旋转加载的加载动画本身 */
 .loading-spinner {
   width: 40px;
   height: 40px;
@@ -26,6 +28,7 @@
   margin-bottom: 20px;
 }
 
+/* 旋转动画的动作 */
 @keyframes spin {
   0% {
     transform: rotate(0deg);

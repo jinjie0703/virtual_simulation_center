@@ -1,10 +1,10 @@
 package routes
 
 import (
-	"api/internal/database"
-	"api/internal/handlers/home_page"
-	"api/internal/handlers/information_center"
-	"api/internal/handlers/our_team"
+	"virtual_simulation_center/api/internal/database"
+	"virtual_simulation_center/api/internal/handlers/home_page"
+	"virtual_simulation_center/api/internal/handlers/information_center"
+	"virtual_simulation_center/api/internal/handlers/our_team"
 	"time"
 
 	"github.com/gin-contrib/cors"

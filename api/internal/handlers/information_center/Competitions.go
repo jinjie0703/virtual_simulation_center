@@ -1,9 +1,9 @@
 package information_center
 
 import (
-	"api/internal/models/information_center"
 	"net/http"
 	"strconv"
+	"virtual_simulation_center/api/internal/models/information_center"
 
 	"github.com/gin-gonic/gin"
 )

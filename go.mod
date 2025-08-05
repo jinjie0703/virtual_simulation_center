@@ -1,4 +1,4 @@
-module api
+module virtual_simulation_center
 
 go 1.24.3
 

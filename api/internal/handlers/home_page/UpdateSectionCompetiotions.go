@@ -3,8 +3,8 @@ package home_page
 import (
 	"net/http"
 
-	"api/internal/database"
-	"api/internal/models/home_page"
+	"virtual_simulation_center/api/internal/database"
+	"virtual_simulation_center/api/internal/models/home_page"
 
 	"github.com/gin-gonic/gin"
 )

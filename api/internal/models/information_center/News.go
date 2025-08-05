@@ -1,8 +1,8 @@
 package information_center
 
 import (
-	"api/internal/database"
-	"api/internal/models"
+	"virtual_simulation_center/api/internal/database"
+	"virtual_simulation_center/api/internal/models"
 )
 
 // News 定义了新闻文章的数据结构。

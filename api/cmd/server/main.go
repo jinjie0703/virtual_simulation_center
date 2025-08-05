@@ -2,10 +2,10 @@
 package main
 
 import (
-	"api/internal/database"
-	routes "api/internal/routes/home_page"
-	"api/pkg/config"
 	"log"
+	"virtual_simulation_center/api/internal/database"
+	routes "virtual_simulation_center/api/internal/routes/home_page"
+	"virtual_simulation_center/api/pkg/config"
 )
 
 func main() {
@@ -24,7 +24,7 @@ func main() {
 
 	// 4. 启动服务器
 	log.Printf("服务开启的端口为 %s", cfg.Server.Port)
-	if err := r.RunTLS(cfg.Server.Port, "./testcrt/localhost+2.pem", "./testcrt/localhost+2-key.pem"); err != nil {
+	if err := r.RunTLS(cfg.Server.Port, "./api/testcrt/localhost+2.pem", "./api/testcrt/localhost+2-key.pem"); err != nil {
 		log.Fatalf("Fatal: 服务启动失败: %v", err)
 	}
 

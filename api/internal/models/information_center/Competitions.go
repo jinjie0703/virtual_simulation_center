@@ -1,8 +1,8 @@
 package information_center
 
 import (
-	"api/internal/database"
-	"api/internal/models"
+	"virtual_simulation_center/api/internal/database"
+	"virtual_simulation_center/api/internal/models"
 )
 
 // Competition 定义了竞赛信息的数据结构。

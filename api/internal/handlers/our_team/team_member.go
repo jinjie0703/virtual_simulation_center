@@ -1,7 +1,7 @@
 package our_team
 
 import (
-	"api/internal/models/our_team"
+	"virtual_simulation_center/api/internal/models/our_team"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

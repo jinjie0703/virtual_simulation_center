@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"api/internal/models/information_center"
+	"virtual_simulation_center/api/internal/models/information_center"
 
 	"github.com/gin-gonic/gin"
 )

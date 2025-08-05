@@ -65,11 +65,16 @@ import { ref } from 'vue'
 console.log('=== 开始加载 OurTeam 组件 ===')
 
 // 使用组合式函数
-const { tabsConfig, getMembersByType } = useTeamData()
-console.log('useTeamData 结果:', { tabsConfig: tabsConfig.value, getMembersByType })
+const { tabsConfig, getMembersByType, isLoading, error, fetchTeamData } = useTeamData()
+console.log('useTeamData 结果:', {
+  tabsConfig: tabsConfig.value,
+  getMembersByType,
+  isLoading: isLoading.value,
+  error: error.value,
+})
 
-const { activeTab, isLoading, switchTab } = useTabSwitcher()
-console.log('useTabSwitcher 结果:', { activeTab: activeTab.value, isLoading: isLoading.value })
+const { activeTab, switchTab } = useTabSwitcher()
+console.log('useTabSwitcher 结果:', { activeTab: activeTab.value })
 
 // 成员详情模态框状态
 const selectedMember = ref(null)
@@ -110,12 +115,15 @@ const currentMembers = computed(() => {
     // 应用搜索筛选
     if (searchKeyword.value.trim()) {
       const keyword = searchKeyword.value.toLowerCase().trim()
-      members = members.filter(
-        (member) =>
-          member.name.toLowerCase().includes(keyword) ||
-          member.position.toLowerCase().includes(keyword) ||
-          member.department.toLowerCase().includes(keyword),
-      )
+      members = members.filter((member) => {
+        const nameMatch = member.name && member.name.toLowerCase().includes(keyword)
+        const positionMatch = member.position && member.position.toLowerCase().includes(keyword)
+        const departmentMatch =
+          member.department && member.department.toLowerCase().includes(keyword)
+        const researchDirectionMatch =
+          member.research_direction && member.research_direction.toLowerCase().includes(keyword)
+        return nameMatch || positionMatch || departmentMatch || researchDirectionMatch
+      })
     }
 
     // 应用排序筛选
@@ -161,6 +169,7 @@ watch(activeTab, () => {
 
 // 组件挂载时的调试
 onMounted(() => {
+  fetchTeamData() // 在组件挂载时获取数据
   console.log('=== OurTeam 组件调试信息 ===')
   console.log('组件已挂载')
   console.log('标签配置:', tabsConfig.value)

@@ -33,11 +33,4 @@ const onMemberClick = (member) => {
   gap: 40px;
   padding: 40px 0;
 }
-
-@media (max-width: 768px) {
-  .member-grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 30px;
-  }
-}
 </style>

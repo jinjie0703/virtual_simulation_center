@@ -1,8 +1,10 @@
 package routes
 
 import (
+	"api/internal/database"
 	"api/internal/handlers/home_page"
 	"api/internal/handlers/information_center"
+	"api/internal/handlers/our_team"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -39,6 +41,10 @@ func SetupRouter() *gin.Engine {
 			infoGroup.GET("/competitions/:id", information_center.GetCompetitionByIDHandler)
 			infoGroup.GET("/projects", information_center.GetProjectsHandler)
 			infoGroup.GET("/projects/:id", information_center.GetProjectByIDHandler)
+		}
+		ourTeamGroup := api.Group("/our_team")
+		{
+			ourTeamGroup.GET("/members", our_team.GetTeamMembers(database.DB))
 		}
 	}
 	return r

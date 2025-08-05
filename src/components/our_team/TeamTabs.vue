@@ -26,6 +26,9 @@
         <span class="tab-text">{{ tab.name }}</span>
       </button>
     </div>
+
+    <!-- 占位符，用于辅助居中 -->
+    <div class="placeholder-section"></div>
   </div>
 </template>
 
@@ -62,41 +65,51 @@ const handleSearch = (event) => {
 
 <style scoped>
 .tab-container {
+  --primary-color: #4a90e2;
+  --secondary-color: #50e3c2;
+  --border-color: #e0e0e0;
+  --border-radius: 30px; /* Reverted from pill to original */
+  --transition-fast: 0.3s ease;
+
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   margin-bottom: 50px;
   gap: 30px;
-  position: relative;
   padding: 0 8%;
 }
 
+.search-section,
+.placeholder-section {
+  flex: 1;
+}
+
 .search-section {
-  flex: 0 0 320px;
   display: flex;
   justify-content: flex-start;
+}
+
+.placeholder-section {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .search-box {
   display: flex;
   align-items: center;
   background: white;
-  border: 3px solid #e1e5e9;
-  border-radius: 30px;
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius);
   padding: 12px 20px;
-  gap: 12px;
-  transition: all 0.3s ease;
+  transition: all var(--transition-fast);
   width: 100%;
+  max-width: 320px;
 }
 
-.search-box:hover {
-  border-color: #4a90e2;
-  box-shadow: 0 5px 20px rgba(74, 144, 226, 0.1);
-}
-
+.search-box:hover,
 .search-box:focus-within {
-  border-color: #4a90e2;
-  box-shadow: 0 5px 20px rgba(74, 144, 226, 0.2);
+  border-color: var(--primary-color);
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.15);
 }
 
 .search-input {
@@ -110,10 +123,11 @@ const handleSearch = (event) => {
 }
 
 .search-input::placeholder {
-  color: #999;
+  color: #aaa;
 }
 
-.search-input:disabled {
+.search-input:disabled,
+.tab-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
@@ -122,140 +136,42 @@ const handleSearch = (event) => {
   display: flex;
   justify-content: center;
   gap: 30px;
-  flex-wrap: wrap;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: max-content;
 }
 
 .tab-button {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 16px 32px;
-  border: 3px solid #e1e5e9;
+  justify-content: center;
+  padding: 14px 32px;
+  border: 2px solid var(--border-color);
   background: white;
+  /* border-radius: var(--border-radius); */
   border-radius: 30px;
   font-size: 18px;
   font-weight: 600;
   color: #666;
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
+  transition: all var(--transition-fast);
   min-width: 160px;
-  justify-content: center;
+  /* overflow: hidden; */
 }
 
-.tab-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.tab-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, #4a90e2, #50e3c2);
-  transition: left 0.4s ease;
-  z-index: -1;
-}
-
-.tab-button:hover:not(:disabled) {
-  border-color: #4a90e2;
-  transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(74, 144, 226, 0.2);
-}
-
-.tab-button:hover:not(:disabled)::before {
-  left: 0;
-}
-
-.tab-button:hover:not(:disabled) {
-  color: white;
+.tab-button:hover:not(.active):not(:disabled) {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  transform: translateY(-2px);
 }
 
 .tab-button.active {
-  background: linear-gradient(135deg, #4a90e2, #50e3c2);
-  border-color: #4a90e2;
   color: white;
-  transform: translateY(-3px);
-  box-shadow: 0 15px 40px rgba(74, 144, 226, 0.4);
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  background-origin: border-box;
+  box-shadow: 0 8px 20px rgba(74, 144, 226, 0.25);
+  transform: translateY(-2px);
 }
 
-.tab-button.active::before {
-  left: 0;
-}
 .tab-text {
   white-space: nowrap;
-}
-
-@media (max-width: 1024px) {
-  .tab-container {
-    flex-direction: column;
-    gap: 25px;
-    padding: 0 5%;
-  }
-
-  .search-section {
-    flex: none;
-    width: 100%;
-    max-width: 400px;
-    margin: 0;
-    padding: 0;
-  }
-
-  .tab-switcher {
-    position: relative;
-    left: auto;
-    transform: none;
-    gap: 20px;
-    width: 100%;
-  }
-}
-
-@media (max-width: 768px) {
-  .tab-container {
-    gap: 20px;
-    padding: 0 4%;
-  }
-
-  .tab-switcher {
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-  }
-
-  .tab-button {
-    padding: 12px 24px;
-    font-size: 16px;
-    min-width: 220px;
-    width: 100%;
-    max-width: 300px;
-  }
-
-  .search-box {
-    padding: 10px 16px;
-  }
-}
-
-@media (max-width: 480px) {
-  .tab-button {
-    min-width: 180px;
-    padding: 10px 20px;
-    font-size: 15px;
-  }
-
-  .search-box {
-    padding: 8px 14px;
-  }
-
-  .search-input {
-    font-size: 14px;
-  }
 }
 </style>

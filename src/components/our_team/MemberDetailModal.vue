@@ -12,21 +12,9 @@
             </div>
           </div>
           <div class="modal-body">
-            <div class="detail-item">
-              <span class="label">联系方式:</span>
-              <a :href="`mailto:${member.email}`" class="value-link">{{ member.email }}</a>
-            </div>
-            <div class="detail-item">
-              <span class="label">办公室:</span>
-              <span class="value">{{ member.office }}</span>
-            </div>
-            <div class="detail-item">
-              <span class="label">研究方向:</span>
-              <span class="value">{{ member.research }}</span>
-            </div>
-            <div class="detail-item">
-              <span class="label">学术成果:</span>
-              <span class="value">{{ member.achievements }}</span>
+            <div v-for="detail in details" :key="detail.label" class="detail-item">
+              <span class="label">{{ detail.label }}:</span>
+              <span class="value">{{ detail.value }}</span>
             </div>
           </div>
         </div>
@@ -36,9 +24,9 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 
-
-defineProps({
+const props = defineProps({
   show: Boolean,
   member: Object,
 })
@@ -48,6 +36,16 @@ const emit = defineEmits(['close'])
 const close = () => {
   emit('close')
 }
+
+const details = computed(() => {
+  if (!props.member) return []
+  return [
+    { label: '联系方式', value: props.member.email },
+    { label: '办公室', value: props.member.office },
+    { label: '研究方向', value: props.member.research },
+    { label: '学术成果', value: props.member.achievements },
+  ].filter((detail) => detail.value)
+})
 </script>
 
 <style scoped>

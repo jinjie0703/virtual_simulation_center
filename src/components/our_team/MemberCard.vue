@@ -3,9 +3,7 @@
     <div class="avatar-container">
       <img :src="member.avatar" :alt="member.name" class="avatar" @error="handleImageError" />
       <div class="avatar-overlay">
-        <div class="view-details-hint">
-          <span class="hint-text">查看详情</span>
-        </div>
+        <span class="view-details-hint">查看详情</span>
       </div>
     </div>
     <h3 class="member-name">{{ member.name }}</h3>
@@ -30,6 +28,10 @@ const handleImageError = (event) => {
 
 <style scoped>
 .member-card {
+  --avatar-size: 120px;
+  --primary-color: #4a90e2;
+  --card-padding: 30px;
+
   height: 380px;
   width: 100%;
   cursor: pointer;
@@ -38,12 +40,11 @@ const handleImageError = (event) => {
     box-shadow 0.3s ease;
   border-radius: 20px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-  padding: 30px;
+  padding: var(--card-padding);
   background: white;
   border: 1px solid #f0f0f0;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   align-items: center;
   text-align: center;
   box-sizing: border-box;
@@ -55,54 +56,33 @@ const handleImageError = (event) => {
   box-shadow: 0 20px 40px rgba(74, 144, 226, 0.2);
 }
 
+.member-card:hover .avatar-overlay {
+  opacity: 1;
+}
+
 .avatar-container {
   position: relative;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
   margin-bottom: 20px;
 }
 
 .avatar {
-  width: 120px;
-  height: 120px;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  border: 4px solid #4a90e2;
+  border: 4px solid var(--primary-color);
   transition: all 0.3s ease;
   box-shadow: 0 8px 20px rgba(74, 144, 226, 0.3);
-}
-
-.status-indicator {
-  position: absolute;
-  bottom: 5px;
-  right: 5px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: 3px solid white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.status-indicator.professor {
-  background: linear-gradient(135deg, #ffd700, #ffed4e);
-}
-
-.status-indicator.doctor {
-  background: linear-gradient(135deg, #8b5cf6, #a78bfa);
-}
-
-.status-indicator.graduate {
-  background: linear-gradient(135deg, #10b981, #34d399);
-}
-
-.status-indicator.student {
-  background: linear-gradient(135deg, #3b82f6, #60a5fa);
 }
 
 .avatar-overlay {
   position: absolute;
   top: 0;
   left: 0;
-  width: 120px;
-  height: 120px;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   background: rgba(74, 144, 226, 0.8);
   display: flex;
@@ -112,19 +92,10 @@ const handleImageError = (event) => {
   transition: opacity 0.3s ease;
 }
 
-.member-card:hover .avatar-overlay {
-  opacity: 1;
-}
-
 .view-details-hint {
   color: white;
   font-size: 14px;
   font-weight: 600;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
 }
 
 .member-name {
@@ -132,15 +103,15 @@ const handleImageError = (event) => {
   font-weight: 600;
   color: #2c3e50;
   margin-bottom: 8px;
-  background: linear-gradient(135deg, #2c3e50, #4a90e2);
+  background: linear-gradient(135deg, #2c3e50, var(--primary-color));
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .member-title {
   font-size: 16px;
-  color: #4a90e2;
+  color: var(--primary-color);
   margin-bottom: 16px;
   font-weight: 500;
   padding: 4px 12px;
@@ -155,66 +126,11 @@ const handleImageError = (event) => {
   flex-grow: 1;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp:3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* 响应式设计 */
-@media (max-width: 768px) {
-  .member-card {
-    height: auto;
-    min-height: 360px;
-  }
-
-  .member-name {
-    font-size: 20px;
-  }
-
-  .member-title {
-    font-size: 14px;
-  }
-
-  .member-description {
-    font-size: 13px;
-  }
-
-  .avatar {
-    width: 100px;
-    height: 100px;
-  }
-
-  .avatar-overlay {
-    width: 100px;
-    height: 100px;
-  }
-}
-
-@media (max-width: 480px) {
-  .member-card {
-    padding: 20px;
-  }
-
-  .member-name {
-    font-size: 18px;
-  }
-
-  .member-title {
-    font-size: 13px;
-  }
-
-  .member-description {
-    font-size: 12px;
-  }
-
-  .avatar {
-    width: 90px;
-    height: 90px;
-  }
-
-  .avatar-overlay {
-    width: 90px;
-    height: 90px;
-  }
-}
+/* 响应式设计已被禁用 */
 </style>

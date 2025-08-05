@@ -20,18 +20,18 @@
 
     <!-- 团队信息 -->
     <div class="team-info">
-      <p class="team-leader"><i class="fas fa-user-tie"></i> {{ team.leader }}</p>
+      <span class="team-leader"><img src="@/assets/team_center/leader.svg"> {{ team.leader }}</span>
       <p class="team-description">{{ team.description }}</p>
       <div class="team-meta">
         <span class="team-meta-item"
-          ><i class="fas fa-users"></i> {{ team.memberCount }}/{{ team.maxMembers }}</span
+          ><img src="@/assets/team_center/member.svg"> {{ team.memberCount }}/{{ team.maxMembers }}</span
         >
         <!-- 动态显示截止日期或项目周期 -->
         <span v-if="team.deadline" class="team-meta-item"
-          ><i class="fas fa-calendar-alt"></i> {{ team.deadline }}</span
+          ><img src="@/assets/team_center/deadline.svg"> {{ team.deadline }}</span
         >
         <span v-else-if="team.duration" class="team-meta-item"
-          ><i class="fas fa-clock"></i> {{ team.duration }}</span
+          ><img src="@/assets/team_center/duration.svg"> {{ team.duration }}</span
         >
       </div>
     </div>
@@ -142,13 +142,14 @@ const getStatusText = (status) => {
   margin-bottom: 1rem;
 }
 .team-leader {
+  display: inline-flex;
   margin-bottom: 0.5rem;
   font-weight: 500;
   color: #334155;
 }
-.team-leader i {
-  margin-right: 0.4rem;
-  color: #64748b;
+.team-leader img {
+  width: 20px;
+  height: 20px;
 }
 .team-description {
   color: #475569;
@@ -171,9 +172,9 @@ const getStatusText = (status) => {
   display: flex;
   align-items: center;
 }
-.team-meta-item i {
-  margin-right: 0.4rem;
-  opacity: 0.7;
+.team-meta-item img {
+  width: 20px;
+  height: 20px;
 }
 .join-button {
   width: 100%;

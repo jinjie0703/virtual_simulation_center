@@ -32,7 +32,7 @@
 
     <div class="search-filter-container">
       <div class="search-box">
-        <i class="fas fa-search"></i>
+        <img src="@/assets/team_center/search.svg"/>
         <input v-model="searchQuery" type="text" placeholder="搜索团队..." />
       </div>
 
@@ -401,12 +401,13 @@ const clearFilters = () => {
   position: relative;
   min-width: 250px;
 }
-.search-box i {
+.search-box img {
+  width: 20px;
+  height: 20px;
   position: absolute;
-  left: 1rem;
   top: 50%;
+  left: 10px; /* 根据需求放在左边 */
   transform: translateY(-50%);
-  color: #94a3b8;
 }
 .search-box input {
   width: 100%;

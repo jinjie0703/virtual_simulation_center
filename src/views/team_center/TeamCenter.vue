@@ -67,7 +67,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import TeamHeader from '@/components/team_center/TeamHeader.vue'
 import TeamActions from '@/components/team_center/TeamActions.vue'
 import TeamList from '@/components/team_center/TeamList.vue'
@@ -160,7 +160,7 @@ const {
   handleOpenJoinModal,
   submitJoinApplication,
 } = useModals(showToastMessage)
-const { loading, filteredTeams, paginatedTeams, addTeam } = useTeams({
+const { loading, filteredTeams, paginatedTeams, addTeam, fetchData } = useTeams({
   activeTab,
   searchQuery,
   filterOption,
@@ -169,6 +169,11 @@ const { loading, filteredTeams, paginatedTeams, addTeam } = useTeams({
   currentPage,
   itemsPerPage,
   showToastMessage,
+})
+
+// 强制刷新数据以解决HMR缓存问题
+onMounted(() => {
+  fetchData()
 })
 
 // 4. 定义仅属于此组件的、简单的事件处理器

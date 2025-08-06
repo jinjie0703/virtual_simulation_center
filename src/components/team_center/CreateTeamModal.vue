@@ -97,6 +97,24 @@
             </div>
           </template>
         </div>
+
+        <div class="form-group contact-section">
+          <label>联系方式 (至少填写一项)</label>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="contact-wechat">微信</label>
+              <input id="contact-wechat" v-model="team.contact.wechat" type="text" placeholder="选填" />
+            </div>
+            <div class="form-group">
+              <label for="contact-qq">QQ</label>
+              <input id="contact-qq" v-model="team.contact.qq" type="text" placeholder="选填" />
+            </div>
+            <div class="form-group">
+              <label for="contact-email">邮箱</label>
+              <input id="contact-email" v-model="team.contact.email" type="email" placeholder="选填" />
+            </div>
+          </div>
+        </div>
         <div class="form-actions">
           <button type="button" class="cancel-button" @click="emit('close')">取消</button>
           <button type="submit" class="submit-button" :disabled="isFormInvalid">
@@ -125,13 +143,21 @@ const team = reactive({
   deadline: '',
   difficulty: '中等',
   duration: '',
+  contact: {
+    wechat: '',
+    qq: '',
+    email: '',
+  },
 })
 const currentTag = ref('')
 const tags = ref([])
 
 // 计算属性
 const minDate = computed(() => new Date().toISOString().split('T')[0])
-const isFormInvalid = computed(() => !team.name || !team.description || tags.value.length === 0)
+const isFormInvalid = computed(() => {
+  const isContactEmpty = !team.contact.wechat && !team.contact.qq && !team.contact.email
+  return !team.name || !team.description || tags.value.length === 0 || isContactEmpty
+})
 
 // 方法
 const addTag = () => {
@@ -220,7 +246,9 @@ onMounted(() => {
   }
 }
 .modal-header {
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 10;
   padding: 1.5rem;
   border-bottom: 1px solid #e2e8f0;
   background-color: #f8fafc;
@@ -233,7 +261,7 @@ h2 {
 }
 .close-button {
   position: absolute;
-  top: 1rem;
+  top: 1.8rem;
   right: 1rem;
   background: none;
   border: none;
@@ -391,6 +419,23 @@ form {
 }
 .submit-button i {
   font-size: 1.1rem;
+}
+.contact-section {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+}
+.contact-section > label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+.contact-section .form-group {
+  margin-bottom: 0; /* 移除内联表单组的下边距 */
+}
+.contact-section .form-group label {
+  font-size: 0.9rem;
+  font-weight: 400;
 }
 @media (max-width: 640px) {
   .modal-content {

@@ -130,5 +130,6 @@ export function useTeams({
     filteredTeams, // 用于计算总数
     paginatedTeams, // 用于列表渲染
     addTeam,
+    fetchData, // 导出 fetchData 以便手动刷新
   }
 }

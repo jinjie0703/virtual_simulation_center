@@ -3,44 +3,31 @@
     <div v-if="show" class="join-modal-overlay" @click.self="$emit('close')">
       <div class="join-modal-content">
         <div class="modal-header">
-          <h3>申请加入团队</h3>
+          <h3>加入团队</h3>
           <button class="close-button" @click="$emit('close')">×</button>
         </div>
         <div class="modal-body" v-if="team">
-          <p><strong>团队名称:</strong> {{ team.name }}</p>
-          <p>
-            <strong>{{ team.type === 'competition' ? '队长' : '负责人' }}:</strong>
-            {{ team.leader }}
-          </p>
-          <div class="form-group">
-            <label for="join-reason">申请理由</label>
-            <textarea
-              id="join-reason"
-              v-model="joinReason"
-              rows="3"
-              placeholder="请简要描述您的技能和加入团队的原因..."
-              required
-            ></textarea>
+          <div class="team-info-box">
+            <p><strong>团队名称:</strong> {{ team.name }}</p>
+            <p><strong>{{ team.type === 'competition' ? '队长' : '负责人' }}:</strong> {{ team.leader }}</p>
           </div>
-          <div class="form-group">
-            <label for="contact-info">联系方式</label>
-            <input
-              id="contact-info"
-              v-model="contactInfo"
-              type="text"
-              placeholder="微信/QQ/手机号等联系方式"
-              required
-            />
+
+          <div class="team-info-box">
+            <h4>联系方式</h4>
+            <div v-if="team.contact && (team.contact.wechat || team.contact.qq || team.contact.email)">
+              <p v-if="team.contact.wechat"><strong>微信:</strong> {{ team.contact.wechat }}</p>
+              <p v-if="team.contact.qq"><strong>QQ:</strong> {{ team.contact.qq }}</p>
+              <p v-if="team.contact.email"><strong>邮箱:</strong> {{ team.contact.email }}</p>
+            </div>
+            <p v-else>该团队暂未提供公开联系方式。</p>
           </div>
+
+          <div class="notice-box">
+            <p><strong>如何加入:</strong> 由于网站尚在开发初期，暂不支持在线申请，请通过上方联系方式主动联系负责人，如果选择发送邮件，请作个人介绍并且说明自己的技术特长和目标。</p>
+          </div>
+
           <div class="modal-footer">
-            <button class="cancel-button" @click="$emit('close')">取消</button>
-            <button
-              class="submit-button"
-              :disabled="!joinReason || !contactInfo"
-              @click="submitApplication"
-            >
-              提交申请
-            </button>
+            <button class="close-button-footer" @click="$emit('close')">关闭</button>
           </div>
         </div>
       </div>
@@ -49,33 +36,13 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
-
-const props = defineProps({
+defineProps({
   show: Boolean,
   team: Object,
   teamType: String
 })
 
-const emit = defineEmits(['close', 'submit'])
-
-const joinReason = ref('')
-const contactInfo = ref('')
-
-const submitApplication = () => {
-  emit('submit', {
-    teamId: props.team.id,
-    reason: joinReason.value,
-    contact: contactInfo.value
-  })
-}
-
-watch(() => props.show, (newVal) => {
-  if (newVal) {
-    joinReason.value = ''
-    contactInfo.value = ''
-  }
-})
+defineEmits(['close'])
 </script>
 
 <style scoped>
@@ -115,19 +82,26 @@ watch(() => props.show, (newVal) => {
   transition: transform 0.3s ease;
 }
 .modal-header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   background-color: #f8fafc;
   padding: 1.2rem 1.5rem;
   border-bottom: 1px solid #e2e8f0;
-  display: flex;
   justify-content: space-between;
   align-items: center;
 }
 .modal-header h3 {
+  grid-column: 2;
+  flex-grow: 1;
+  text-align: center;
+  font-size: 1.5rem;
   margin: 0;
   color: #334155;
   font-weight: 600;
 }
 .close-button {
+  grid-column: 3; /* 3. 按钮放在第三列 */
+    justify-self: end;
   background: none;
   border: none;
   font-size: 1.5rem;
@@ -141,29 +115,40 @@ watch(() => props.show, (newVal) => {
 .modal-body {
   padding: 1.5rem;
 }
-.form-group {
-  margin-bottom: 1.2rem;
-}
-.form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-  color: #334155;
-}
-.form-group input,
-.form-group textarea {
-  width: 100%;
-  padding: 0.8rem;
+.team-info-box {
+  background-color: #ffffff;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
   border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  font-size: 1rem;
-  transition: all 0.3s ease;
+  padding: 1.2rem;
 }
-.form-group input:focus,
-.form-group textarea:focus {
-  outline: none;
-  border-color: #3498db;
-  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+.team-info-box p {
+  margin: 0 0 0.8rem 0;
+  color: #334155;
+  line-height: 1.6;
+  word-break: break-all;
+}
+.team-info-box p:last-child {
+  margin-bottom: 0;
+}
+.team-info-box h4 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: #334155;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 0.8rem;
+}
+.notice-box {
+  padding: 1rem;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  line-height: 1.6;
+}
+.notice-box p {
+  margin: 0;
 }
 .modal-footer {
   display: flex;
@@ -171,21 +156,7 @@ watch(() => props.show, (newVal) => {
   gap: 1rem;
   margin-top: 1.5rem;
 }
-.cancel-button {
-  padding: 0.7rem 1.2rem;
-  background-color: #f1f5f9;
-  color: #64748b;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
-.cancel-button:hover {
-  background-color: #e2e8f0;
-  color: #334155;
-}
-.submit-button {
+.close-button-footer {
   padding: 0.7rem 1.5rem;
   background-color: #3498db;
   color: white;
@@ -195,12 +166,7 @@ watch(() => props.show, (newVal) => {
   font-weight: 500;
   transition: all 0.3s ease;
 }
-.submit-button:hover:not(:disabled) {
+.close-button-footer:hover {
   background-color: #2980b9;
-}
-.submit-button:disabled {
-  background-color: #cbd5e1;
-  cursor: not-allowed;
-  opacity: 0.7;
 }
 </style>

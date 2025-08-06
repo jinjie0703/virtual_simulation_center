@@ -1,36 +1,39 @@
 <template>
-  <header class="achievement-header">
-    <div class="header-content">
-      <h1 class="title">{{ title }}</h1>
-      <p class="subtitle">{{ subtitle }}</p>
+  <header class="team-header">
+    <div>
+      <h1 class="title">团队中心</h1>
+      <p class="subtitle">寻找志同道合的伙伴，一起组队参加竞赛或开展项目</p>
     </div>
   </header>
 </template>
 
 <script setup>
-defineProps({
-  title: String,
-  subtitle: String,
-})
+// This component is purely presentational.
 </script>
 
 <style scoped>
-.achievement-header {
+/* 标题样式 */
+.team-header {
   padding: 120px 0px 80px 0px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   text-align: center;
-  color: white;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #a1d3ff 0%, #2d92ff 100%);
 }
+
 .title {
   font-size: 3.5rem;
   font-weight: 800;
   margin: 0 0 15px;
+  color: #2c3e50;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   animation: fadeInDown 1s ease-out;
 }
+
 .subtitle {
   font-size: 1.25rem;
   max-width: 800px;
+  color: gray;
   margin: 0 auto;
   opacity: 0.9;
   line-height: 1.6;

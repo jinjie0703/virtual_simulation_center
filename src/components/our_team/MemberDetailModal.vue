@@ -5,7 +5,7 @@
         <button class="close-button" @click="close">&times;</button>
         <div v-if="member" class="modal-content">
           <div class="modal-header">
-            <img :src="member.avatar" :alt="member.name" class="modal-avatar" />
+            <img :src="member.avatar_url" :alt="member.name" class="modal-avatar" />
             <div class="header-info">
               <h2 class="member-name">{{ member.name }}</h2>
               <p class="member-title">{{ member.title }}</p>
@@ -42,7 +42,7 @@ const details = computed(() => {
   return [
     { label: '联系方式', value: props.member.email },
     { label: '办公室', value: props.member.office },
-    { label: '研究方向', value: props.member.research },
+    { label: '研究方向', value: props.member.research_interests },
     { label: '学术成果', value: props.member.achievements },
   ].filter((detail) => detail.value)
 })

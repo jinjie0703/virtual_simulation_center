@@ -7,7 +7,7 @@
   >
     <div class="select-trigger" :class="triggerClass">
       <span class="select-value">{{ selectedOption?.label || placeholder }}</span>
-      <i :class="['fas', iconClass, { rotated: isOpen }]" :style="{ fontSize: iconSize }"></i>
+      <img :src="iconPath" class="select-icon" :class="{ rotated: isOpen }" alt="icon" />
     </div>
     <transition :name="transitionName">
       <ul v-if="isOpen" class="select-options" :class="optionsClass">
@@ -69,13 +69,9 @@ const props = defineProps({
     type: String,
     default: 'auto',
   },
-  iconClass: {
+  iconPath: {
     type: String,
-    default: 'fa-chevron-down',
-  },
-  iconSize: {
-    type: String,
-    default: '0.8rem',
+    default: '',
   },
   transitionName: {
     type: String,
@@ -225,13 +221,13 @@ watch(
   white-space: nowrap;
 }
 
-.select-trigger i {
-  color: #64748b;
+.select-icon {
+  width: 16px;
+  height: 16px;
   transition: transform 0.3s ease;
-  flex-shrink: 0;
 }
 
-.select-trigger i.rotated {
+.select-icon.rotated {
   transform: rotate(180deg);
 }
 

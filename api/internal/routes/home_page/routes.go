@@ -1,11 +1,11 @@
 package routes
 
 import (
+	"time"
 	"virtual_simulation_center/api/internal/database"
 	"virtual_simulation_center/api/internal/handlers/home_page"
 	"virtual_simulation_center/api/internal/handlers/information_center"
 	"virtual_simulation_center/api/internal/handlers/our_team"
-	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -44,7 +44,7 @@ func SetupRouter() *gin.Engine {
 		}
 		ourTeamGroup := api.Group("/our_team")
 		{
-			ourTeamGroup.GET("/members", our_team.GetTeamMembers(database.DB))
+			ourTeamGroup.GET("/team_members", our_team.GetTeamMembers(database.DB))
 		}
 	}
 	return r

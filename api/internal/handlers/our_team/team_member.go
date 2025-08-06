@@ -1,8 +1,8 @@
 package our_team
 
 import (
-	"virtual_simulation_center/api/internal/models/our_team"
 	"net/http"
+	"virtual_simulation_center/api/internal/models/our_team"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"

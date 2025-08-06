@@ -1,7 +1,7 @@
 <template>
   <div class="member-card">
     <div class="avatar-container">
-      <img :src="member.avatar" :alt="member.name" class="avatar" @error="handleImageError" />
+      <img :src="member.avatar_url" :alt="member.name" class="avatar" @error="handleImageError" />
       <div class="avatar-overlay">
         <span class="view-details-hint">查看详情</span>
       </div>

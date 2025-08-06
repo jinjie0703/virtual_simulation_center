@@ -21,6 +21,7 @@
           min-width="140px"
           trigger-class="filter-trigger"
           options-class="filter-options"
+          :icon-path="unfoldIcon"
           @update:model-value="handleTeacherChange"
         />
 
@@ -32,6 +33,7 @@
           min-width="140px"
           trigger-class="filter-trigger"
           options-class="filter-options"
+          :icon-path="unfoldIcon"
           @update:model-value="handleTagChange"
         />
 
@@ -43,6 +45,7 @@
           min-width="140px"
           trigger-class="filter-trigger"
           options-class="filter-options"
+          :icon-path="unfoldIcon"
           @update:model-value="handleTimeChange"
         />
       </div>
@@ -57,6 +60,7 @@
 
 <script setup>
 import CustomSelect from '@/components/common/CustomSelect.vue'
+import unfoldIcon from '@/assets/achievement_showcase/unfold.svg'
 
 const props = defineProps({
   modelValue: String,

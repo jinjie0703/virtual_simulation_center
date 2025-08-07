@@ -6,6 +6,7 @@ import (
 	"virtual_simulation_center/api/internal/handlers/home_page"
 	"virtual_simulation_center/api/internal/handlers/information_center"
 	"virtual_simulation_center/api/internal/handlers/our_team"
+	"virtual_simulation_center/api/internal/handlers/team_center"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -23,7 +24,7 @@ func SetupRouter() *gin.Engine {
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}))
-	r.Static("/static", "./public") // 静态文件目录
+	r.Static("/static", "./api/public") // 静态文件目录
 
 	api := r.Group("/api")
 	{
@@ -45,6 +46,15 @@ func SetupRouter() *gin.Engine {
 		ourTeamGroup := api.Group("/our_team")
 		{
 			ourTeamGroup.GET("/team_members", our_team.GetTeamMembers(database.DB))
+		}
+		teamCenterGroup := api.Group("/team_center")
+		{
+			teamCenterGroup.GET("/competition_teams", team_center.GetAllCompetitionTeams)
+			teamCenterGroup.GET("/competition_teams/:id", team_center.GetCompetitionTeamByID)
+			teamCenterGroup.POST("/competition_teams", team_center.CreateCompetitionTeam)
+			teamCenterGroup.GET("/project_teams", team_center.GetAllProjectTeams)
+			teamCenterGroup.GET("/project_teams/:id", team_center.GetProjectTeamByID)
+			teamCenterGroup.POST("/project_teams", team_center.CreateProjectTeam)
 		}
 	}
 	return r

@@ -1,4 +1,4 @@
-package models
+package information_center
 
 import (
 	"database/sql"

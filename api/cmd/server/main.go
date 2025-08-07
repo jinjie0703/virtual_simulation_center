@@ -4,7 +4,7 @@ package main
 import (
 	"log"
 	"virtual_simulation_center/api/internal/database"
-	routes "virtual_simulation_center/api/internal/routes/home_page"
+	"virtual_simulation_center/api/internal/routes"
 	"virtual_simulation_center/api/pkg/config"
 )
 

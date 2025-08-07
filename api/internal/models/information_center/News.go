@@ -2,17 +2,16 @@ package information_center
 
 import (
 	"virtual_simulation_center/api/internal/database"
-	"virtual_simulation_center/api/internal/models"
 )
 
-// News 定义了新闻文章的数据结构。
+// News 定义了新闻的数据结构
 type News struct {
-	models.BaseModel        // 嵌入基础模型，自动获得 ID, CreatedAt, UpdatedAt, DeletedAt 字段
-	Title            string `json:"title" db:"title"`
-	Summary          string `json:"summary" db:"summary"`
-	PublishDate      string `json:"publish_date" db:"publish_date"`
-	Category         string `json:"category" db:"category"`
-	DetailURL        string `json:"detail_url" db:"detail_url"`
+	BaseModel
+	Title     string `json:"title" db:"title"`
+	Summary   string `json:"summary" db:"summary"`
+	Source    string `json:"source" db:"source"`
+	ImageURL  string `json:"image_url" db:"image_url"`
+	DetailURL string `json:"detail_url" db:"detail_url"`
 }
 
 func GetAllNews() ([]News, error) {

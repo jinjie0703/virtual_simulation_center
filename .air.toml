@@ -1,0 +1,49 @@
+# .air.toml
+# Air 配置文件 - 专为你的项目结构定制
+
+# 项目的根目录，"." 代表当前目录 (即 go.mod 所在的目录)
+root = "."
+# 存放临时编译文件的目录
+tmp_dir = "tmp"
+
+[build]
+# 这是最关键的一行！
+# Air 将会运行这个命令来编译你的程序。
+# 我们使用 "go build" 来代替 "go run"，并把编译结果输出到 ./tmp/main。
+# "api/cmd/server" 是你 main.go 文件所在的目录。
+cmd = "go build -o ./tmp/main ./api/cmd/server"
+
+# 编译后生成的可执行文件的路径，Air 会运行这个文件。
+# 这个路径必须和上面 cmd 命令里的 -o 参数指定的路径一致。
+bin = "tmp/main"
+
+# 监控这些后缀的文件变化。当这些文件被保存时，会触发热重载。
+# 我额外加了 .env，如果你用 .env 文件来管理配置，修改它也会重启服务。
+include_ext = ["go", "tpl", "tmpl", "html", "env"]
+
+# 忽略监控这些目录的变化。
+# 必须加上 "tmp"，否则会无限重启！
+exclude_dir = ["assets", "tmp", "vendor", ".git"]
+
+# 在文件变化后，延迟多久触发重载（单位：毫秒）。
+# 这可以防止因快速连续保存而导致多次重启。
+delay = 1000 # ms
+
+# 如果编译出错，是否停止运行旧的程序。
+# 设置为 true 能让你立刻看到编译错误。
+stop_on_error = true
+
+[log]
+# 日志前面加上时间戳，方便调试。
+time = true
+
+[color]
+# 美化日志输出，不同部分的日志用不同颜色，一目了然。
+main = "magenta"
+watcher = "cyan"
+build = "yellow"
+runner = "green"
+
+[misc]
+# 在 Air 退出时，自动清理掉 tmp 目录中的临时文件。
+clean_on_exit = true

@@ -11,11 +11,11 @@ tmp_dir = "tmp"
 # Air 将会运行这个命令来编译你的程序。
 # 我们使用 "go build" 来代替 "go run"，并把编译结果输出到 ./tmp/main。
 # "api/cmd/server" 是你 main.go 文件所在的目录。
-cmd = "go build -o ./tmp/main ./api/cmd/server"
+cmd = "go build -o ./tmp/main.exe ./api/cmd/server"
 
 # 编译后生成的可执行文件的路径，Air 会运行这个文件。
 # 这个路径必须和上面 cmd 命令里的 -o 参数指定的路径一致。
-bin = "tmp/main"
+bin = "tmp/main.exe"
 
 # 监控这些后缀的文件变化。当这些文件被保存时，会触发热重载。
 # 我额外加了 .env，如果你用 .env 文件来管理配置，修改它也会重启服务。

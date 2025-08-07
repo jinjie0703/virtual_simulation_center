@@ -3,12 +3,11 @@
 import { ref, computed, watch } from 'vue'
 // 注意：这里我们假设你有一个api.js文件来导出获取数据的函数
 // 即使你不提供它，这里的结构也是清晰的
-import * as Api from '@/components/team_center/api'
+import * as Api from './api'
 
 export function useTeams({
   activeTab,
   searchQuery,
-  filterOption,
   difficultyFilter,
   tagFilter,
   currentPage,
@@ -26,7 +25,16 @@ export function useTeams({
         activeTab.value === 'competition'
           ? await Api.fetchCompetitionTeams() // 你的API调用
           : await Api.fetchProjectTeams() // 你的API调用
-      allTeams.value = data
+      allTeams.value = data.map((team) => ({
+        ...team,
+        contact: {
+          wechat: team.contact_wechat,
+          qq: team.contact_qq,
+          email: team.contact_email,
+        },
+        deadline: team.deadline ? new Date(team.deadline).toLocaleDateString() : null,
+        createdAt: new Date(team.createdAt).toLocaleDateString(),
+      }))
     } catch (error) {
       console.error('获取团队数据失败:', error)
       showToastMessage('数据加载失败，请稍后重试', 'error')
@@ -62,47 +70,20 @@ export function useTeams({
     }
 
     // 2. 难度过滤
-    if (difficultyFilter.value) {
-      teams = teams.filter(
-        (team) =>
-          Object.prototype.hasOwnProperty.call(team, 'difficulty') &&
-          team.difficulty === difficultyFilter.value,
-      )
+    if (difficultyFilter.value && difficultyFilter.value !== '') {
+      teams = teams.filter((team) => team.difficulty === difficultyFilter.value)
     }
 
     // 3. 标签过滤
-    if (tagFilter.value) {
-      teams = teams.filter((team) => team.tags && team.tags.includes(tagFilter.value))
-    }
-
-    // 4. 排序
-    switch (filterOption.value) {
-      case 'deadline':
-        // 仅当团队有deadline属性时排序
-        teams.sort((a, b) => {
-          if (a.deadline && b.deadline) {
-            return new Date(a.deadline) - new Date(b.deadline)
-          }
-          return 0 // 保持原顺序
-        })
-        break
-      case 'members_desc':
-        teams.sort((a, b) => (b.recruitmentNumber || 0) - (a.recruitmentNumber || 0))
-        break
-      case 'members_asc':
-        teams.sort((a, b) => (a.recruitmentNumber || 0) - (b.recruitmentNumber || 0))
-        break
-      case 'newest':
-      default:
-        teams.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-        break
+    if (tagFilter.value && tagFilter.value !== '') {
+      teams = teams.filter((team) => team.tags.includes(tagFilter.value))
     }
 
     return teams
   })
 
   // 监听筛选条件变化，自动重置到第一页
-  watch([searchQuery, filterOption, difficultyFilter, tagFilter], () => {
+  watch([searchQuery, difficultyFilter, tagFilter], () => {
     currentPage.value = 1
   })
 
@@ -122,6 +103,16 @@ export function useTeams({
   // 组件挂载时首次获取数据
   fetchData()
 
+  const dynamicDifficultyOptions = computed(() => {
+    const difficulties = [...new Set(allTeams.value.map((team) => team.difficulty).filter(Boolean))]
+    return [{ value: '', label: '全部难度' }, ...difficulties.map((d) => ({ value: d, label: d }))]
+  })
+
+  const dynamicTagOptions = computed(() => {
+    const tags = [...new Set(allTeams.value.flatMap((team) => team.tags).filter(Boolean))]
+    return [{ value: '', label: '全部标签' }, ...tags.map((t) => ({ value: t, label: t }))]
+  })
+
   // 返回所有组件需要用到的状态和方法
   return {
     loading,
@@ -129,5 +120,7 @@ export function useTeams({
     paginatedTeams, // 用于列表渲染
     addTeam,
     fetchData, // 导出 fetchData 以便手动刷新
+    dynamicDifficultyOptions,
+    dynamicTagOptions,
   }
 }

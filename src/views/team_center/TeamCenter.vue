@@ -5,12 +5,10 @@
     <TeamActions
       v-model:activeTab="activeTab"
       v-model:searchQuery="searchQuery"
-      v-model:filterOption="filterOption"
       v-model:difficultyFilter="difficultyFilter"
       v-model:tagFilter="tagFilter"
-      :filter-options="filterOptions"
-      :difficulty-options="difficultyOptions"
-      :tag-options="tagOptions"
+      :difficulty-options="dynamicDifficultyOptions"
+      :tag-options="dynamicTagOptions"
       @create-team="showCreateModal = true"
     />
 
@@ -83,59 +81,13 @@ import { useTeams } from './useTeams.js'
 // 2. 定义组件顶层的、驱动UI交互的状态
 const activeTab = ref('competition')
 const searchQuery = ref('')
-const filterOption = ref('') // 默认无排序，UI显示placeholder
 const currentPage = ref(1)
 const itemsPerPage = ref(20)
 // 新增筛选状态
 const difficultyFilter = ref('')
 const tagFilter = ref('')
 
-// 修改：使用计算属性定义筛选选项
-const filterOptions = computed(() => {
-  const options = [
-    { value: 'newest', label: '最新创建' },
-    { value: 'members_desc', label: '人数最多' },
-    { value: 'members_asc', label: '急需招人' },
-  ]
-  // 只有竞赛组队有“临近截止”选项
-  if (activeTab.value === 'competition') {
-    options.splice(1, 0, { value: 'deadline', label: '临近截止' })
-  }
-  return options
-})
 
-// 新增：难度选项
-const difficultyOptions = computed(() => [
-  { value: '', label: '全部难度' },
-  { value: 'easy', label: '简单' },
-  { value: 'medium', label: '中等' },
-  { value: 'hard', label: '困难' },
-  { value: 'expert', label: '专家' },
-])
-
-// 新增：标签选项
-const tagOptions = computed(() => {
-  // 根据activeTab返回不同的标签选项
-  if (activeTab.value === 'competition') {
-    return [
-      { value: '', label: '全部标签' },
-      { value: 'ai', label: '人工智能' },
-      { value: 'algorithm', label: '算法' },
-      { value: 'data', label: '数据分析' },
-      { value: 'security', label: '网络安全' },
-      { value: 'innovation', label: '创新设计' },
-    ]
-  } else {
-    return [
-      { value: '', label: '全部标签' },
-      { value: 'web', label: '网站开发' },
-      { value: 'mobile', label: '移动应用' },
-      { value: 'game', label: '游戏开发' },
-      { value: 'iot', label: '物联网' },
-      { value: 'research', label: '研究项目' },
-    ]
-  }
-})
 
 // 增加对activeTab的监听，当切换标签页时重置筛选选项
 watch(activeTab, (newTab, oldTab) => {
@@ -143,7 +95,6 @@ watch(activeTab, (newTab, oldTab) => {
 
   // 切换标签页时重置所有筛选
   searchQuery.value = ''
-  filterOption.value = ''
   difficultyFilter.value = ''
   tagFilter.value = ''
   currentPage.value = 1
@@ -160,10 +111,17 @@ const {
   handleOpenJoinModal,
   submitJoinApplication,
 } = useModals(showToastMessage)
-const { loading, filteredTeams, paginatedTeams, addTeam, fetchData } = useTeams({
+const {
+  loading,
+  filteredTeams,
+  paginatedTeams,
+  addTeam,
+  fetchData,
+  dynamicDifficultyOptions,
+  dynamicTagOptions,
+} = useTeams({
   activeTab,
   searchQuery,
-  filterOption,
   difficultyFilter, // 新增筛选参数
   tagFilter, // 新增筛选参数
   currentPage,
@@ -184,7 +142,6 @@ const handlePageChange = (page) => {
 
 const clearFilters = () => {
   searchQuery.value = ''
-  filterOption.value = ''
   difficultyFilter.value = ''
   tagFilter.value = ''
 }

@@ -36,21 +36,12 @@
 
       <div class="filter-options">
         <CustomSelect
-          :model-value="filterOption"
-          @update:modelValue="$emit('update:filterOption', $event)"
-          :options="filterOptions"
-          placeholder="选择排序方式"
-          size="medium"
-          :min-width="'140px'"
-          :icon-path="unfoldIcon"
-        />
-        <CustomSelect
           :model-value="difficultyFilter"
           @update:modelValue="$emit('update:difficultyFilter', $event)"
           :options="difficultyOptions"
           placeholder="选择难度"
           size="medium"
-          :min-width="'120px'"
+          :style="{ width: '150px' }"
           :icon-path="unfoldIcon"
         />
         <CustomSelect
@@ -59,7 +50,7 @@
           :options="tagOptions"
           placeholder="选择标签"
           size="medium"
-          :min-width="'120px'"
+          :style="{ width: '150px' }"
           :icon-path="unfoldIcon"
         />
       </div>
@@ -78,10 +69,8 @@ import unfoldIcon from '@/assets/team_center/unfold.svg'
 defineProps({
   activeTab: String,
   searchQuery: String,
-  filterOption: String,
   difficultyFilter: String,
   tagFilter: String,
-  filterOptions: Array,
   difficultyOptions: Array,
   tagOptions: Array
 })
@@ -89,7 +78,6 @@ defineProps({
 defineEmits([
   'update:activeTab',
   'update:searchQuery',
-  'update:filterOption',
   'update:difficultyFilter',
   'update:tagFilter',
   'create-team'

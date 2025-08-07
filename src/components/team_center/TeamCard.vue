@@ -24,7 +24,7 @@
       <p class="team-description">{{ team.description }}</p>
       <div class="team-meta">
         <span class="team-meta-item"
-          ><img src="@/assets/team_center/member.svg"> {{ team.memberCount }}/{{ team.maxMembers }}</span
+          ><img src="@/assets/team_center/member.svg">招募人数：{{ team.recruitmentNumber }}</span
         >
         <!-- 动态显示截止日期或项目周期 -->
         <span v-if="team.deadline" class="team-meta-item"

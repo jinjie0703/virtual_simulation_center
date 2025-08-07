@@ -56,10 +56,10 @@
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label for="max-members">招募人数</label>
+            <label for="recruitment-number">招募人数</label>
             <input
-              id="max-members"
-              v-model.number="team.maxMembers"
+              id="recruitment-number"
+              v-model.number="team.recruitmentNumber"
               type="number"
               min="2"
               max="10"
@@ -139,7 +139,7 @@ const emit = defineEmits(['close', 'team-created'])
 const team = reactive({
   name: '',
   description: '',
-  maxMembers: 5,
+  recruitmentNumber: 5,
   deadline: '',
   difficulty: '中等',
   duration: '',
@@ -178,7 +178,6 @@ const submitForm = () => {
   const newTeam = {
     id: Date.now(),
     leader: '当前用户', // 实际应从用户状态管理获取
-    memberCount: 1,
     createdAt: new Date().toISOString(),
     tags: tags.value,
     ...team,

@@ -87,12 +87,10 @@ export function useTeams({
         })
         break
       case 'members_desc':
-        teams.sort((a, b) => (b.memberCount || 0) - (a.memberCount || 0))
+        teams.sort((a, b) => (b.recruitmentNumber || 0) - (a.recruitmentNumber || 0))
         break
       case 'members_asc':
-        teams.sort(
-          (a, b) => (a.maxMembers - a.memberCount || 0) - (b.maxMembers - b.memberCount || 0),
-        )
+        teams.sort((a, b) => (a.recruitmentNumber || 0) - (b.recruitmentNumber || 0))
         break
       case 'newest':
       default:

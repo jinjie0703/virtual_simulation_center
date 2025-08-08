@@ -160,7 +160,7 @@ const props = defineProps({
 })
 
 watchEffect(() => {
-  console.log('2. [子组件] 接收到的 Props:', props.features)
+  console.log('接收到的 Props:', props.features)
 })
 
 const processedFeatures = computed(() => {

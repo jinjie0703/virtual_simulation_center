@@ -3,7 +3,7 @@ import axios from 'axios'
 
 // 创建一个axios实例，用于后续的API请求
 const apiClient = axios.create({
-  baseURL: 'https://localhost:8080/api', // 你的Go后端地址
+  baseURL: `${import.meta.env.VITE_API_BASE_URL}/api`, // 你的Go后端地址
   headers: {
     'Content-Type': 'application/json',
   },

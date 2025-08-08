@@ -1,7 +1,18 @@
 # configs/config.yaml
-# 数据库配置
+
+# 服务器配置
 server:
   port: ':8080'
 
+# 数据库环境配置
 database:
-  dsn: 'root:2594817591@tcp(127.0.0.1:3306)/virtual_simulation_center?charset=utf8mb4&parseTime=True&loc=Local'
+  # 当前激活的环境: local 或 azure
+  active: azure 
+  
+  # 本地开发环境配置
+  local:
+    dsn: 'root:2594817591@tcp(127.0.0.1:3306)/virtual_simulation_center?charset=utf8mb4&parseTime=True&loc=Local'
+
+  # Azure 生产环境配置
+  azure:
+    dsn: 'cg2594817591:20050726.cg@tcp(jinjie0808.mysql.database.azure.com:3306)/virtual_simulation_center?charset=utf8mb4&parseTime=True&loc=Local&tls=true'

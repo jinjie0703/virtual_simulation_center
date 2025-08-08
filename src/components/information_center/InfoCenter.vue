@@ -58,7 +58,7 @@ const allData = ref({
 const fetchData = async () => {
   try {
     const response = await axios.get(
-      `https://localhost:8080/api/information_center/${activeTab.value}`,
+      `${import.meta.env.VITE_API_BASE_URL}/api/information_center/${activeTab.value}`,
     )
     allData.value[activeTab.value] = response.data
   } catch (error) {

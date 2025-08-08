@@ -13,9 +13,8 @@
       <p class="card-summary">{{ item.summary }}</p>
       <div class="card-footer">
         <div class="meta-info">
-          <span v-if="item.publish_date" class="date"
-            >发布日期：{{ formatDate(item.publish_date) }}</span
-          >
+          <span v-if="item.publish_date" class="date">发布日期：{{ formatDate(item.publish_date) }}</span>
+          <span v-else-if="item.created_at" class="date">发布日期：{{ formatDate(item.created_at) }}</span>
           <span v-if="item.deadline" class="deadline">截止：{{ formatDate(item.deadline) }}</span>
         </div>
         <router-link :to="detailRoute" class="details-link">查看详情 →</router-link>

@@ -10,7 +10,7 @@ export function useTeamData() {
     isLoading.value = true
     error.value = null
     try {
-      const response = await axios.get('https://localhost:8080/api/our_team/team_members')
+      const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/our_team/team_members`)
       members.value = response.data
     } catch (err) {
       error.value = 'Failed to fetch members'

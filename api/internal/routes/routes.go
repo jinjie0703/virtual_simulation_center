@@ -2,6 +2,7 @@ package routes
 
 import (
 	"time"
+
 	"virtual_simulation_center/api/internal/database"
 	"virtual_simulation_center/api/internal/handlers/home_page"
 	"virtual_simulation_center/api/internal/handlers/information_center"
@@ -17,7 +18,7 @@ func SetupRouter() *gin.Engine {
 
 	// 中间件必须在路由前面注册
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173"}, // 开发环境，允许你的 Vue 前端地址访问
+		AllowOrigins:     []string{"http://localhost:5173", "https://jinjie0808.z23.web.core.windows.net"}, // 开发环境，允许你的 Vue 前端地址访问
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},

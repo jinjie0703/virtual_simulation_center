@@ -33,8 +33,8 @@ const updatesSectionCompetitions = ref([])
 const loading = ref(false)
 const error = ref(null)
 
-// API 基础 URL
-const API_BASE_URL = 'https://localhost:8080/api' // 根据你的服务器配置调整
+// API 基础 URL 从环境变量中读取，并拼接 /api 路径，与项目其他部分保持一致
+const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/api`
 
 // 获取合作企业数据
 const fetchCompanies = async () => {

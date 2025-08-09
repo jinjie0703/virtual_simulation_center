@@ -24,7 +24,12 @@
             rel="noopener noreferrer"
             class="partner-item"
           >
-            <img :src="getImageUrl(company.logo)" :alt="company.name" class="partner-logo" />
+            <img
+              :src="getImageUrl(company.logo)"
+              :alt="company.name"
+              class="partner-logo"
+              @load="onImageLoad('companies')"
+            />
           </a>
         </div>
       </div>
@@ -50,7 +55,12 @@
             rel="noopener noreferrer"
             class="partner-item"
           >
-            <img :src="getImageUrl(school.logo)" :alt="school.name" class="partner-logo" />
+            <img
+              :src="getImageUrl(school.logo)"
+              :alt="school.name"
+              class="partner-logo"
+              @load="onImageLoad('schools')"
+            />
           </a>
         </div>
       </div>
@@ -113,6 +123,31 @@ const isPaused = ref({
   schools: false,
 })
 
+const loadedImages = ref({
+  companies: 0,
+  schools: 0,
+})
+
+const onImageLoad = (type) => {
+  loadedImages.value[type]++
+  if (
+    type === 'companies' &&
+    loadedImages.value.companies === props.companies.length &&
+    companiesTrack.value
+  ) {
+    animationState.value.companies.resetPoint = companiesTrack.value.scrollWidth / 2
+    if (!isPaused.value.companies) scrollCarousel('companies')
+  }
+  if (
+    type === 'schools' &&
+    loadedImages.value.schools === props.schools.length &&
+    schoolsTrack.value
+  ) {
+    animationState.value.schools.resetPoint = schoolsTrack.value.scrollWidth / 2
+    if (!isPaused.value.schools) scrollCarousel('schools')
+  }
+}
+
 const scrollCarousel = (type) => {
   if (isPaused.value[type] || !animationState.value[type].resetPoint) return
 
@@ -160,11 +195,7 @@ const initCarousel = () => {
 }
 
 onMounted(() => {
-  // 使用 nextTick 确保DOM渲染完成
-  // 为了应对图片加载可能导致的宽度变化，可以加一个延时
-  setTimeout(initCarousel, 200)
-
-  // 如果窗口大小变化，重新计算宽度
+  // 现在初始化逻辑由 onImageLoad 触发，但保留 resize 监听器
   window.addEventListener('resize', initCarousel)
 })
 

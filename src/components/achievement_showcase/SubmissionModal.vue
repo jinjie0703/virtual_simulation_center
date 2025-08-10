@@ -40,7 +40,7 @@
               <input id="contact1" v-model="formData.contact1" type="text" />
             </div>
             <div class="form-group">
-              <label for="contact2">联系方式 2 (选填)</label>
+              <label for="contact2">联系方式 2</label>
               <input id="contact2" v-model="formData.contact2" type="text" />
             </div>
             <div class="form-group">
